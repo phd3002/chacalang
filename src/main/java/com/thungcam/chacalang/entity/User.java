@@ -41,14 +41,13 @@ public class User {
     @Column(name = "phone", length = 20)
     private String phone;
 
-//    @ColumnDefault("'CUSTOMER'")
-    @Lob
-    @Column(name = "role")
-    private String role;
-
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private Instant createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private Set<Cart> carts = new LinkedHashSet<>();
@@ -101,20 +100,20 @@ public class User {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public Instant getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Set<Cart> getCarts() {
