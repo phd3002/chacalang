@@ -2,6 +2,8 @@ package com.thungcam.chacalang.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -9,8 +11,10 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "reviews", schema = "thungcam_db", indexes = {
-        @Index(name = "product_id", columnList = "product_id")
+        @Index(name = "menu_id", columnList = "menu_id")
 })
 public class Review {
     @Id
@@ -20,8 +24,8 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 
     @Size(max = 100)
     @Column(name = "reviewer_name", length = 100)
@@ -41,61 +45,5 @@ public class Review {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private Instant createdAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getReviewerName() {
-        return reviewerName;
-    }
-
-    public void setReviewerName(String reviewerName) {
-        this.reviewerName = reviewerName;
-    }
-
-    public String getReviewerEmail() {
-        return reviewerEmail;
-    }
-
-    public void setReviewerEmail(String reviewerEmail) {
-        this.reviewerEmail = reviewerEmail;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
 
 }

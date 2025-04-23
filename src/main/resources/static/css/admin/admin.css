@@ -1,0 +1,62 @@
+/* admin.css - Dành riêng cho giao diện quản trị */
+
+body {
+    background-color: #f9f9f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.table th {
+    text-align: center;
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.alert-success {
+    margin-top: 20px;
+}
+
+form.form-inline .form-control {
+    margin-right: 10px;
+    min-width: 200px;
+}
+/* admin.css - Dành riêng cho giao diện quản trị */
+
+body {
+    background-color: #f9f9f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.table th {
+    text-align: center;
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.alert-success {
+    margin-top: 20px;
+}
+
+form.form-inline .form-control {
+    margin-right: 10px;
+    min-width: 200px;
+}

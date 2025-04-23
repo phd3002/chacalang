@@ -2,15 +2,19 @@ package com.thungcam.chacalang.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "order_items", schema = "thungcam_db", indexes = {
         @Index(name = "order_id", columnList = "order_id"),
-        @Index(name = "product_id", columnList = "product_id")
+        @Index(name = "menu_id", columnList = "menu_id")
 })
 public class OrderItem {
     @Id
@@ -24,8 +28,8 @@ public class OrderItem {
     private com.thungcam.chacalang.entity.Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private com.thungcam.chacalang.entity.Product product;
+    @JoinColumn(name = "menu_id")
+    private com.thungcam.chacalang.entity.Menu menu;
 
     @NotNull
     @Column(name = "quantity", nullable = false)
@@ -38,53 +42,5 @@ public class OrderItem {
     @NotNull
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public com.thungcam.chacalang.entity.Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(com.thungcam.chacalang.entity.Order order) {
-        this.order = order;
-    }
-
-    public com.thungcam.chacalang.entity.Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(com.thungcam.chacalang.entity.Product product) {
-        this.product = product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
 
 }
