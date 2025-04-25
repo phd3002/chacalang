@@ -60,7 +60,7 @@ public class AuthController {
                             RedirectAttributes redirect) {
         Optional<OtpToken> optional = otpTokenRepo.findByEmailAndOtp(user.getEmail(), otp);
         if (optional.isPresent() && !optional.get().isExpired()) {
-            user.setCreatedAt(Instant.from(LocalDateTime.now()));
+            user.setCreatedAt(LocalDateTime.now());
             user.setRole(roleRepo.findByName("CUSTOMER"));
             userRepo.save(user);
             otpTokenRepo.deleteByEmail(user.getEmail());

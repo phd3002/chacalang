@@ -31,6 +31,7 @@ public class AdminReservationController {
 
         model.addAttribute("reservations", reservations);
         model.addAttribute("branches", branchService.getAllBranches());
+        model.addAttribute("activePage", "reservation");
         return "admin/admin-reservation";
     }
 

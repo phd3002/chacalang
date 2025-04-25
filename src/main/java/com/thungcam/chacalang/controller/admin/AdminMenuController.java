@@ -1,0 +1,59 @@
+package com.thungcam.chacalang.controller.admin;
+
+import com.thungcam.chacalang.entity.Menu;
+import com.thungcam.chacalang.service.CategoryService;
+import com.thungcam.chacalang.service.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping("/admin/menu")
+public class AdminMenuController {
+
+    @Autowired
+    private MenuService menuService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @GetMapping
+    public String listMenu(Model model) {
+        model.addAttribute("menus", menuService.getAllMenu());
+        model.addAttribute("activePage", "menu");
+        return "admin/menu-list";
+    }
+
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("menu", new Menu());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("activePage", "menu"); // 👈 thêm
+        return "admin/menu-form";
+    }
+
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("menu") Menu menu) {
+        menuService.save(menu);
+        return "redirect:/admin/menu";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, Model model) {
+        model.addAttribute("menu", menuService.getById(id));
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("activePage", "menu"); // 👈 thêm
+        return "admin/menu-form";
+    }
+
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        menuService.deleteById(id);
+        return "redirect:/admin/menu";
+    }
+}
+

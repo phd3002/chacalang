@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý Món ăn</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/owl.carousel.css}"/>
+  <link rel="stylesheet" th:href="@{/css/owl.theme.default.css}"/>
+</head>
+<body>
+
+<div class="admin-sidebar">
+  <a th:class="${activePage == 'reservation' ? 'active' : ''}" href="/admin/reservations">
+    <i class="fa fa-calendar"></i> Đặt bàn
+  </a>
+  <a th:class="${activePage == 'menu' ? 'active' : ''}" href="/admin/menu">
+    <i class="fa fa-cutlery"></i> Quản lý món
+  </a>
+</div>
+
+<div class="admin-content">
+  <h2 class="text-center">Quản lý Menu</h2>
+  <div class="text-right mb-3">
+    <a href="/admin/menu/create" class="btn btn-success">+ Thêm vào Menu</a>
+  </div>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Tên món</th>
+      <th>Danh mục</th>
+      <th>Giá</th>
+      <th>Mô tả</th>
+      <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="menu, iStat : ${menus}">
+      <td th:text="${iStat.count}">1</td>
+      <td th:text="${menu.name}">Chả cá</td>
+      <td th:text="${menu.category.name}">Món chính</td>
+      <td th:text="${#numbers.formatDecimal(menu.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">150.000 ₫</td>
+      <td th:text="${menu.description}">Thơm ngon đặc biệt</td>
+      <td>
+        <a th:href="@{'/admin/menu/edit/' + ${menu.id}}" class="btn btn-sm btn-warning">Sửa</a>
+        <a th:href="@{'/admin/menu/delete/' + ${menu.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Xóa món này?')">Xóa</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

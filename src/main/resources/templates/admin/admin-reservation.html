@@ -6,99 +6,104 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
     <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
-    <!-- Owl Carousel -->
     <link rel="stylesheet" th:href="@{/css/owl.carousel.css}"/>
     <link rel="stylesheet" th:href="@{/css/owl.theme.default.css}"/>
 </head>
 <body>
 
-<div class="container mt-5">
-    <h2 class="text-center">Quản lý đặt bàn</h2>
-    <hr>
+<div class="admin-sidebar">
+    <a th:class="${activePage == 'reservation' ? 'active' : ''}" href="/admin/reservations">
+        <i class="fa fa-calendar"></i> Đặt bàn
+    </a>
+    <a th:class="${activePage == 'menu' ? 'active' : ''}" href="/admin/menu">
+        <i class="fa fa-cutlery"></i> Quản lý món
+    </a>
+</div>
 
-    <!-- Lọc theo chi nhánh -->
-    <form method="get" action="/admin/reservations" class="form-inline mb-4">
-        <label class="mr-2">Chi nhánh:</label>
-        <label>
-            <select name="branchId" class="form-control mr-2">
-                <option value="">Tất cả</option>
-                <th:block th:each="b : ${branches}">
-                    <option th:value="${b.id}" th:text="${b.name}"></option>
-                </th:block>
-            </select>
-        </label>
-        <button class="btn btn-primary"><i class="fa fa-filter"></i> Lọc</button>
-    </form>
 
-    <!-- Bảng danh sách đặt bàn -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="bg-warning text-dark">
-            <tr>
-                <th>#</th>
-                <th>Khách hàng</th>
-                <th>Số điện thoại</th>
-                <th>Số người</th>
-                <th>Thời gian</th>
-                <th>Chi nhánh</th>
-                <th>Ghi chú</th>
-                <th>Ngày tạo</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="r, iStat : ${reservations}">
-                <td th:text="${iStat.count}">1</td>
-                <td th:text="${r.customerName}">Nguyễn Văn A</td>
-                <td th:text="${r.phone}">0909090909</td>
-                <td th:text="${r.numberOfPeople}">4</td>
-                <td>
-                    <span th:if="${r.reservationDate != null}" th:text="${#temporals.format(r.reservationDate, 'dd/MM/yyyy')}"></span>
-                    <span class="text-muted">|</span>
-                    <span th:if="${r.reservationTime != null}" th:text="${#temporals.format(r.reservationTime, 'HH:mm')}"></span>
-                </td>
-                <td th:text="${r.branch.name}">Cơ sở Quán Thánh</td>
-                <td th:text="${r.note}">Sinh nhật</td>
-                <td th:if="${r.createdAt != null}" th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}">19/04/2024</td>
-                <td>
-                    <span th:text="${r.status}"></span>
-                </td>
-                <td>
-                    <form th:action="@{'/admin/reservations/' + ${r.id} + '/status'}" method="post" class="form-inline">
-                        <select name="status" class="form-control form-control-sm mr-2">
-                            <option th:each="s : ${T(com.thungcam.chacalang.enums.ReservationStatus).values()}"
-                                    th:value="${s}" th:text="${s}"
-                                    th:selected="${s == r.status}">
-                            </option>
-                        </select>
-                        <button class="btn btn-sm btn-success" type="submit">Cập nhật</button>
-                    </form>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(reservations)}">
-                <td colspan="10" class="text-center text-muted">Không có đơn đặt bàn nào.</td>
-            </tr>
+<div class="admin-content">
+    <div class="container mt-5">
+        <h2 class="text-center">Quản lý đặt bàn</h2>
+        <hr>
 
-            </tbody>
-        </table>
+        <!-- Lọc theo chi nhánh -->
+        <form method="get" action="/admin/reservations" class="form-inline mb-4">
+            <label class="mr-2">Chi nhánh:</label>
+            <label>
+                <select name="branchId" class="form-control mr-2">
+                    <option value="">Tất cả</option>
+                    <th:block th:each="b : ${branches}">
+                        <option th:value="${b.id}" th:text="${b.name}"></option>
+                    </th:block>
+                </select>
+            </label>
+            <button class="btn btn-primary"><i class="fa fa-filter"></i> Lọc</button>
+        </form>
+
+        <!-- Bảng danh sách đặt bàn -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="bg-warning text-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Số người</th>
+                    <th>Thời gian</th>
+                    <th>Chi nhánh</th>
+                    <th>Ghi chú</th>
+                    <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="r, iStat : ${reservations}">
+                    <td th:text="${iStat.count}">1</td>
+                    <td th:text="${r.customerName}">Nguyễn Văn A</td>
+                    <td th:text="${r.phone}">0909090909</td>
+                    <td th:text="${r.numberOfPeople}">4</td>
+                    <td>
+                        <span th:if="${r.reservationDate != null}" th:text="${#temporals.format(r.reservationDate, 'dd/MM/yyyy')}"></span>
+                        <span class="text-muted">|</span>
+                        <span th:if="${r.reservationTime != null}" th:text="${#temporals.format(r.reservationTime, 'HH:mm')}"></span>
+                    </td>
+                    <td th:text="${r.branch.name}">Cơ sở Quán Thánh</td>
+                    <td th:text="${r.note}">Sinh nhật</td>
+                    <td th:if="${r.createdAt != null}" th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}">19/04/2024</td>
+                    <td>
+                        <span th:text="${r.status}"></span>
+                    </td>
+                    <td>
+                        <form th:action="@{'/admin/reservations/' + ${r.id} + '/status'}" method="post" class="form-inline">
+                            <label>
+                                <select name="status" class="form-control form-control-sm mr-2">
+                                    <option th:each="s : ${T(com.thungcam.chacalang.enums.ReservationStatus).values()}"
+                                            th:value="${s}" th:text="${s}"
+                                            th:selected="${s == r.status}">
+                                    </option>
+                                </select>
+                            </label>
+                            <button class="btn btn-sm btn-success" type="submit">Cập nhật</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(reservations)}">
+                    <td colspan="10" class="text-center text-muted">Không có đơn đặt bàn nào.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<!-- jQuery + Bootstrap -->
+<!-- Scripts -->
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
-
-<!-- Owl Carousel (nếu dùng trong admin) -->
 <script th:src="@{/js/owl.carousel.min.js}"></script>
-
-<!-- Google Map (nếu admin quản lý bản đồ chi nhánh) -->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script th:src="@{/js/google-map.js}"></script>
-
-<!-- Main JS (chung toàn site) -->
 <script th:src="@{/js/main.js}"></script>
-
 
 </body>
 </html>

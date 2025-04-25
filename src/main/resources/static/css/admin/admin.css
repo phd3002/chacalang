@@ -2,6 +2,11 @@
 
 body {
     background-color: #f9f9f9;
+    background-image: url('../../img/adminBG.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
     font-family: 'Segoe UI', sans-serif;
 }
 
@@ -11,14 +16,36 @@ h2 {
     margin-bottom: 20px;
 }
 
-.table th {
-    text-align: center;
-    background-color: #ffc107;
-    color: #212529;
+/* Cải thiện bảng trên nền vàng */
+.table {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
 }
 
-.table td {
+.table thead th {
+    background-color: #ffc107;
+    color: #212529;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.98);
+}
+
+.table td, .table th {
+    border-color: #e0e0e0;
     vertical-align: middle;
+}
+
+.table .btn {
+    min-width: 60px;
 }
 
 .alert-success {
@@ -29,34 +56,38 @@ form.form-inline .form-control {
     margin-right: 10px;
     min-width: 200px;
 }
-/* admin.css - Dành riêng cho giao diện quản trị */
 
-body {
-    background-color: #f9f9f9;
-    font-family: 'Segoe UI', sans-serif;
+/* Sidebar admin */
+.admin-sidebar {
+    width: 220px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #343a40;
+    padding-top: 20px;
+    z-index: 1000;
 }
 
-h2 {
-    font-weight: bold;
-    margin-top: 30px;
-    margin-bottom: 20px;
+.admin-sidebar a {
+    display: block;
+    color: #ddd;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+    transition: 0.3s;
 }
 
-.table th {
-    text-align: center;
-    background-color: #ffc107;
-    color: #212529;
+.admin-sidebar a:hover,
+.admin-sidebar a.active {
+    background-color: #495057;
+    color: #fff;
+    border-left: 4px solid #ffc107;
 }
 
-.table td {
-    vertical-align: middle;
+.admin-content {
+    margin-left: 230px;
+    padding: 30px;
 }
 
-.alert-success {
-    margin-top: 20px;
-}
-
-form.form-inline .form-control {
-    margin-right: 10px;
-    min-width: 200px;
-}
