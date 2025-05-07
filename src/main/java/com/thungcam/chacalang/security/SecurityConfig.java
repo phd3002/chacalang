@@ -18,18 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-
-//    private final UserService userService;
-//
-//    public SecurityConfig(UserService userService) {
-//        this.userService = userService;
-//    }
-//
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return userService;
-//    }
+    @Autowired
+    private CustomLoginSuccessHandler customLoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,7 +36,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customLoginSuccessHandler) // Chuyển hướng sau khi login thành công
                         .permitAll()
                 )
                 .logout(logout -> logout
