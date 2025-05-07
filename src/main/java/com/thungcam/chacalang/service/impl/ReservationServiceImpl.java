@@ -1,6 +1,7 @@
 package com.thungcam.chacalang.service.impl;
 
 import com.thungcam.chacalang.entity.Reservation;
+import com.thungcam.chacalang.enums.ReservationStatus;
 import com.thungcam.chacalang.repository.ReservationRepository;
 import com.thungcam.chacalang.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation save(Reservation reservation) {
+        reservation.setStatus(ReservationStatus.PENDING);
         return reservationRepository.save(reservation);
     }
 

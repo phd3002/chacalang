@@ -13,18 +13,32 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin/menu")
 public class AdminMenuController {
 
-    @Autowired
-    private MenuService menuService;
+    final private MenuService menuService;
+
+    final private CategoryService categoryService;
 
     @Autowired
-    private CategoryService categoryService;
-
+    public AdminMenuController(MenuService menuService, CategoryService categoryService) {
+        this.menuService = menuService;
+        this.categoryService = categoryService;
+    }
     @GetMapping
-    public String listMenu(Model model) {
-        model.addAttribute("menus", menuService.getAllMenu());
+    public String listMenu(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            Model model) {
+
+        model.addAttribute("menus", menuService.filterMenu(categoryId, minPrice, maxPrice));
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("activePage", "menu");
+
         return "admin/menu-list";
     }
+
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {

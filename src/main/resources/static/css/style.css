@@ -85,10 +85,12 @@ ul,ol{
 
 /* --- Section --- */
 .section {
-	position:relative;
-	padding-top:80px;
-	padding-bottom:80px;
+	position: relative;
+	overflow: hidden;
+	min-height: 100vh;
+	padding: 80px 0;
 }
+
 
 .section-header .title {
 	font-family: 'Dancing Script', cursive;
@@ -115,15 +117,16 @@ ul,ol{
 
 /* --- Background Image --- */
 .bg-image {
-	position:absolute;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
-	background-position:center;
-	background-size:cover;
-	z-index:-1;
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: -1;
 }
+
 
 .bg-image.bg-parallax {
 	background-attachment:fixed;
@@ -671,6 +674,18 @@ textarea.input {
 /*------------------------------------*\
 	Reservation
 \*------------------------------------*/
+#reservation {
+	position: relative;
+	background-image: url('../img/background03.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+	padding: 80px 0;
+	min-height: 100vh; /* 👈 Đảm bảo ảnh bao toàn phần */
+}
+
+
 #reservation.section {
 	padding-bottom:0px;
 }
@@ -1254,3 +1269,52 @@ textarea.input {
 		        transform:translateY(40px);
 	}
 }
+
+.contact-form label {
+	font-weight: 600;
+	margin-top: 10px;
+}
+.contact-form .form-control {
+	margin-bottom: 12px;
+	background-color: #fdfdfd;
+	border-radius: 4px;
+}
+.contact-wrapper {
+	max-width: 600px;
+	margin: 0 auto;
+
+}
+.contact-wrapper .form-group {
+	margin-bottom: 15px;
+}
+.contact-wrapper .main-button {
+	padding: 10px 30px;
+	border-radius: 999px;
+}
+
+.circle-icon {
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-color: #ff6600;
+	color: white;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 36px;
+	font-size: 16px;
+	margin: 0 5px;
+	transition: 0.3s;
+}
+
+.circle-icon:hover {
+	background-color: #ff8533;
+	text-decoration: none;
+}
+
+.username {
+	margin-left: 6px;
+	font-weight: bold;
+	color: #444;
+}
+
+

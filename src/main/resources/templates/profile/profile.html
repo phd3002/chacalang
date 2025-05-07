@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang cá nhân của tôi</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+  <style>
+    .profile-section {
+      padding: 100px 0;
+      position: relative;
+      background-image: url('/img/background-profile.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .profile-wrapper {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label {
+      float: left;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .alert {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="section profile-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-md-offset-3 profile-wrapper text-center">
+        <div class="section-header">
+          <h2 class="title">Trang cá nhân của tôi</h2>
+          <hr style="width: 80px; border: 2px solid orange;">
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+        <form th:action="@{/profile}" method="post" th:object="${user}" class="contact-form">
+
+          <div class="form-group">
+            <label>Họ</label>
+            <input type="text" class="input form-control" th:field="*{firstName}" placeholder="Họ" required>
+          </div>
+
+          <div class="form-group">
+            <label>Tên</label>
+            <input type="text" class="input form-control" th:field="*{lastName}" placeholder="Tên" required>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="input form-control" th:field="*{email}" readonly>
+          </div>
+
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" class="input form-control" th:field="*{phone}" placeholder="SĐT" required>
+          </div>
+
+          <div class="form-group text-center">
+            <button type="submit" class="main-button">Cập nhật</button>
+          </div>
+        </form>
+
+        <div class="form-group text-center">
+          <a th:href="@{/}"><i class="fa fa-chevron-left"></i> Quay lại trang chủ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

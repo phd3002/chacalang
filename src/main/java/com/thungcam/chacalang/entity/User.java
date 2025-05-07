@@ -3,26 +3,26 @@ package com.thungcam.chacalang.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users", schema = "thungcam_db", uniqueConstraints = {
         @UniqueConstraint(name = "username", columnNames = {"username"})
 })
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -39,8 +39,12 @@ public class User {
     private String password;
 
     @Size(max = 100)
-    @Column(name = "full_name", length = 100)
-    private String fullName;
+    @Column(name = "first_name", length = 100)
+    private String firstName;
+
+    @Size(max = 100)
+    @Column(name = "last_name", length = 100)
+    private String lastName;
 
     @Size(max = 100)
     @Column(name = "email", length = 100)
@@ -57,7 +61,40 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Column(name = "status")
+    private String status;
+
     @OneToMany(mappedBy = "user")
     private Set<Cart> carts = new LinkedHashSet<>();
 
+    @Transient
+    private String confirmPassword;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(role == null){
+            return Collections.emptyList();
+        }
+        return Collections.singleton(new SimpleGrantedAuthority(role.getName()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 }

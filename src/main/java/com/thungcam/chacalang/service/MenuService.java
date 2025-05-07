@@ -10,5 +10,6 @@ public interface MenuService {
     Menu getById(Long id);
     Menu save(Menu menu);
     void deleteById(Long id);
+    List<Menu> filterMenu(Long categoryId, Integer minPrice, Integer maxPrice);
 }
 

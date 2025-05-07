@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý liên hệ - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+</head>
+<body>
+
+<div class="admin-sidebar">
+    <a th:class="${activePage == 'reservation' ? 'active' : ''}" href="/admin/reservations">
+        <i class="fa fa-calendar"></i> Đặt bàn
+    </a>
+    <a th:class="${activePage == 'menu' ? 'active' : ''}" href="/admin/menu">
+        <i class="fa fa-cutlery"></i> Quản lý món
+    </a>
+    <a th:class="${activePage == 'contact' ? 'active' : ''}" href="/admin/contacts">
+        <i class="fa fa-envelope"></i> Quản lý liên hệ
+    </a>
+</div>
+
+<div class="admin-content">
+    <h2 class="text-center">Quản lý liên hệ</h2>
+    <hr>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="bg-warning text-dark">
+            <tr>
+                <th>#</th>
+                <th>Tên khách hàng</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Tiêu đề</th>
+                <th>Nội dung</th>
+                <th>Ngày gửi</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c, iStat : ${contacts}">
+                <td th:text="${iStat.count}">1</td>
+                <td th:text="${c.name}">Nguyễn Văn A</td>
+                <td th:text="${c.phone}">0909090909</td>
+                <td th:text="${c.email}">abc@gmail.com</td>
+                <td th:text="${c.subject}">Góp ý</td>
+                <td th:text="${c.message}">Nội dung liên hệ</td>
+                <td th:text="${#temporals.format(c.createdAt, 'dd/MM/yyyy HH:mm')}">01/05/2024</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(contacts)}">
+                <td colspan="7" class="text-center text-muted">Chưa có liên hệ nào.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

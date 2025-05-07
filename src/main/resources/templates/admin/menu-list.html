@@ -18,13 +18,39 @@
   <a th:class="${activePage == 'menu' ? 'active' : ''}" href="/admin/menu">
     <i class="fa fa-cutlery"></i> Quản lý món
   </a>
+  <a th:class="${activePage == 'contact' ? 'active' : ''}" href="/admin/contacts">
+    <i class="fa fa-envelope"></i> Quản lý liên hệ
+  </a>
 </div>
 
 <div class="admin-content">
   <h2 class="text-center">Quản lý Menu</h2>
+
+  <!-- Bộ lọc -->
+  <form method="get" action="/admin/menu" class="form-inline mb-4">
+    <div class="form-group mr-2">
+      <label for="categoryId" class="mr-1">Danh mục:</label>
+      <select name="categoryId" id="categoryId" class="form-control">
+        <option value="">Tất cả</option>
+        <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id == categoryId}"></option>
+      </select>
+    </div>
+    <div class="form-group mr-2">
+      <label for="minPrice" class="mr-1">Giá từ:</label>
+      <input type="number" name="minPrice" id="minPrice" class="form-control" th:value="${minPrice}">
+    </div>
+    <div class="form-group mr-2">
+      <label for="maxPrice" class="mr-1">Đến:</label>
+      <input type="number" name="maxPrice" id="maxPrice" class="form-control" th:value="${maxPrice}">
+    </div>
+    <button type="submit" class="btn btn-primary">Lọc</button>
+    <a href="/admin/menu" class="btn btn-secondary ml-2">Reset</a>
+  </form>
+
   <div class="text-right mb-3">
     <a href="/admin/menu/create" class="btn btn-success">+ Thêm vào Menu</a>
   </div>
+
   <table class="table table-bordered table-striped">
     <thead>
     <tr>

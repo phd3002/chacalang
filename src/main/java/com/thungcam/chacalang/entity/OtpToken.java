@@ -1,57 +1,40 @@
 package com.thungcam.chacalang.entity;
 
-
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
-
+@Setter
+@Getter
 @Entity
-@Table(name = "otp_tokens", schema = "thungcam_db")
+@Table(
+        name = "otp_tokens",
+        schema = "thungcam_db",
+        indexes = {
+                @Index(name = "idx_otp_created_at", columnList = "createdAt")
+        }
+)
+
 public class OtpToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-
+    @Column(name = "email")
     private String email;
+    @Column(name = "otp")
     private String otp;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "temp_data", columnDefinition = "TEXT")
+    private String tempData;
+
 
     public boolean isExpired() {
         return createdAt.plusMinutes(5).isBefore(LocalDateTime.now());
 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getOtp() {
-        return otp;
-    }
-
-    public void setOtp(String otp) {
-        this.otp = otp;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

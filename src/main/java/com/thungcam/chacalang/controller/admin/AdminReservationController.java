@@ -16,11 +16,17 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminReservationController {
 
-    @Autowired
-    private ReservationService reservationService;
+
+    final private ReservationService reservationService;
+
+    final private BranchService branchService;
 
     @Autowired
-    private BranchService branchService;
+    public AdminReservationController(ReservationService reservationService,
+                                       BranchService branchService) {
+        this.reservationService = reservationService;
+        this.branchService = branchService;
+    }
 
     @GetMapping("/reservations")
     public String viewReservations(@RequestParam(value = "branchId", required = false) Long branchId,

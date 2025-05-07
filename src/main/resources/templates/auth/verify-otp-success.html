@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Thành Công - Chả Cá Lăng Thung Cấm</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700%7CCabin:400%7CDancing+Script" rel="stylesheet"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}" />
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.css}" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/auth/auth.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+</head>
+
+<body>
+
+<!-- Header -->
+<div th:replace="~{base :: header}"></div>
+<!-- /Header -->
+
+<!-- Success Section -->
+<div class="section" style="padding: 100px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-md-offset-3 text-center">
+                <div class="section-header">
+                    <h2 class="title">Xác Minh Thành Công!</h2>
+                    <p>Tài khoản của bạn đã được xác thực thành công.</p>
+                </div>
+
+                <a th:href="@{/auth/login}" class="main-button">Đăng nhập ngay</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Success Section -->
+
+<!-- Footer -->
+<div th:replace="~{base :: footer}"></div>
+<!-- /Footer -->
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

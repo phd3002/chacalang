@@ -29,8 +29,14 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <![endif]-->
+<style>
+    .logo img {
+        filter: drop-shadow(0 0 4px #000000aa);
+    }
+</style>
 
 </head>
 <body>
@@ -56,12 +62,41 @@
 
             <!-- social links -->
             <ul class="social-nav">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-            </ul>
-            <!-- /social links -->
+                <!-- ĐÃ ĐĂNG NHẬP -->
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <span class="username" th:text="'Xin chào, ' + ${fullName}">Xin chào</span>
 
+                </li>
+
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/cart}" class="circle-icon" title="Giỏ hàng">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/profile}" class="circle-icon" title="Tài khoản của tôi">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/logout}" class="circle-icon" title="Đăng xuất">
+                        <i class="fa fa-sign-out"></i>
+                    </a>
+                </li>
+
+                <!-- CHƯA ĐĂNG NHẬP -->
+                <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a th:href="@{/auth/login}" class="circle-icon" title="Đăng nhập">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a th:href="@{/auth/register}" class="circle-icon" title="Đăng ký">
+                        <i class="fa fa-user-plus"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- /social links -->
         </div>
     </div>
     <!-- /Top nav -->
@@ -77,7 +112,6 @@
                     <li><a href="#about">Giới Thiệu</a></li>
                     <li><a href="#menu">Thực Đơn</a></li>
                     <li><a href="#reservation">Đặt Bàn</a></li>
-                    <li><a href="#events">Sự Kiện</a></li>
                     <li><a href="#contact">Liên Hệ</a></li>
                 </ul>
 
@@ -110,7 +144,7 @@
 <div class="banner-area" id="home">
 
     <!-- Backgound Image -->
-    <div class="bg-image bg-parallax overlay" style="background-image:url(/img/background03.jpg)"></div>
+    <div class="bg-image bg-parallax overlay" style="background-image:url(/img/background02.jpg)"></div>
     <!-- /Backgound Image -->
 
     <div class="home-wrapper">
@@ -305,7 +339,7 @@
 
 <!-- Reservation -->
 <div class="section" id="reservation">
-    <div class="bg-image bg-parallax overlay" style="background-image:url(/img/background03.jpg)"></div>
+    <div class="bg-image bg-parallax overlay"></div>
     <div class="container">
         <div class="row">
             <div class="section-header text-center">
@@ -323,13 +357,14 @@
             <!-- Form đặt bàn -->
             <form class="reserve-form row" method="post" th:action="@{/dat-ban}" th:object="${reservation}">
                 <div class="col-md-6">
-                    <input class="input" placeholder="Họ tên" required th:field="*{customerName}" type="text">
+                    <input class="input" placeholder="Họ tên" required th:field="*{customerName}" type="text"
+                           th:value="${fullName}">
                 </div>
                 <div class="col-md-6">
                     <input class="input" placeholder="Số điện thoại" required th:field="*{phone}" type="tel">
                 </div>
                 <div class="col-md-6">
-                    <input class="input" placeholder="Email (nếu có)" th:field="*{email}" type="email">
+                    <input class="input" placeholder="Email " th:field="*{email}" type="email">
                 </div>
                 <div class="col-md-6">
                     <select class="input" required th:field="*{branch}">
@@ -348,7 +383,7 @@
                            type="number">
                 </div>
                 <div class="col-md-12">
-                    <textarea class="input" placeholder="Ghi chú thêm" th:field="*{note}"></textarea>
+                    <textarea class="input" placeholder="Ghi chú thêm" th:field="*{note}" style="resize: vertical;"></textarea>
                 </div>
                 <div class="col-md-12 text-center">
                     <button class="main-button" type="submit">Đặt bàn</button>
@@ -361,107 +396,6 @@
 
 <!-- /Reservation -->
 
-<!-- Events -->
-<div class="section" id="events">
-
-    <!-- container -->
-    <div class="container">
-
-        <!-- row -->
-        <div class="row">
-
-            <!-- section header -->
-            <div class="section-header text-center">
-                <h4 class="sub-title">Special Event</h4>
-                <h2 class="title">Upcoming Event</h2>
-            </div>
-            <!-- /section header -->
-
-            <!-- single event -->
-            <div class="col-md-6">
-                <div class="event">
-                    <div class="event-img">
-                        <img alt="" src="./img/event01.jpg">
-                        <div class="event-day">
-                            <span>08<br>July</span>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <p><i class="fa fa-clock-o"></i> 8.00PM - 10.00PM</p>
-                        <h3><a href="blog.html">te vero tritani iuvaret vis. Nec odio periculis adipiscing an.</a></h3>
-                        <p>Te sit stet labitur veritus, sea similique consetetur ut. Ne fastidii oportere usu. Iusto
-                            mediocrem iudicabit ea eos, nemore offendit detraxit ei cum.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /single event -->
-
-            <!-- single event -->
-            <div class="col-md-6">
-                <div class="event">
-                    <div class="event-img">
-                        <img alt="" src="./img/event02.jpg">
-                        <div class="event-day">
-                            <span>08<br>July</span>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <p><i class="fa fa-clock-o"></i> 8.00PM - 10.00PM</p>
-                        <h3><a href="#">te vero tritani iuvaret vis. Nec odio periculis adipiscing an.</a></h3>
-                        <p>Te sit stet labitur veritus, sea similique consetetur ut. Ne fastidii oportere usu. Iusto
-                            mediocrem iudicabit ea eos, nemore offendit detraxit ei cum.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /single event -->
-
-            <!-- single event -->
-            <div class="col-md-6">
-                <div class="event">
-                    <div class="event-img">
-                        <img alt="" src="./img/event02.jpg">
-                        <div class="event-day">
-                            <span>08<br>July</span>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <p><i class="fa fa-clock-o"></i> 8.00PM - 10.00PM</p>
-                        <h3><a href="#">te vero tritani iuvaret vis. Nec odio periculis adipiscing an.</a></h3>
-                        <p>Te sit stet labitur veritus, sea similique consetetur ut. Ne fastidii oportere usu. Iusto
-                            mediocrem iudicabit ea eos, nemore offendit detraxit ei cum.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /single event -->
-
-            <!-- single event -->
-            <div class="col-md-6">
-                <div class="event">
-                    <div class="event-img">
-                        <img alt="" src="./img/event01.jpg">
-                        <div class="event-day">
-                            <span>08<br>July</span>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <p><i class="fa fa-clock-o"></i> 8.00PM - 10.00PM</p>
-                        <h3><a href="#">te vero tritani iuvaret vis. Nec odio periculis adipiscing an.</a></h3>
-                        <p>Te sit stet labitur veritus, sea similique consetetur ut. Ne fastidii oportere usu. Iusto
-                            mediocrem iudicabit ea eos, nemore offendit detraxit ei cum.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /single event -->
-
-        </div>
-        <!-- /row -->
-
-    </div>
-    <!-- /container -->
-
-</div>
-<!-- /Events -->
-
 <!-- Contact -->
 <div class="section" id="contact">
 
@@ -470,34 +404,87 @@
 
         <!-- row -->
         <div class="row">
+            <!-- FORM LIÊN HỆ BÊN TRÁI -->
+            <div class="col-md-5">
+                <!--                <div class="section-header">-->
+                <!--                    <h4 class="sub-title">Liên hệ với chúng tôi</h4>-->
+                <!--                    <h2 class="title">Gửi liên hệ</h2>-->
+                <!--                </div>-->
+                <div class="alert alert-success text-center" th:if="${contactSuccess}">
+                    Cảm ơn quý khách đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.
+                </div>
 
-            <div class="col-md-5 col-md-offset-7">
+                <form class="contact-form" method="post" th:action="@{/lien-he}" th:object="${contact}">
+                    <div>
+                        <div class="form-group">
+                            <label>Họ tên *</label>
+                            <input class="input form-control" placeholder="Nhập họ tên" required th:field="*{name}"
+                                   type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input class="input form-control" placeholder="Nhập email" required th:field="*{email}"
+                                   type="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tiêu đề</label>
+                            <input class="input form-control" placeholder="Tiêu đề liên hệ" th:field="*{subject}"
+                                   type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số điện thoại *</label>
+                            <input class="input form-control" placeholder="Nhập số điện thoại" required
+                                   th:field="*{phone}" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nội dung *</label>
+                            <textarea class="input form-control" placeholder="Nội dung liên hệ" required
+                                      rows="5" th:field="*{message}" style="resize: vertical;"></textarea>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button class="main-button" type="submit">Gửi Liên Hệ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- THÔNG TIN LIÊN HỆ BÊN PHẢI -->
+            <div class="col-md-5">
                 <div class="section-header">
                     <h4 class="sub-title">Liên Hệ</h4>
                     <h2 class="title">Kết Nối Với Chúng Tôi</h2>
                 </div>
                 <div class="contact-content">
-                    <p>Hãy liên hệ với chúng tôi để đặt bàn hoặc biết thêm thông tin về nhà hàng Chả Cá Lăng Thung Cấm.</p>
-                    <h3>Hotline: <a href="tel:18009077">1800 9077</a></h3>
-                    <p>Địa chỉ: Ngõ 1 Nguyễn Thị Định, Q. Cầu Giấy, Hà Nội, Việt Nam</p>
-                    <p>Email: <a href="mailto:info@chacathungcam.com">info@chacathungcam.com</a></p>
-                    <ul class="list-inline">
-                        <li><p>Theo Dõi Chúng Tôi:</p></li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                        <li><a href="#"><i class="fa fa-youtube"></i></a></li>
-                    </ul>
+                    <p>Hãy liên hệ với chúng tôi để đặt bàn hoặc biết thêm thông tin về nhà hàng Chả Cá Lăng Thung
+                        Cấm.</p>
+                    <div th:each="branch : ${branches}">
+                        <h4 th:text="${branch.name}"></h4>
+                        <p th:text="${branch.address}"></p>
+                        <p><b>Hotline:</b> <span th:text="${branch.phone}"></span></p>
+                        <hr>
+                    </div>
+                    <!--                    <ul class="list-inline">-->
+                    <!--                        <li><p>Theo Dõi Chúng Tôi:</p></li>-->
+                    <!--                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
+                    <!--                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>-->
+                    <!--                        <li><a href="#"><i class="fa fa-youtube"></i></a></li>-->
+                    <!--                    </ul>-->
                 </div>
             </div>
-
         </div>
+
         <!-- /row -->
 
     </div>
     <!-- /container -->
 
     <!-- map -->
-    <div id="map"></div>
+    <!--    <div id="map"></div>-->
     <!-- /map -->
 
 </div>
@@ -515,8 +502,7 @@
             <!-- copyright -->
             <div class="col-md-6">
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                <span class="copyright">Copyright @2018 All rights reserved | This template is made with <i
-                        aria-hidden="true" class="fa fa-heart-o"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></span>
+                <span class="copyright">Copyright @2025 Chả Cá Lăng Thung Cấm</span>
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </div>
             <!-- /copyright -->
@@ -528,7 +514,6 @@
                     <a href="#about">Giới Thiệu</a>
                     <a href="#menu">Thực Đơn</a>
                     <a href="#reservation">Đặt Bàn</a>
-                    <a href="#events">Sự Kiện</a>
                     <a href="#contact">Liên Hệ</a>
                 </nav>
             </div>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Đăng Nhập - Chả Cá Lăng Thung Cấm</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700%7CCabin:400%7CDancing+Script"
+          rel="stylesheet"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.css}"/>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
+
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/auth/auth.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+</head>
+
+<body>
+
+<!-- Header -->
+<header id="header">
+    <div id="top-nav">
+        <div class="container">
+            <div class="logo">
+                <a th:href="@{/}"><img alt="Logo" src="/img/LogoThungCam.jpg"></a>
+            </div>
+            <button class="navbar-toggle">
+                <span></span>
+            </button>
+            <ul class="social-nav">
+                <!-- ĐÃ ĐĂNG NHẬP -->
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <span class="username" th:text="'Xin chào, ' + ${fullName}">Xin chào, FullName</span>
+
+                </li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/logout}" class="circle-icon" title="Đăng xuất">
+                        <i class="fa fa-sign-out"></i>
+                    </a>
+                </li>
+
+                <!-- CHƯA ĐĂNG NHẬP -->
+                <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a th:href="@{/auth/login}" class="circle-icon" title="Đăng nhập">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a th:href="@{/auth/register}" class="circle-icon" title="Đăng ký">
+                        <i class="fa fa-user-plus"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<!-- /Header -->
+
+<!-- Login Form Section -->
+<div class="section" style="padding: 100px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="section-header text-center">
+                    <h2 class="title">Đăng Nhập</h2>
+                </div>
+
+                <div class="alert alert-danger text-center" th:if="${param.error}" th:text="'Sai tài khoản hoặc mật khẩu.'"></div>
+<!--                <div class="alert alert-success text-center" th:if="${successMessage}" th:text="${successMessage}"></div>-->
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                <form class="contact-form" method="post" th:action="@{/auth/login}">
+                    <div class="form-group">
+                        <input class="input form-control" name="username" placeholder="Email hoặc Số điện thoại"
+                               required type="text"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="input form-control" name="password" placeholder="Mật khẩu" required
+                               type="password"/>
+                    </div>
+
+                    <div class="form-group text-left">
+                        <label>
+                            <input name="remember-me" type="checkbox"> Ghi nhớ đăng nhập
+                        </label>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button class="main-button" type="submit">Đăng nhập</button>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <a th:href="@{/auth/forgot-password}">Quên mật khẩu?</a> |
+                        <a th:href="@{/auth/register}">Đăng ký tài khoản mới</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Login Form Section -->
+
+<!-- Footer -->
+<footer id="footer">
+    <div class="container text-center">
+        <span class="copyright">Copyright @2025 Chả Cá Lăng Thung Cấm</span>
+    </div>
+</footer>
+<!-- /Footer -->
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

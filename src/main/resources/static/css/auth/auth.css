@@ -1,0 +1,44 @@
+.section {
+    padding: 100px 0;
+    background-image: url('../../img/auth-background.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.auth-overlay {
+    background: rgba(255, 255, 255, 0.94);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.section-header h2.title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 36px;
+    color: #e07b00;
+}
+
+.contact-form .form-group input {
+    font-size: 16px;
+    padding: 12px;
+}
+
+.main-button {
+    background-color: #e07b00;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.main-button:hover {
+    background-color: #c86800;
+    color: #fff;
+}
+
+.alert {
+    font-size: 14px;
+}
