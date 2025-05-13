@@ -18,4 +18,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
                           @Param("minPrice") Double minPrice,
                           @Param("maxPrice") Double maxPrice);
 
+    List<Menu> findByCategoryId(Long categoryId);
+
+    Menu findByName(String name);
 }

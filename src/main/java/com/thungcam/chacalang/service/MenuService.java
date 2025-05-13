@@ -6,10 +6,16 @@ import com.thungcam.chacalang.entity.Menu;
 import java.util.List;
 
 public interface MenuService {
-    List<Menu> getAllMenu();
-    Menu getById(Long id);
-    Menu save(Menu menu);
-    void deleteById(Long id);
+    List<Menu> getAllMenus();
+
+    Menu getMenuById(Long id);
+
+    List<Menu> getMenusByCategory(Long categoryId);
+
+    void saveMenu(Menu menu);
+
+    void deleteMenu(Long id);
+
     List<Menu> filterMenu(Long categoryId, Integer minPrice, Integer maxPrice);
 }
 

@@ -1,5 +1,6 @@
 package com.thungcam.chacalang.entity;
 
+import com.thungcam.chacalang.enums.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -61,8 +62,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private UserStatus status;
 
     @OneToMany(mappedBy = "user")
     private Set<Cart> carts = new LinkedHashSet<>();

@@ -57,7 +57,6 @@ public class Reservation {
 
 //    @ColumnDefault("'PENDING'")
     @Enumerated(EnumType.STRING)
-    @Lob
     @Column(name = "status", nullable = false)
     private ReservationStatus status;
 

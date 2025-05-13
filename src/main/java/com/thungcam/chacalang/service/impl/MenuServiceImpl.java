@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -16,22 +15,28 @@ public class MenuServiceImpl implements MenuService {
     private MenuRepository menuRepository;
 
     @Override
-    public List<Menu> getAllMenu() {
+    public List<Menu> getAllMenus() {
         return menuRepository.findAll();
     }
 
     @Override
-    public Menu getById(Long id) {
-        return menuRepository.findById(id).orElse(null);
+    public Menu getMenuById(Long id) {
+        return menuRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Menu not found with id: " + id));
     }
 
     @Override
-    public Menu save(Menu menu) {
-        return menuRepository.save(menu);
+    public List<Menu> getMenusByCategory(Long categoryId) {
+        return menuRepository.findByCategoryId(categoryId);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void saveMenu(Menu menu) {
+        menuRepository.save(menu);
+    }
+
+    @Override
+    public void deleteMenu(Long id) {
         menuRepository.deleteById(id);
     }
 
@@ -41,6 +46,5 @@ public class MenuServiceImpl implements MenuService {
         Double max = (maxPrice != null) ? maxPrice.doubleValue() : null;
         return menuRepository.filterMenu(categoryId, min, max);
     }
-
 }
 

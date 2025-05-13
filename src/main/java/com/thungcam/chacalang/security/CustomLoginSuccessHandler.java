@@ -21,7 +21,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
             if (role.equals("ROLE_ADMIN")) {
-                response.sendRedirect("/admin/home");
+                response.sendRedirect("/admin/dashboard");
                 return;
             }
         }

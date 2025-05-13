@@ -39,4 +39,6 @@ public interface UserService extends UserDetailsService {
     void updatePassword(String token, String newPassword); // cập nhật mật khẩu mới
 
     void updateProfile(Authentication auth, User updatedUser); // cập nhật thông tin người dùng
+
+    void changePassword(Authentication auth, String currentPassword, String newPassword, String confirmPassword);
 }

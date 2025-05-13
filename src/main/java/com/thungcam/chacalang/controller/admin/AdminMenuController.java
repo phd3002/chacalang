@@ -51,13 +51,13 @@ public class AdminMenuController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute("menu") Menu menu) {
-        menuService.save(menu);
+        menuService.saveMenu(menu);
         return "redirect:/admin/menu";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
-        model.addAttribute("menu", menuService.getById(id));
+        model.addAttribute("menu", menuService.getMenuById(id));
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("activePage", "menu"); // 👈 thêm
         return "admin/menu-form";
@@ -66,7 +66,7 @@ public class AdminMenuController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        menuService.deleteById(id);
+        menuService.deleteMenu(id);
         return "redirect:/admin/menu";
     }
 }

@@ -69,11 +69,11 @@
                 </li>
 
                 <li th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/cart}" class="circle-icon" title="Giỏ hàng">
+                    <a th:href="@{/order/select-branch}" class="circle-icon" title="Giỏ hàng">
                         <i class="fa fa-shopping-cart"></i>
                     </a>
                 <li th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/profile}" class="circle-icon" title="Tài khoản của tôi">
+                    <a th:href="@{/user/profile-manager}" class="circle-icon" title="Tài khoản của tôi">
                         <i class="fa fa-user"></i>
                     </a>
                 </li>

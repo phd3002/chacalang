@@ -12,6 +12,9 @@
 <body>
 
 <div class="admin-sidebar">
+  <a th:class="${activePage == 'dashboard' ? 'active' : ''}" href="/admin/dashboard">
+    <i class="fa fa-line-chart"></i> Dashboard
+  </a>
   <a th:class="${activePage == 'reservation' ? 'active' : ''}" href="/admin/reservations">
     <i class="fa fa-calendar"></i> Đặt bàn
   </a>

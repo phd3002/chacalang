@@ -2,6 +2,7 @@ package com.thungcam.chacalang.service.impl;
 
 import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.*;
+import com.thungcam.chacalang.enums.UserStatus;
 import com.thungcam.chacalang.exception.BusinessException;
 import com.thungcam.chacalang.repository.OtpTokenRepository;
 import com.thungcam.chacalang.repository.RoleRepository;
@@ -95,9 +96,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
 
-        Role role = roleRepo.findByName("CUSTOMER");
+        Role role = roleRepo.findById(1);
         user.setRole(role);
-
+        user.setStatus(UserStatus.ACTIVE);
         userRepo.save(user);
     }
 
@@ -243,6 +244,29 @@ public class UserServiceImpl implements UserService {
         user.setLastName(updatedUser.getLastName());
         user.setPhone(updatedUser.getPhone());
 
+        userRepo.save(user);
+    }
+
+    @Override
+    public void changePassword(Authentication auth, String currentPassword, String newPassword, String confirmPassword) {
+        User user = getAuthenticatedUser(auth);
+        if (user == null) {
+            throw new BusinessException(AuthConst.ERROR.USER_NOT_FOUND);
+        }
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new BusinessException(AuthConst.ERROR.CURRENT_PASSWORD_INCORRECT);
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new BusinessException(AuthConst.ERROR.PASSWORD_NOT_MATCH);
+        }
+
+        if (!newPassword.matches(AuthConst.VALIDATE.REGEX_PASSWORD)) {
+            throw new BusinessException(AuthConst.ERROR.INVALID_PASSWORD_FORMAT);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
     }
 }

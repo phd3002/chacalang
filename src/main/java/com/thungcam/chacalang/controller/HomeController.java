@@ -68,7 +68,7 @@ public class HomeController {
 
         model.addAttribute("reservation", reservation); // GÁN reservation có sẵn dữ liệu
 
-        model.addAttribute("products", menuService.getAllMenu());
+        model.addAttribute("products", menuService.getAllMenus());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("branches", branchService.getAllBranches());
         model.addAttribute("contact", contact);

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -40,8 +40,8 @@ public class Menu {
     private Integer weight;
 
 //    @ColumnDefault("0")
-    @Column(name = "stock")
-    private Integer stock;
+//    @Column(name = "stock")
+//    private Integer stock;
 
     @Size(max = 255)
     @Column(name = "main_image")
@@ -53,7 +53,7 @@ public class Menu {
 
 //    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "menu")
     private Set<CartItem> cartItems = new LinkedHashSet<>();
@@ -67,4 +67,6 @@ public class Menu {
     @OneToMany(mappedBy = "menu")
     private Set<com.thungcam.chacalang.entity.Review> reviews = new LinkedHashSet<>();
 
+//    @Column(name = "is_available")
+//    private Boolean isAvailable = true;
 }
