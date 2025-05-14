@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý tài khoản</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account/account.css}">
+</head>
+<div th:replace="~{base :: header}"></div>
+<br><br><br>
+<body>
+<div class="profile-section">
+    <div class="container">
+        <div class="row justify-content-center align-items-start">
+            <!-- Sidebar -->
+            <div class="col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+                <div class="account-sidebar">
+                    <div class="sidebar-title">TÀI KHOẢN CỦA TÔI</div>
+                    <ul class="sidebar-menu">
+                        <li class="active"><a href="/user/profile-manager"><i class="fa fa-user-circle"></i>QUẢN LÝ TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-shopping-bag"></i>ĐƠN HÀNG CỦA TÔI</a></li>
+                        <li><a href="/user/user-address"><i class="fa fa-map-marker"></i>ĐỊA CHỈ GIAO HÀNG</a></li>
+                        <li><a href="/user/profile"><i class="fa fa-info-circle"></i>THÔNG TIN TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-gift"></i>DANH SÁCH ƯU ĐÃI</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-8">
+                <div class="profile-manage-wrapper">
+                    <div class="main-title">QUẢN LÝ TÀI KHOẢN</div>
+                    <div class="section-desc">Xin chào, <span style="font-weight:600;" th:text="${fullName}">Doan Phan Hung</span>. Với trang này, bạn sẽ quản lý được tất cả thông tin tài khoản của mình.</div>
+
+                    <!-- Thông tin tài khoản -->
+                    <div class="info-section">
+                        <div class="info-header">THÔNG TIN TÀI KHOẢN</div>
+                        <div class="info-card">
+                            <div class="info-block">
+                                <div class="info-label">THÔNG TIN LIÊN HỆ</div>
+                                <div class="info-value" th:text="${fullName}">Tên Người Dùng</div>
+                                <div class="info-value" th:text="${user.email}">Email</div>
+                                <div class="info-actions">
+                                    <a href="/user/profile">Chỉnh sửa</a>
+                                    <a href="/user/change-password">Thay đổi mật khẩu</a>
+                                </div>
+                            </div>
+                            <div class="info-block">
+                                <div class="info-label">ĐĂNG KÝ NHẬN TIN</div>
+                                <div class="info-value">Bạn chưa đăng ký nhận bản tin</div>
+                                <div class="info-actions">
+                                    <a href="#">Chỉnh sửa</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Địa chỉ giao hàng -->
+                    <div class="info-section">
+                        <div class="info-header">ĐỊA CHỈ GIAO HÀNG <a class="address-link" href="/user-address">Quản lý địa chỉ</a></div>
+                        <div class="info-card">
+                            <div class="info-block">
+                                <div class="info-label">ĐỊA CHỈ GIAO HÀNG MẶC ĐỊNH</div>
+                                <div class="info-actions">
+                                    <a href="/user/user-address">Chỉnh sửa</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{base :: footer}"></div>
+</body>
+</html> 

@@ -35,6 +35,9 @@ public class AuthConst {
         public static final String RESET_PASSWORD_SUCCESS = "Đặt lại mật khẩu thành công, vui lòng đăng nhập.";
         public static final String UPDATE_PASSWORD_SUCCESS = "Cập nhật mật khẩu thành công.";
         public static final String UPDATE_PROFILE_SUCCESS = "Cập nhật thông tin thành công.";
+        public static final String UPDATE_ADDRESS_SUCCESS = "Cập nhật địa chỉ thành công.";
+        public static final String SAVE_ADDRESS_SUCCESS = "Lưu địa chỉ thành công.";
+        public static final String DELETE_ADDRESS_SUCCESS = "Xóa địa chỉ thành công.";
     }
 
 }

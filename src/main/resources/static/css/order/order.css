@@ -1,0 +1,82 @@
+/* order.css - Chả Cá Lăng Thung Cấm */
+
+body, .order-section, .branch-select-section {
+    background: #f6c04e !important; /* vàng cam chủ đạo */
+}
+
+.section-header .title, h2.title, h3.title, .success-message {
+    color: #b85c00;
+    font-family: 'Quicksand', 'Cabin', sans-serif;
+    font-weight: 700;
+}
+
+.menu-category, .cart-section, .checkout-form, .branch-card, .order-details {
+    background: #fffbe6;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(184, 92, 0, 0.08);
+    border: 1px solid #ffe0a3;
+}
+
+.menu-item, .cart-item {
+    border-bottom: 1px solid #ffe0a3;
+}
+.menu-item:last-child, .cart-item:last-child {
+    border-bottom: none;
+}
+
+.quantity-btn, .main-button, .btn-home {
+    background: linear-gradient(90deg, #f6a700 0%, #f36700 100%);
+    color: #fff !important;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(246, 167, 0, 0.08);
+}
+.quantity-btn:hover, .main-button:hover, .btn-home:hover {
+    background: linear-gradient(90deg, #f36700 0%, #b85c00 100%);
+    color: #fff !important;
+}
+
+input.form-control, textarea.form-control {
+    border-radius: 8px;
+    border: 1px solid #ffe0a3;
+    background: #fffbe6;
+}
+input.form-control:focus, textarea.form-control:focus {
+    border-color: #f6a700;
+    box-shadow: 0 0 0 2px #f6c04e33;
+}
+
+.branch-card {
+    border: 2px solid #f6a700;
+    background: #fffbe6;
+    color: #b85c00;
+}
+.branch-card:hover {
+    border-color: #f36700;
+    box-shadow: 0 4px 16px rgba(246, 103, 0, 0.12);
+}
+
+.order-code {
+    color: #f36700;
+    font-weight: 700;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #f6a700;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #fffbe6;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .menu-category, .cart-section, .checkout-form, .branch-card, .order-details {
+        padding: 12px;
+    }
+    .section-header .title {
+        font-size: 1.3rem;
+    }
+} 

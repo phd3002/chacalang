@@ -1,7 +1,9 @@
 package com.thungcam.chacalang.controller.account;
 
+import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.entity.UserAddress;
+import com.thungcam.chacalang.exception.BusinessException;
 import com.thungcam.chacalang.service.UserAddressService;
 import com.thungcam.chacalang.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,9 @@ public class UserAddressController {
     @GetMapping("/user-address")
     public String showUserAddresses(Model model, Authentication authentication) {
         User user = userService.getAuthenticatedUser(authentication);
+        String fullName = user.getFirstName() + " " + user.getLastName();
+        model.addAttribute("fullName", fullName);
+        model.addAttribute("user", user);
         model.addAttribute("addresses", userAddressService.getAllUserAddresses(user));
         return "profile/shipping-address";
     }
@@ -34,24 +39,38 @@ public class UserAddressController {
         UserAddress address = (id != null)
                 ? userAddressService.getUserAddressByIdAndUser(id, user)
                 : new UserAddress();
+        String fullName = user.getFirstName() + " " + user.getLastName();
+        model.addAttribute("fullName", fullName);
+        model.addAttribute("user", user);
         model.addAttribute("address", address);
+        model.addAttribute("addresses", userAddressService.getAllUserAddresses(user));
         return "profile/update-shipping-address";
     }
 
     @PostMapping("/update-address")
     public String saveAddress(Authentication authentication,
                               @ModelAttribute UserAddress address,
-                              @RequestParam("isDefault") boolean isDefault,
+                              @RequestParam(value = "isDefault", required = false) Boolean isDefault,
                               RedirectAttributes redirectAttributes) {
         User user = userService.getAuthenticatedUser(authentication);
-        if (address.getId() == null) {
-            userAddressService.createUserAddress(user, address, isDefault);
-        } else {
-            userAddressService.updateUserAddress(user, address, isDefault);
+        try {
+            boolean isDefaultFlag = (address.getId() != null && address.getIsDefault()) || Boolean.TRUE.equals(isDefault);
+
+            if (address.getId() == null) {
+                userAddressService.createUserAddress(user, address, isDefaultFlag);
+                redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.SAVE_ADDRESS_SUCCESS);
+            } else {
+                userAddressService.updateUserAddress(user, address, isDefaultFlag);
+                redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.UPDATE_ADDRESS_SUCCESS);
+            }
+        } catch (BusinessException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        redirectAttributes.addFlashAttribute("success", "Lưu địa chỉ thành công");
         return "redirect:/user/user-address";
     }
+
+
+
 
     @PostMapping("/delete-address")
     public String deleteAddress(@RequestParam Long id,
@@ -59,7 +78,7 @@ public class UserAddressController {
                                 RedirectAttributes redirectAttributes) {
         User user = userService.getAuthenticatedUser(authentication);
         userAddressService.deleteAddress(user, id);
-        redirectAttributes.addFlashAttribute("success", "Xóa địa chỉ thành công");
+        redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.DELETE_ADDRESS_SUCCESS);
         return "redirect:/user/user-address";
     }
 }

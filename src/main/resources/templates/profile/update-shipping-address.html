@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật địa chỉ giao hàng</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account/account.css}">
+    <style>
+        /* Style cho form địa chỉ - giới hạn chiều rộng và căn giữa form */
+        .address-form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Tạo khoảng cách giữa các nhóm form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Style cho label của form - làm nổi bật và dễ đọc */
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        /* Style cho các input và select - tạo viền và padding phù hợp */
+        .form-control {
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        /* Hiệu ứng focus cho input và select - tạo viền xanh khi focus */
+        .form-control:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+        }
+
+        /* Style cho nút submit - màu xanh dương và hiệu ứng hover */
+        .btn-submit {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #1565c0;
+        }
+
+        /* Style cho nút cancel - màu xám và hiệu ứng hover */
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        /* Style cho phần chọn loại địa chỉ (mặc định/phụ) */
+        .address-type {
+            margin-bottom: 20px;
+        }
+
+        .address-type label {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{base :: header}"></div>
+<br><br>
+<div class="profile-section">
+    <div class="container">
+        <div class="row justify-content-center align-items-start">
+            <!-- Sidebar -->
+            <div class="col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+                <div class="account-sidebar">
+                    <div class="sidebar-title">TÀI KHOẢN CỦA TÔI</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="/user/profile-manager"><i class="fa fa-user-circle"></i>QUẢN LÝ TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-shopping-bag"></i>ĐƠN HÀNG CỦA TÔI</a></li>
+                        <li class="active"><a href="/user/user-address"><i class="fa fa-map-marker"></i>ĐỊA CHỈ GIAO
+                            HÀNG</a></li>
+                        <li><a href="/user/profile"><i class="fa fa-info-circle"></i>THÔNG TIN TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-gift"></i>DANH SÁCH ƯU ĐÃI</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-8">
+                <div class="profile-wrapper">
+                    <div class="section-header text-center">
+                        <h2 class="title">Cập nhật địa chỉ giao hàng</h2>
+                        <hr>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                    <form class="address-form" method="post" th:action="@{/user/update-address}">
+                        <input name="id" th:value="${address != null ? address.id : ''}" type="hidden">
+
+                        <!-- Nếu là thêm mới hoặc sửa địa chỉ phụ -->
+                        <div class="form-group"
+                             th:if="${address == null or !address.isDefault}">
+                            <label>
+                                <input type="checkbox" name="isDefault" value="true"
+                                       th:checked="${address != null and address.isDefault}">
+                                Đặt làm địa chỉ mặc định
+                            </label>
+                        </div>
+
+                        <!-- Nếu đang sửa địa chỉ mặc định: gửi hidden giữ lại trạng thái -->
+                        <input type="hidden" name="isDefault" value="true"
+                               th:if="${address != null and address.isDefault}" />
+
+
+                        <div class="form-group">
+                            <label class="form-label">Họ và tên người nhận:</label>
+                            <input class="form-control" name="fullName" required
+                                   th:value="${address.fullName}" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Số điện thoại:</label>
+                            <input class="form-control" name="phone" required
+                                   th:value="${address.phone}" type="tel">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tỉnh/Thành phố:</label>
+                            <select class="form-control" id="city" required onchange="this.nextElementSibling.value = this.options[this.selectedIndex].text;">
+                                <option disabled selected value="">Chọn tỉnh/thành phố</option>
+                            </select>
+                            <input type="hidden" name="city"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Quận/Huyện:</label>
+                            <select class="form-control" id="district" required onchange="this.nextElementSibling.value = this.options[this.selectedIndex].text;">
+                                <option disabled selected value="">Chọn quận/huyện</option>
+                            </select>
+                            <input type="hidden" name="district"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Phường/Xã:</label>
+                            <select class="form-control" id="ward" required onchange="this.nextElementSibling.value = this.options[this.selectedIndex].text;">
+                                <option disabled selected value="">Chọn phường/xã</option>
+                            </select>
+                            <input type="hidden" name="ward"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Địa chỉ chi tiết:</label>
+                            <input class="form-control" name="address" required
+                                   th:value="${address != null ? address.address : ''}" type="text">
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button class="btn-submit" type="submit">Lưu địa chỉ</button>
+                            <a class="btn-cancel" href="/user/user-address">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{base :: footer}"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script th:src="@{/js/address-selector.js}"></script>
+</body>
+</html> 

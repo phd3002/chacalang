@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Cabin:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .error-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #F9F9F9;
+            position: relative;
+        }
+        .error-content {
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+        .error-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 72px;
+            color: #f36700;
+            margin-bottom: 20px;
+        }
+        .error-subtitle {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 24px;
+            color: #151515;
+            margin-bottom: 30px;
+        }
+        .error-text {
+            color: #969696;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .error-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #f36700;
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 700;
+            transition: opacity 0.2s;
+        }
+        .error-button:hover {
+            opacity: 0.8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-section">
+        <div class="error-content">
+            <h1 class="error-title">Oops!</h1>
+            <h2 class="error-subtitle">404 - Page Not Found</h2>
+            <p class="error-text">Xin lỗi, trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.</p>
+            <a th:href="@{/static}" class="error-button">Quay về trang chủ</a>
+        </div>
+    </div>
+</body>
+</html> 

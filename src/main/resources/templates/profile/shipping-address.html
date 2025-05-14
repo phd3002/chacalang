@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Địa chỉ giao hàng</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account/account.css}">
+    <style>
+        body {
+            font-size: 18px;
+            background: #f7f8fa;
+        }
+
+        .profile-section {
+            font-size: 1.13rem;
+        }
+
+        .section-header .title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #e53935;
+        }
+
+        .info-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .info-card {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+        }
+
+        .address-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+            padding: 28px 28px 18px 28px;
+            min-width: 340px;
+            flex: 1;
+        }
+
+        .address-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1976d2;
+        }
+
+        .address-title.secondary {
+            color: #333;
+        }
+
+        .info-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1.08rem;
+            margin-bottom: 10px;
+        }
+
+        .address-actions a, .address-actions button {
+            margin-right: 16px;
+            color: #1976d2;
+            font-size: 1.08rem;
+            text-decoration: underline;
+            transition: color 0.18s;
+            font-weight: 600;
+        }
+
+        .address-actions a:last-child, .address-actions button:last-child {
+            margin-right: 0;
+        }
+
+        .address-actions a:hover, .address-actions button:hover {
+            color: #e53935;
+        }
+
+        .add-address-btn {
+            background: #e53935;
+            color: #fff;
+            border: none;
+            border-radius: 22px;
+            padding: 12px 32px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 22px;
+            margin-top: 8px;
+            transition: background 0.18s;
+        }
+
+        .add-address-btn:hover {
+            background: #b71c1c;
+        }
+
+        .back-link {
+            font-size: 1.08rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{base :: header}"></div>
+<br><br>
+<div class="profile-section">
+    <div class="container">
+        <div class="row justify-content-center align-items-start">
+            <!-- Sidebar -->
+            <div class="col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+                <div class="account-sidebar">
+                    <div class="sidebar-title">TÀI KHOẢN CỦA TÔI</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="/user/profile-manager"><i class="fa fa-user-circle"></i>QUẢN LÝ TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-shopping-bag"></i>ĐƠN HÀNG CỦA TÔI</a></li>
+                        <li class="active"><a href="/user/user-address"><i class="fa fa-map-marker"></i>ĐỊA CHỈ GIAO
+                            HÀNG</a></li>
+                        <li><a href="/user/profile"><i class="fa fa-info-circle"></i>THÔNG TIN TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-gift"></i>DANH SÁCH ƯU ĐÃI</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-8">
+                <div class="profile-wrapper">
+                    <div class="section-header text-center">
+                        <h2 class="title">Địa chỉ giao hàng</h2>
+                        <hr>
+                    </div>
+                    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+                    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+                    <button class="add-address-btn" onclick="location.href='/user/update-address'"><i
+                            class="fa fa-plus"></i> Thêm địa chỉ mới
+                    </button>
+                    <div class="info-section">
+                        <div class="info-header">DANH SÁCH ĐỊA CHỈ</div>
+                        <div class="info-card">
+                            <!-- Địa chỉ mặc định -->
+                            <div class="address-card" style="border-left: 4px solid #1976d2;">
+                                <div class="address-title">Địa chỉ mặc định</div>
+                                <div th:each="address : ${addresses}" th:if="${address.isDefault}">
+                                    <div class="info-value">
+                                        <div><strong>Họ tên:</strong> <span th:text="${address.fullName}"></span></div>
+                                        <div><strong>Địa chỉ:</strong>
+                                            <span th:text="${address.address}"></span>,
+                                            <span th:text="${address.ward}"></span>,
+                                            <span th:text="${address.district}"></span>,
+                                            <span th:text="${address.city}"></span>
+                                        </div>
+                                        <div><strong>SĐT:</strong> <span th:text="${address.phone}"></span></div>
+                                    </div>
+                                    <div class="address-actions">
+                                        <a th:href="@{/user/update-address(id=${address.id})}">
+                                            <i class="fa fa-pencil"></i> Chỉnh sửa
+                                        </a>
+                                        <th:block th:if="${!address.isDefault}">
+                                            <form method="post" style="display:inline;"
+                                                  th:action="@{/user/delete-address}">
+                                                <input name="id" th:value="${address.id}" type="hidden"/>
+                                                <button class="btn btn-link" onclick="return confirm('Xác nhận xoá?')"
+                                                        type="submit">
+                                                    <i class="fa fa-trash"></i> Xoá
+                                                </button>
+                                            </form>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <div th:if="${#lists.isEmpty(addresses.?[isDefault == true])}">
+                                    <p>Bạn chưa có địa chỉ mặc định.</p>
+                                </div>
+                            </div>
+                            <!-- Địa chỉ phụ -->
+                            <div class="address-card" style="border-left: 4px solid #aaa;">
+                                <div class="address-title secondary">Địa chỉ phụ</div>
+                                <div th:if="${#lists.isEmpty(addresses.?[isDefault == false])}">
+                                    <p>Bạn không có địa chỉ nào khác trong sổ địa chỉ của mình.</p>
+                                </div>
+                                <div th:each="address : ${addresses}" th:if="${!address.isDefault}">
+                                    <div class="info-value">
+                                        <div><strong>Họ tên:</strong> <span th:text="${address.fullName}"></span></div>
+                                        <div><strong>Địa chỉ:</strong>
+                                            <span th:text="${address.address}"></span>,
+                                            <span th:text="${address.ward}"></span>,
+                                            <span th:text="${address.district}"></span>,
+                                            <span th:text="${address.city}"></span>
+                                        </div>
+                                        <div><strong>SĐT:</strong> <span th:text="${address.phone}"></span></div>
+                                    </div>
+                                    <div class="address-actions">
+                                        <a th:href="@{/user/update-address(id=${address.id})}">
+                                            <i class="fa fa-pencil"></i> Chỉnh sửa
+                                        </a>
+                                        <form method="post" style="display:inline;" th:action="@{/user/delete-address}">
+                                            <input name="id" th:value="${address.id}" type="hidden"/>
+                                            <button class="btn btn-link" onclick="return confirm('Xác nhận xoá?')"
+                                                    type="submit">
+                                                <i class="fa fa-trash"></i> Xoá
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <hr style="margin: 18px 0;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <a class="back-link" href="/profile-manager">
+                            <i class="fa fa-chevron-left"></i> Quay lại quản lý tài khoản
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{base :: footer}"></div>
+</body>
+</html> 

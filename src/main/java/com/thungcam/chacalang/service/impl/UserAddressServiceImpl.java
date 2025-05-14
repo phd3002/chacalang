@@ -71,7 +71,6 @@ public class UserAddressServiceImpl implements UserAddressService {
                 });
     }
 
-
     @Override
     public void deleteAddress(User user, Long addressId) {
         UserAddress address = getUserAddressByIdAndUser(addressId, user);
