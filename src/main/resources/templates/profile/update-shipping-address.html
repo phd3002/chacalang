@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vn">
 <head>
     <meta charset="UTF-8">
     <title>Cập nhật địa chỉ giao hàng</title>
@@ -142,24 +142,24 @@
 
                         <div class="form-group">
                             <label class="form-label">Tỉnh/Thành phố:</label>
-                            <select class="form-control" id="city" required onchange="this.nextElementSibling.value = this.options[this.selectedIndex].text;">
-                                <option disabled selected value="">Chọn tỉnh/thành phố</option>
+                            <select class="form-control" id="city" required onchange="document.getElementsByName('city')[0].value = this.value;">
+                                <option value="">Chọn tỉnh/thành phố</option>
                             </select>
                             <input type="hidden" name="city"/>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Quận/Huyện:</label>
-                            <select class="form-control" id="district" required onchange="this.nextElementSibling.value = this.options[this.selectedIndex].text;">
-                                <option disabled selected value="">Chọn quận/huyện</option>
+                            <select class="form-control" id="district" required onchange="document.getElementsByName('district')[0].value = this.value;">
+                                <option value="">Chọn quận/huyện</option>
                             </select>
                             <input type="hidden" name="district"/>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Phường/Xã:</label>
-                            <select class="form-control" id="ward" required onchange="this.nextElementSibling.value = this.options[this.selectedIndex].text;">
-                                <option disabled selected value="">Chọn phường/xã</option>
+                            <select class="form-control" id="ward" required onchange="document.getElementsByName('ward')[0].value = this.value;">
+                                <option value="">Chọn phường/xã</option>
                             </select>
                             <input type="hidden" name="ward"/>
                         </div>
@@ -181,8 +181,105 @@
     </div>
 </div>
 <div th:replace="~{base :: footer}"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script th:src="@{/js/address-selector.js}"></script>
+<script th:inline="javascript">
+    const host = "https://provinces.open-api.vn/api/";
+
+    // Lấy giá trị từ Thymeleaf
+    let selectedCity = /*[['' + ${address.city}]]*/ '';
+    let selectedDistrict = /*[['' + ${address.district}]]*/ '';
+    let selectedWard = /*[['' + ${address.ward}]]*/ '';
+    // Render dữ liệu vào select
+    const renderData = (array, select) => {
+        let row = '<option value="" disabled selected>Chọn</option>';
+        array.forEach(element => {
+            row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`;
+        });
+        document.querySelector(`#${select}`).innerHTML = row;
+    };
+
+    const callAPI = (api) => {
+        return axios.get(api).then((response) => {
+            renderData(response.data, "city");
+
+            if (selectedCity) {
+                $("#city option").filter(function () {
+                    return $(this).val() === selectedCity;
+                }).prop("selected", true);
+
+                document.getElementsByName('city')[0].value = selectedCity;
+
+                const cityId = $("#city option:selected").data("id");
+                if (cityId) {
+                    callApiDistrict(`${host}p/${cityId}?depth=2`);
+                }
+            }
+        });
+    };
+
+    const callApiDistrict = (api) => {
+        return axios.get(api).then((response) => {
+            renderData(response.data.districts, "district");
+
+            if (selectedDistrict) {
+                $("#district option").filter(function () {
+                    return $(this).val() === selectedDistrict;
+                }).prop("selected", true);
+
+                document.getElementsByName('district')[0].value = selectedDistrict;
+
+                const districtId = $("#district option:selected").data("id");
+                if (districtId) {
+                    callApiWard(`${host}d/${districtId}?depth=2`);
+                }
+            }
+        });
+    };
+
+    const callApiWard = (api) => {
+        return axios.get(api).then((response) => {
+            renderData(response.data.wards, "ward");
+
+            if (selectedWard) {
+                $("#ward option").filter(function () {
+                    return $(this).val() === selectedWard;
+                }).prop("selected", true);
+
+                document.getElementsByName('ward')[0].value = selectedWard;
+            }
+        });
+    };
+
+    // Gán lại hidden input khi người dùng chọn lại dropdown
+    $("#city").change(() => {
+        const value = $("#city").val();
+        document.getElementsByName('city')[0].value = value;
+
+        const cityId = $("#city option:selected").data("id");
+        if (cityId) {
+            callApiDistrict(`${host}p/${cityId}?depth=2`);
+        }
+    });
+
+    $("#district").change(() => {
+        const value = $("#district").val();
+        document.getElementsByName('district')[0].value = value;
+
+        const districtId = $("#district option:selected").data("id");
+        if (districtId) {
+            callApiWard(`${host}d/${districtId}?depth=2`);
+        }
+    });
+
+    $("#ward").change(() => {
+        const value = $("#ward").val();
+        document.getElementsByName('ward')[0].value = value;
+    });
+
+    // Gọi API ban đầu
+    callAPI(`${host}?depth=1`);
+</script>
 </body>
 </html> 
