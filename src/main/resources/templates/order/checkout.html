@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Thanh Toán Đơn Hàng - Chả Cá Lăng Thung Cấm</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700%7CCabin:400%7CDancing+Script" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/order.css}"/>
+    <style>
+        body {
+            background: #F9F9F9;
+        }
+        .checkout-section {
+            padding: 40px 0;
+            min-height: 100vh;
+        }
+        .checkout-title {
+            color: #f36700;
+            font-weight: bold;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .checkout-summary {
+            background: #fff8f2;
+            border-radius: 8px;
+            padding: 24px 20px 16px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(243, 103, 0, 0.04);
+        }
+        .cart-item-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            min-height: 48px;
+        }
+        .cart-item-name {
+            flex: 2;
+            font-size: 15px;
+            font-weight: 500;
+            white-space: normal;
+            align-items: center;
+            display: flex;
+        }
+        .quantity-control {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .cart-item-price {
+            flex: 1;
+            text-align: right;
+            color: #f36700;
+            font-weight: 600;
+            min-width: 80px;
+            align-items: center;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .order-summary {
+            background: #fff8f2;
+            border-radius: 6px;
+            padding: 16px 12px 10px 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 2px rgba(243, 103, 0, 0.04);
+        }
+        .order-summary .cart-item {
+            font-size: 15px;
+        }
+        .order-summary .cart-item strong {
+            color: #f36700;
+        }
+        .checkout-form {
+            background: #FFF;
+            padding: 24px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .checkout-form label {
+            font-weight: 500;
+            color: #333;
+        }
+        .checkout-form .form-control {
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+        .main-button {
+            width: 100%;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<header id="header">
+    <div id="top-nav">
+        <div class="container">
+            <a class="logo" href="/">
+                <h1 style="font-family: 'Dancing Script', cursive; color: #f36700;">Chả Cá Lăng Thung Cấm</h1>
+            </a>
+        </div>
+    </div>
+</header>
+<section class="checkout-section">
+    <div class="container">
+        <h2 class="checkout-title">Thanh Toán Đơn Hàng</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="checkout-summary">
+                    <h4 style="color:#f36700; font-weight:600; margin-bottom:18px;">Sản phẩm trong giỏ hàng</h4>
+                    <div id="checkoutCartItems">
+                        <!-- Cart items sẽ được render ở đây bằng JS -->
+                    </div>
+                    <div class="order-summary">
+                        <div class="cart-item">
+                            <span>Tạm Tính</span>
+                            <span id="checkoutSubtotal">0₫</span>
+                        </div>
+                        <div class="cart-item">
+                            <span>Phí Giao Hàng</span>
+                            <span id="checkoutShippingFee">30.000₫</span>
+                        </div>
+                        <div class="cart-item">
+                            <strong>Tổng Cộng</strong>
+                            <strong id="checkoutTotal">0₫</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <form class="checkout-form" id="checkoutForm">
+                    <h4 style="color:#f36700; font-weight:600; margin-bottom:18px;">Thông tin khách hàng</h4>
+                    <div class="form-group">
+                        <label for="customerName">Họ và tên</label>
+                        <input type="text" class="form-control" id="customerName" name="customerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">Số điện thoại</label>
+                        <input type="tel" class="form-control" id="customerPhone" name="customerPhone" required pattern="[0-9]{10,11}">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerAddress">Địa chỉ giao hàng</label>
+                        <input type="text" class="form-control" id="customerAddress" name="customerAddress" required>
+                    </div>
+                    <button type="submit" class="main-button">Xác Nhận Đặt Hàng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="copyright">© 2024 Chả Cá Lăng Thung Cấm. Bảo lưu mọi quyền.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script>
+    // Lấy dữ liệu giỏ hàng từ API và render ra checkout
+    function renderCheckoutCart() {
+        $.get('/api/cart', function(data) {
+            const cartItems = $('#checkoutCartItems');
+            cartItems.empty();
+            let subtotal = 0;
+            data.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                const html = `
+                <div class="cart-item cart-item-flex">
+                    <span class="cart-item-name">${item.name}</span>
+                    <div class="quantity-control">
+                        <span>${item.quantity}</span>
+                    </div>
+                    <span class="cart-item-price">${itemTotal.toLocaleString()}₫</span>
+                </div>`;
+                cartItems.append(html);
+            });
+            const shippingFee = 30000;
+            const total = subtotal + shippingFee;
+            $('#checkoutSubtotal').text(subtotal.toLocaleString() + '₫');
+            $('#checkoutTotal').text(total.toLocaleString() + '₫');
+        });
+    }
+    $(document).ready(function() {
+        renderCheckoutCart();
+        $('#checkoutForm').on('submit', function(e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+            $.post('/checkout', formData)
+                .done(function() {
+                    alert('Đặt hàng thành công!');
+                    window.location.href = '/';
+                })
+                .fail(function() {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                });
+        });
+    });
+</script>
+</body>
+</html> 

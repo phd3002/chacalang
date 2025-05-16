@@ -331,6 +331,54 @@
         .menu-category {
             scroll-margin-top: 100px; /* Add space for the sticky header */
         }
+
+        .cart-item-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            min-height: 48px;
+        }
+        .cart-item-name {
+            flex: 2;
+            font-size: 15px;
+            font-weight: 500;
+            white-space: normal;
+            align-items: center;
+            display: flex;
+        }
+        .quantity-control {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .cart-item-price {
+            flex: 1;
+            text-align: right;
+            color: #f36700;
+            font-weight: 600;
+            min-width: 80px;
+            align-items: center;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .quantity-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.cart-open .order-section .container {
+            margin-right: 350px; /* đúng bằng chiều rộng popup */
+            transition: margin-right 0.3s;
+        }
+        @media (max-width: 991px) {
+            body.cart-open .order-section .container {
+                margin-right: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -509,6 +557,7 @@
     function toggleCart() {
         const cartPopup = document.getElementById('cartPopup');
         cartPopup.classList.toggle('active');
+        document.body.classList.toggle('cart-open', cartPopup.classList.contains('active'));
     }
 
     function showNotification(message) {
@@ -545,18 +594,14 @@
                 subtotal += itemTotal;
                 totalItems += item.quantity;
                 const html = `
-                <div class="cart-item">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>${item.name}</span>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity - 1})">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity + 1})">+</button>
-                        </div>
+                <div class="cart-item cart-item-flex">
+                    <span class="cart-item-name">${item.name}</span>
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity - 1})">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity + 1})">+</button>
                     </div>
-                    <div style="text-align: right; color: #f36700;">
-                        ${itemTotal.toLocaleString()}₫
-                    </div>
+                    <span class="cart-item-price">${itemTotal.toLocaleString()}₫</span>
                 </div>`;
                 cartItems.append(html);
             });
