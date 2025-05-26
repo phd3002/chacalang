@@ -474,9 +474,11 @@
                 <strong id="total">0₫</strong>
             </div>
         </div>
-        <button class="main-button" onclick="proceedToCheckout()"
-                style="width: 100%; margin-top: 20px;">Tiến Hành Thanh Toán
-        </button>
+        <form action="/checkout" method="get">
+            <button class="main-button" type="submit"
+                    style="width: 100%; margin-top: 20px;">Tiến Hành Thanh Toán
+            </button>
+        </form>
     </div>
 </div>
 

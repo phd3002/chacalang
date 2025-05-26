@@ -1,108 +1,146 @@
 package com.thungcam.chacalang.service.impl;
 
 import com.thungcam.chacalang.dto.OrderCheckoutDTO;
-import com.thungcam.chacalang.entity.Menu;
-import com.thungcam.chacalang.entity.OrderItem;
-import com.thungcam.chacalang.entity.Orders;
+import com.thungcam.chacalang.entity.*;
 import com.thungcam.chacalang.enums.OrderStatus;
-import com.thungcam.chacalang.repository.MenuRepository;
-import com.thungcam.chacalang.repository.OrderItemRepository;
-import com.thungcam.chacalang.repository.OrderRepository;
-import com.thungcam.chacalang.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.thungcam.chacalang.enums.PaymentStatus;
+import com.thungcam.chacalang.enums.ShippingMethod;
+import com.thungcam.chacalang.repository.*;
+import com.thungcam.chacalang.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+    final private OrderRepository orderRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
+    final private OrderItemRepository orderItemRepository;
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;
+    final private CartService cartService;
 
-    @Autowired
-    private MenuRepository menuRepository;
+    final private MenuRepository menuRepository;
 
-    @Override
+    final private InvoiceRepository invoiceRepository;
+
+    final private PaymentMethodRepository paymentMethodRepository;
+
+    private final MailService mailService;
+
+    private final UserAddressService userAddressService;
+
+    private final BranchRepository branchRepository;
+
+    private final InvoiceService invoiceService;
+
     @Transactional
-    public Orders createOrder(OrderCheckoutDTO checkoutDTO) {
-        // Create new order
+    @Override
+    public Orders createOrder(OrderCheckoutDTO dto, User user) {
+        List<CartItem> cartItems = cartService.getCartItems(user.getId());
+        if (cartItems.isEmpty()) throw new IllegalStateException("Giỏ hàng trống");
+
+        // Tính phí và tổng
+        BigDecimal shippingFee = "pickup".equals(dto.getShippingMethod()) ? BigDecimal.ZERO : new BigDecimal("30000");
+        BigDecimal subtotal = cartItems.stream()
+                .map(i -> i.getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal total = subtotal.add(shippingFee);
+
+        // Tìm payment method
+        PaymentMethod paymentMethod = paymentMethodRepository.findById(dto.getPaymentMethod())
+                .orElseThrow(() -> new RuntimeException("Phương thức thanh toán không hợp lệ"));
+
+        // Tạo đơn hàng
         Orders order = new Orders();
-        order.setOrderCode(generateOrderCode());
-        order.setCustomerName(checkoutDTO.getCustomerName());
-        order.setCustomerPhone(checkoutDTO.getCustomerPhone());
-        order.setCustomerEmail(checkoutDTO.getCustomerEmail());
-        order.setCustomerAddress(checkoutDTO.getCustomerAddress());
-        order.setNote(checkoutDTO.getNote());
-        order.setStatus(OrderStatus.PENDING);
+        order.setUser(user);
+        order.setOrderCode("HD" + System.currentTimeMillis());
         order.setCreatedAt(LocalDateTime.now());
-        order.setUpdatedAt(LocalDateTime.now());
+        order.setShippingMethod(
+                ShippingMethod.valueOf(dto.getShippingMethod().trim().toUpperCase())
+        );
 
-        // Save order first to get the ID
-        order = orderRepository.save(order);
+        ShippingMethod method = ShippingMethod.valueOf(dto.getShippingMethod().trim().toUpperCase());
+        order.setShippingMethod(method);
 
-        // Create order items
-        List<OrderItem> orderItems = new ArrayList<>();
-        BigDecimal totalAmount = BigDecimal.ZERO;
+        if (method == ShippingMethod.DELIVERY) {
+            if (dto.getAddressId() == null)
+                throw new RuntimeException("Vui lòng chọn địa chỉ giao hàng");
 
-        for (Map.Entry<Long, Integer> entry : checkoutDTO.getCartData().entrySet()) {
-            Long menuId = entry.getKey();
-            Integer quantity = entry.getValue();
+            UserAddress address = userAddressService.getAddressById(dto.getAddressId());
+            if (address == null) throw new RuntimeException("Địa chỉ không tồn tại");
 
-            Menu menu = menuRepository.findById(menuId)
-                    .orElseThrow(() -> new RuntimeException("Menu not found: " + menuId));
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setMenu(menu);
-            orderItem.setQuantity(quantity);
-            orderItem.setPrice(menu.getPrice());
-            orderItem.setCreatedAt(LocalDateTime.now());
-            orderItem.setUpdatedAt(LocalDateTime.now());
-
-            orderItems.add(orderItem);
-            totalAmount = totalAmount.add(menu.getPrice().multiply(BigDecimal.valueOf(quantity)));
+            order.setCustomerName(address.getFullName());
+            order.setCustomerPhone(address.getPhone());
+            order.setCustomerAddress(address.getAddress());
+            order.setWard(address.getWard());
+            order.setDistrict(address.getDistrict());
+            order.setCity(address.getCity());
+        } else {
+            if (dto.getBranchId() == null)
+                throw new RuntimeException("Vui lòng chọn chi nhánh cửa hàng");
+            Branch branch = branchRepository.findById(dto.getBranchId())
+                    .orElseThrow(() -> new RuntimeException("Chi nhánh không tồn tại"));
+            order.setCustomerName(dto.getCustomerName());
+            order.setCustomerPhone(dto.getCustomerPhone());
+            order.setBranch(branch);
+            order.setCustomerAddress(branch.getName() + " - " + branch.getAddress());
         }
 
-        // Save order items
-        orderItemRepository.saveAll(orderItems);
 
-        // Update order total amount
-        order.setTotalPrice(totalAmount);
-        return orderRepository.save(order);
-    }
-
-    @Override
-    public Orders getOrderById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + id));
-    }
-
-    @Override
-    public Orders getOrderByOrderCode(String orderCode) {
-        return orderRepository.findByOrderCode(orderCode)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + orderCode));
-    }
-
-    @Override
-    @Transactional
-    public void updateOrderStatus(Long orderId, String status) {
-        Orders order = getOrderById(orderId);
-        order.setStatus(OrderStatus.valueOf(status));
-        order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
+
+        // Lưu từng món
+        for (CartItem ci : cartItems) {
+            OrderItem item = new OrderItem();
+            item.setOrder(order);
+            item.setMenu(ci.getMenu());
+            item.setQuantity(ci.getQuantity());
+            item.setPrice(ci.getPrice());
+            item.setSubtotal(ci.getPrice().multiply(BigDecimal.valueOf(ci.getQuantity())));
+            item.setCreatedAt(LocalDateTime.now());
+            orderItemRepository.save(item);
+        }
+
+        // Tạo hóa đơn
+        Invoice invoice = new Invoice();
+        invoice.setOrder(order);
+        invoice.setInvoiceCode("INV" + System.currentTimeMillis());
+        invoice.setIssuedDate(LocalDateTime.now());
+        invoice.setShippingFee(shippingFee);
+        invoice.setTaxAmount(BigDecimal.ZERO);
+        invoice.setDiscountAmount(BigDecimal.ZERO);
+        invoice.setTotalAmount(total);
+        invoice.setFinalAmount(total);
+        invoice.setPaymentMethod(paymentMethod);
+        invoice.setPaymentStatus(PaymentStatus.PENDING);
+        invoice.setNotes("Tạo từ đơn hàng #" + order.getOrderCode());
+
+        invoiceRepository.save(invoice);
+
+        // Gửi email xác nhận (nếu có)
+        mailService.sendOrderConfirmation(order);
+
+        // Xoá giỏ hàng
+        cartService.clearCart(user.getId());
+
+        return order;
     }
 
-    private String generateOrderCode() {
-        return "ORD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+    private String buildFullAddress(OrderCheckoutDTO dto) {
+        if ("pickup".equals(dto.getShippingMethod())) {
+            return dto.getPickupStore() + ", " + dto.getPickupCity();
+        }
+        return dto.getCustomerAddress() + ", " + dto.getWard() + ", " + dto.getDistrict() + ", " + dto.getCity();
     }
-} 
+
+    private String generateCode() {
+        return "HD" + System.currentTimeMillis();
+    }
+}

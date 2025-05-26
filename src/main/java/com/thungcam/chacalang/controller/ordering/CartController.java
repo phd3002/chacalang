@@ -47,11 +47,15 @@ public class CartController {
     @GetMapping("/api/cart")
     @ResponseBody
     public List<CartItemDTO> getCartItems(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return List.of(); // Trả về danh sách rỗng
+        }
         Long userId = getUserId(userDetails);
         return cartService.getCartItems(userId).stream()
                 .map(CartItemDTO::new)
                 .collect(Collectors.toList());
     }
+
 
 
     private Long getUserId(UserDetails userDetails) {

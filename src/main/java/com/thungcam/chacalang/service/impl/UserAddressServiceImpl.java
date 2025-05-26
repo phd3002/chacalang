@@ -76,4 +76,24 @@ public class UserAddressServiceImpl implements UserAddressService {
         UserAddress address = getUserAddressByIdAndUser(addressId, user);
         userAddressRepository.delete(address);
     }
+
+    @Override
+    public List<UserAddress> getAddressesByUserId(User user) {
+        return userAddressRepository.findAllByUser(user);
+    }
+
+    @Override
+    public List<UserAddress> getDefaultAddressesByUserId(User user) {
+        return userAddressRepository.findAllByUserAndIsDefault(user, true);
+    }
+
+    @Override
+    public List<UserAddress> getAddressByUserId(User user) {
+        return userAddressRepository.findAllByUser(user);
+    }
+
+    @Override
+    public UserAddress getAddressById(Long id) {
+        return userAddressRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ"));
+    }
 }

@@ -2,10 +2,8 @@ package com.thungcam.chacalang.service;
 
 import com.thungcam.chacalang.dto.OrderCheckoutDTO;
 import com.thungcam.chacalang.entity.Orders;
+import com.thungcam.chacalang.entity.User;
 
 public interface OrderService {
-    Orders createOrder(OrderCheckoutDTO checkoutDTO);
-    Orders getOrderById(Long id);
-    Orders getOrderByOrderCode(String orderCode);
-    void updateOrderStatus(Long orderId, String status);
+    Orders createOrder(OrderCheckoutDTO dto, User user);
 } 

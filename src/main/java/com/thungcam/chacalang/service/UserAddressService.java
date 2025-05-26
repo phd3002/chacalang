@@ -15,4 +15,12 @@ public interface UserAddressService {
     void updateUserAddress(User user, UserAddress address, boolean isDefault);
 
     void deleteAddress(User user, Long addressId);
+
+    List<UserAddress> getAddressesByUserId(User user);
+
+    List<UserAddress> getDefaultAddressesByUserId(User user);
+
+    List<UserAddress> getAddressByUserId(User user);
+
+    UserAddress getAddressById(Long id);
 }

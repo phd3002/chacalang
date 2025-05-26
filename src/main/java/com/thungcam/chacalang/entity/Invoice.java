@@ -16,30 +16,22 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "invoice", schema = "thungcam_db", indexes = {
-        @Index(name = "order_id", columnList = "order_id"),
-        @Index(name = "payment_method_id", columnList = "payment_method_id")
-}, uniqueConstraints = {
-        @UniqueConstraint(name = "invoice_code", columnNames = {"invoice_code"})
-})
+@Table(name = "invoice", schema = "thungcam_db")
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "order_id", nullable = false)
-    private com.thungcam.chacalang.entity.Orders order;
+    @OneToOne
+    @JoinColumn(name = "order_id", nullable = false, unique = true)
+    private Orders order;
 
     @Size(max = 100)
     @NotNull
     @Column(name = "invoice_code", nullable = false, length = 100)
     private String invoiceCode;
 
-//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "issued_date")
     private LocalDateTime issuedDate;
 
@@ -47,15 +39,12 @@ public class Invoice {
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
-//    @ColumnDefault("0.00")
     @Column(name = "shipping_fee", precision = 10, scale = 2)
     private BigDecimal shippingFee;
 
-//    @ColumnDefault("0.00")
     @Column(name = "tax_amount", precision = 10, scale = 2)
     private BigDecimal taxAmount;
 
-    @ColumnDefault("0.00")
     @Column(name = "discount_amount", precision = 10, scale = 2)
     private BigDecimal discountAmount;
 
@@ -63,14 +52,13 @@ public class Invoice {
     @Column(name = "final_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal finalAmount;
 
-//    @ColumnDefault("'UNPAID'")
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status")
     private PaymentStatus paymentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_method_id")
-    private com.thungcam.chacalang.entity.PaymentMethod paymentMethod;
+    private PaymentMethod paymentMethod;
 
     @Lob
     @Column(name = "notes")

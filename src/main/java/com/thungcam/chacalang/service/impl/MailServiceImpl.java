@@ -1,15 +1,26 @@
 package com.thungcam.chacalang.service.impl;
 
+import com.thungcam.chacalang.entity.OrderItem;
+import com.thungcam.chacalang.entity.Orders;
+import com.thungcam.chacalang.repository.OrderItemRepository;
 import com.thungcam.chacalang.service.MailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
-    @Autowired
-    private JavaMailSender mailSender;
+
+    final private JavaMailSender mailSender;
+
+    private final OrderItemRepository orderItemRepository;
 
     public void sendOtp(String to, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -25,6 +36,47 @@ public class MailServiceImpl implements MailService {
         message.setSubject("Đặt lại mật khẩu - Chả Cá Thung Cấm");
         message.setText("Bạn vừa yêu cầu đặt lại mật khẩu. Vui lòng nhấn vào link sau để đặt mật khẩu mới:\n" + resetLink + "\nLink có hiệu lực trong 10 phút.");
         mailSender.send(message);
+    }
+
+    @Override
+    public void sendOrderConfirmation(Orders order) {
+        if (order.getCustomerEmail() == null || order.getCustomerEmail().isBlank()) return;
+
+        String subject = "Xác nhận đơn hàng #" + order.getOrderCode();
+        String content = generateOrderContent(order);
+
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+            helper.setTo(order.getCustomerEmail());
+            helper.setSubject(subject);
+            helper.setText(content, false);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Gửi mail thất bại: " + e.getMessage());
+        }
+    }
+
+
+    private String generateOrderContent(Orders order) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Xin chào ").append(order.getCustomerName()).append(",\n\n");
+        sb.append("Mã đơn hàng: ").append(order.getOrderCode()).append("\n");
+//        sb.append("Tổng tiền: ").append(order.getTotalPrice()).append(" đ\n");
+//        sb.append("Phí giao hàng: ").append(order.getShippingFee()).append(" đ\n\n");
+
+        sb.append("Chi tiết đơn hàng:\n");
+
+        List<OrderItem> items = orderItemRepository.findByOrderId(order.getId());
+        for (OrderItem item : items) {
+            sb.append("- ").append(item.getMenu().getName())
+                    .append(" x").append(item.getQuantity())
+                    .append(" = ").append(item.getSubtotal()).append(" đ\n");
+        }
+
+        sb.append("\nCảm ơn bạn đã ủng hộ!");
+        return sb.toString();
     }
 
 }

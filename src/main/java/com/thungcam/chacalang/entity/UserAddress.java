@@ -53,4 +53,9 @@ public class UserAddress {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public String getFullAddress() {
+        return this.address + ", " + this.ward + ", " + this.district + ", " + this.city;
+    }
+
 }

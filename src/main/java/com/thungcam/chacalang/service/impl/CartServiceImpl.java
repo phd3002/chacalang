@@ -97,11 +97,9 @@ public class CartServiceImpl implements CartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    //    @Override
-//    public void updateCartStatus(Cart cart) {
-//        boolean empty = cartItemRepository.findAllByCart_Id(cart.getId()).isEmpty();
-//        cart.setEmpty(empty);
-//        cart.setUpdatedAt(LocalDateTime.now());
-//        cartRepository.save(cart);
-//    }
+    @Override
+    public void clearCart(Long userId) {
+        Cart cart = getCart(userId);
+        cartItemRepository.deleteAllByCart_Id(cart.getId());
+    }
 }

@@ -24,12 +24,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Vô hiệu hóa CSRF để dễ dev ban đầu
+                .csrf(csrf -> csrf.disable()) // ❗ Tắt CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/img/**", "/js/**", "/fonts/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/gui-otp", "/auth/verify-otp", "/auth/verify-otp-success",
                                 "/auth/login", "/auth/forgot-password", "/auth/reset-password/**").permitAll()
                         .requestMatchers("/order/**", "/cart/**", "/api/**").permitAll()
+                        .requestMatchers("/checkout/**").permitAll()
                         .requestMatchers("/user/**","/user/profile/**","/user/profile-manager", "/user/change-password", "/user/user-address").permitAll()
                         .requestMatchers("/admin/**").permitAll() // Các trang admin yêu cầu login (sẽ config sau)
                         .requestMatchers("/", "/lien-he", "/dat-ban", "/menu/**")

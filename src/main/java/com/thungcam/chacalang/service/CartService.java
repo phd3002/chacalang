@@ -19,5 +19,7 @@ public interface CartService {
 
     BigDecimal calculateTotal(Long userId);
 
+    void clearCart(Long userId);
+
 //    void updateCartStatus(Cart cart);
 }

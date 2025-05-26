@@ -3,14 +3,15 @@ package com.thungcam.chacalang.controller.ordering;
 import com.thungcam.chacalang.dto.OrderCheckoutDTO;
 import com.thungcam.chacalang.entity.Category;
 import com.thungcam.chacalang.entity.Menu;
-import com.thungcam.chacalang.entity.Orders;
+import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
 
     final private CategoryService categoryService;
@@ -32,15 +34,6 @@ public class OrderController {
     final private UserService userService;
 
     final private CartService cartService;
-
-    @Autowired
-    public OrderController(CategoryService categoryService, MenuService menuService, OrderService orderService, UserService userService, CartService cartService) {
-        this.categoryService = categoryService;
-        this.menuService = menuService;
-        this.orderService = orderService;
-        this.userService = userService;
-        this.cartService = cartService;
-    }
 
     @GetMapping("/home")
     public String orderHomepage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -57,24 +50,10 @@ public class OrderController {
         if (userDetails != null) {
             Long userId = userService.findByEmail(userDetails.getUsername()).getId();
             model.addAttribute("cartItems", cartService.getCartItems(userId));
-//            System.out.println("Cart items: " + cartService.getCartItems(userId));
             model.addAttribute("total", cartService.calculateTotal(userId));
         }
 
         return "order/order-homepage";
-    }
-
-
-    @PostMapping("/checkout")
-    public String processCheckout(OrderCheckoutDTO checkoutDTO, RedirectAttributes redirectAttributes) {
-        try {
-            Orders order = orderService.createOrder(checkoutDTO);
-            redirectAttributes.addFlashAttribute("success", "Đặt hàng thành công! Mã đơn hàng: " + order.getOrderCode());
-            return "redirect:/order/success";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Có lỗi xảy ra khi đặt hàng: " + e.getMessage());
-            return "redirect:/order/home";
-        }
     }
 
     @GetMapping("/success")

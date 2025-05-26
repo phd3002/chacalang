@@ -10,8 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
-    @Query("select sum(o.totalPrice) from Orders o")
-    BigDecimal getTotalRevenue();
 
     Optional<Orders> findByOrderCode(String orderCode);
 }

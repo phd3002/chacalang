@@ -24,13 +24,12 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "order_id", nullable = false)
-    private com.thungcam.chacalang.entity.Orders order;
+    private Orders order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
-    private com.thungcam.chacalang.entity.Menu menu;
+    private Menu menu;
 
     @NotNull
     @Column(name = "quantity", nullable = false)

@@ -23,7 +23,7 @@
 
     <style>
         .success-section {
-            padding: 80px 0;
+            padding: 120px 20px 80px;
             text-align: center;
             background-color: #F9F9F9;
         }
@@ -102,14 +102,21 @@
             </div>
             <h2 class="success-message">Đặt Hàng Thành Công!</h2>
             <div class="order-details">
-                <p>Cảm ơn bạn đã đặt hàng tại Chả Cá Lăng Thung Cấm.</p>
-                <div class="order-code" th:text="${success}"></div>
-                <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất để xác nhận đơn hàng.</p>
-                <p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua số điện thoại: 0123 456 789</p>
+                <p style="margin-bottom: 10px;">Cảm ơn bạn đã đặt hàng tại <strong>Chả Cá Lăng Thung Cấm</strong>.</p>
+                <p style="color: #f36700; font-weight: 600; margin-bottom: 16px;">Đơn hàng của bạn đã được ghi nhận thành công.</p>
+
+                <!-- Mã đơn hàng nếu có -->
+                <div class="order-code" th:if="${success != null}">
+                    Mã đơn hàng: <span th:text="${success}"></span>
+                </div>
+
+                <p style="margin-top: 20px;">Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất để xác nhận đơn hàng.</p>
+                <p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ qua số: <strong>0123 456 789</strong></p>
             </div>
             <a href="/" class="btn-home">Về Trang Chủ</a>
         </div>
     </section>
+
 
     <!-- Footer -->
     <footer id="footer">
