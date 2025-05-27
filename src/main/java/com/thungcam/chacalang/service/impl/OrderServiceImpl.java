@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         if (cartItems.isEmpty()) throw new IllegalStateException("Giỏ hàng trống");
 
         // Tính phí và tổng
-        BigDecimal shippingFee = "pickup".equals(dto.getShippingMethod()) ? BigDecimal.ZERO : new BigDecimal("30000");
+        BigDecimal shippingFee = "pickup".equals(dto.getShippingMethod()) ? BigDecimal.ZERO : new BigDecimal("10000");
         BigDecimal subtotal = cartItems.stream()
                 .map(i -> i.getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -60,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
         Orders order = new Orders();
         order.setUser(user);
         order.setOrderCode("HD" + System.currentTimeMillis());
+        order.setStatus(OrderStatus.PENDING);
         order.setCreatedAt(LocalDateTime.now());
         order.setShippingMethod(
                 ShippingMethod.valueOf(dto.getShippingMethod().trim().toUpperCase())
@@ -116,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
         invoice.setTaxAmount(BigDecimal.ZERO);
         invoice.setDiscountAmount(BigDecimal.ZERO);
         invoice.setTotalAmount(total);
-        invoice.setFinalAmount(total);
+        invoice.setFinalAmount(total.add(shippingFee));
         invoice.setPaymentMethod(paymentMethod);
         invoice.setPaymentStatus(PaymentStatus.PENDING);
         invoice.setNotes("Tạo từ đơn hàng #" + order.getOrderCode());

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account/account.css}">
+    <style>
+        .order-detail-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .order-info-section {
+            margin-bottom: 24px;
+        }
+        .order-info-section h4 {
+            color: #f36700;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .info-item {
+            margin-bottom: 12px;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #333;
+        }
+        .order-items {
+            margin-bottom: 24px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .item-name {
+            flex: 2;
+        }
+        .item-quantity {
+            flex: 1;
+            text-align: center;
+        }
+        .item-price {
+            flex: 1;
+            text-align: right;
+            color: #f36700;
+            font-weight: 600;
+        }
+        .order-summary {
+            background: #fff;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .summary-total {
+            font-weight: 600;
+            color: #f36700;
+            font-size: 18px;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+        .back-btn {
+            background: #f36700;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #d95a00;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{base :: header}"></div>
+<br><br>
+<div class="profile-section">
+    <div class="container">
+        <div class="row justify-content-center align-items-start">
+            <!-- Sidebar -->
+            <div class="col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+                <div class="account-sidebar">
+                    <div class="sidebar-title">TÀI KHOẢN CỦA TÔI</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="/user/profile-manager"><i class="fa fa-user-circle"></i>QUẢN LÝ TÀI KHOẢN</a></li>
+                        <li class="active"><a href="/user/orders"><i class="fa fa-shopping-bag"></i>ĐƠN HÀNG CỦA TÔI</a></li>
+                        <li><a href="/user/user-address"><i class="fa fa-map-marker"></i>ĐỊA CHỈ GIAO HÀNG</a></li>
+                        <li><a href="/user/profile"><i class="fa fa-info-circle"></i>THÔNG TIN TÀI KHOẢN</a></li>
+                        <li><a href="#"><i class="fa fa-gift"></i>DANH SÁCH ƯU ĐÃI</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-8">
+                <div class="profile-wrapper">
+                    <div class="section-header text-center">
+                        <h2 class="title">Chi tiết đơn hàng</h2>
+                        <hr>
+                    </div>
+                    <div class="order-detail-card">
+                        <div class="order-info-section">
+                            <h4>Thông tin đơn hàng</h4>
+                            <div class="info-item">
+                                <span class="info-label">Mã đơn hàng:</span>
+                                <span th:text="${order.orderCode}">#123</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ngày đặt:</span>
+                                <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Trạng thái:</span>
+                                <span th:text="${order.status.label}">Đang xử lý</span>
+                            </div>
+                        </div>
+                        <div class="order-info-section">
+                            <h4>Thông tin giao hàng</h4>
+                            <div th:if="${order.shippingMethod == 'delivery'}">
+                                <div class="info-item">
+                                    <span class="info-label">Phương thức:</span>
+                                    <span>Giao hàng tận nơi</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Địa chỉ:</span>
+                                    <span th:text="${order.customerAddress}">Địa chỉ giao hàng</span>
+                                </div>
+                            </div>
+                            <div th:if="${order.shippingMethod == 'pickup'}">
+                                <div class="info-item">
+                                    <span class="info-label">Phương thức:</span>
+                                    <span>Nhận tại cửa hàng</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Chi nhánh:</span>
+                                    <span th:text="${order.branch.name + ' - ' + order.branch.address}">Chi nhánh</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                            <h4>Chi tiết sản phẩm</h4>
+                            <div class="order-item" th:each="item : ${order.items}">
+                                <div class="item-name" th:text="${item.menu != null ? item.menu.name : 'Sản phẩm không xác định'}"></div>
+                                <div class="item-quantity" th:text="${item.quantity}">1</div>
+                                <div class="item-price" th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
+                            </div>
+                        </div>
+                        <div class="order-summary">
+                            <div class="summary-item">
+                                <span>Tạm tính</span>
+                                <span th:text="${#numbers.formatDecimal(order.invoice.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Phí giao hàng</span>
+                                <span th:text="${#numbers.formatDecimal(order.invoice.shippingFee, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                            </div>
+                            <div class="summary-item summary-total">
+                                <span>Tổng cộng</span>
+                                <span th:text="${#numbers.formatDecimal(order.invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                            </div>
+                        </div>
+                        <a href="/user/orders" class="back-btn">Quay lại danh sách</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{base :: footer}"></div>
+</body>
+</html> 

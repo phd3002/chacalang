@@ -461,14 +461,14 @@
     </div>
     <div class="cart-footer">
         <div class="order-summary">
-            <div class="cart-item">
-                <span>Tạm Tính</span>
-                <span id="subtotal">0₫</span>
-            </div>
-            <div class="cart-item">
-                <span>Phí Giao Hàng</span>
-                <span id="shippingFee">30.000₫</span>
-            </div>
+<!--            <div class="cart-item">-->
+<!--                <span>Tạm Tính</span>-->
+<!--                <span id="subtotal">0₫</span>-->
+<!--            </div>-->
+<!--            <div class="cart-item">-->
+<!--                <span>Phí Giao Hàng</span>-->
+<!--                <span id="shippingFee">30.000₫</span>-->
+<!--            </div>-->
             <div class="cart-item">
                 <strong>Tổng Cộng</strong>
                 <strong id="total">0₫</strong>
@@ -609,7 +609,7 @@
             });
 
             const shippingFee = 30000;
-            const total = subtotal + shippingFee;
+            const total = subtotal;
 
             $('#subtotal').text(subtotal.toLocaleString() + '₫');
             $('#total').text(total.toLocaleString() + '₫');

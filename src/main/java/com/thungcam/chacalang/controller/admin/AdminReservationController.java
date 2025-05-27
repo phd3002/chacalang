@@ -1,5 +1,6 @@
 package com.thungcam.chacalang.controller.admin;
 
+import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.Reservation;
 import com.thungcam.chacalang.enums.ReservationStatus;
 import com.thungcam.chacalang.service.BranchService;
@@ -49,7 +50,7 @@ public class AdminReservationController {
         if (reservation != null) {
             reservation.setStatus(status);
             reservationService.save(reservation);
-            redirectAttributes.addFlashAttribute("success", "Cập nhật trạng thái thành công!");
+            redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.UPDATE_STATUS_SUCCESS);
         }
         return "redirect:/admin/reservations";
     }

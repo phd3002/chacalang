@@ -31,7 +31,6 @@
     <div class="container mt-5">
         <h2 class="text-center">Quản lý đặt bàn</h2>
         <hr>
-
         <!-- Lọc theo chi nhánh -->
         <form method="get" action="/admin/reservations" class="form-inline mb-4">
             <label class="mr-2">Chi nhánh:</label>
@@ -48,6 +47,7 @@
 
         <!-- Bảng danh sách đặt bàn -->
         <div class="table-responsive">
+            <span th:if="${success != null}" class="text-success mr-2" th:text="${success}"></span>
             <table class="table table-bordered table-striped">
                 <thead class="bg-warning text-dark">
                 <tr>

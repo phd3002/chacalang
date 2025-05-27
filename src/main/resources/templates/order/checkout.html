@@ -134,26 +134,33 @@
                     <h4 style="color:#f36700; font-weight:600; margin-bottom:18px;">Sản phẩm trong giỏ hàng</h4>
                     <div id="checkoutCartItems">
                         <div class="cart-item cart-item-flex" th:each="item : ${cartItems}">
-                            <span class="cart-item-name" th:text="${item.menu.name}">Tên món</span>
-                            <div class="quantity-control">
-                                <span th:text="${item.quantity}">1</span>
+                            <div style="flex: 2;">
+                                <div class="cart-item-name" th:text="${item.menu.name}">Tên món</div>
+                                <div class="text-muted" style="font-size: 13px;">
+                                    Số lượng: <span th:text="${item.quantity}">1</span>
+                                </div>
                             </div>
-                            <span class="cart-item-price"
-                                  th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                            <div class="cart-item-price"
+                                 th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
                         </div>
                     </div>
                     <div class="order-summary">
-                        <div class="cart-item">
-                            <span>Tạm Tính</span>
-                            <span th:text="${#numbers.formatDecimal(subtotal, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                        <div class="cart-item" style="font-size: 16px;">
+                            <span style="font-weight: 500;">Tạm tính:</span>
+                            <span th:text="${#numbers.formatDecimal(subtotal, 0, 'POINT', 0, 'COMMA')} + '₫'"
+                                  style="font-weight: 500;">0₫</span>
                         </div>
-                        <div class="cart-item">
-                            <span>Phí Giao Hàng</span>
-                            <span th:text="${#numbers.formatDecimal(shippingFee, 0, 'POINT', 0, 'COMMA')} + '₫'">30.000₫</span>
+                        <div class="cart-item" id="shippingFeeSection" style="font-size: 16px;">
+                            <span style="font-weight: 500;">Phí giao hàng:&nbsp;</span>
+                            <span th:text="${#numbers.formatDecimal(shippingFee, 0, 'POINT', 0, 'COMMA')} + '₫'"
+                                  style="font-weight: 500;">0₫</span>
                         </div>
-                        <div class="cart-item">
-                            <strong>Tổng Cộng</strong>
-                            <strong th:text="${#numbers.formatDecimal(total, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</strong>
+                        <div class="cart-item" style="font-size: 18px; margin-top: 6px;">
+                            <strong>Tổng cộng:</strong>
+                            <strong id="totalAmountText"
+                                    th:data-subtotal="${subtotal}"
+                                    th:data-shipping="${shippingFee}"
+                                    th:text="${#numbers.formatDecimal(total, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</strong>
                         </div>
                     </div>
                 </div>
@@ -256,8 +263,19 @@
         const storeSelect = document.getElementById('storeSelect');
         const customerNameInput = document.querySelector('input[name="customerName"]');
         const customerPhoneInput = document.querySelector('input[name="customerPhone"]');
+        const shippingFeeSection = document.getElementById('shippingFeeSection');
+        const totalElement = document.getElementById('totalAmountText');
+        const subtotal = parseFloat(totalElement.dataset.subtotal);
+        const shippingFee = parseFloat(totalElement.dataset.shipping);
+
+        let total = shippingMethod === 'delivery'
+            ? subtotal + shippingFee
+            : subtotal;
+
+        totalElement.textContent = total.toLocaleString('vi-VN') + '₫';
 
         if (shippingMethod === 'delivery') {
+            shippingFeeSection.style.display = 'flex';
             addressSection.style.display = 'block';
             storeSection.style.display = 'none';
             addressSelect.setAttribute('required', 'required');
@@ -268,6 +286,7 @@
             customerNameInput.value = '';
             customerPhoneInput.value = '';
         } else {
+            shippingFeeSection.style.display = 'none';
             addressSection.style.display = 'none';
             storeSection.style.display = 'block';
             storeSelect.setAttribute('required', 'required');

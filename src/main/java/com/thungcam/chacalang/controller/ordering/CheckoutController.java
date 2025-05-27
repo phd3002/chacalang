@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -42,14 +41,14 @@ public class CheckoutController {
         User user = userService.getAuthenticatedUser(authentication);
         List<CartItem> cartItems = cartService.getCartItems(user.getId());
         List<PaymentMethod> paymentMethods = paymentMethodService.findAllActive();
-        List<UserAddress> addresses = userAddressService.getDefaultAddressesByUserId(user);
+        List<UserAddress> addresses = userAddressService.getAddressesByUserId(user);
         List<Branch> branches = branchService.getAllBranches();
 
         BigDecimal subtotal = cartItems.stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal shippingFee = new BigDecimal("30000");
+        BigDecimal shippingFee = new BigDecimal("10000");
         BigDecimal total = subtotal.add(shippingFee);
 
         model.addAttribute("cartItems", cartItems);
@@ -70,13 +69,8 @@ public class CheckoutController {
                                   @AuthenticationPrincipal UserDetails userDetails,
                                   RedirectAttributes redirectAttributes) {
         User user = userService.findByEmail(userDetails.getUsername());
-        log.debug("Processing checkout for user: {}", user.getEmail());
-        System.out.println("DTO: " + dto.toString());
-        if (dto.getBranchId() == null) {
-            log.error("Branch ID is null in checkout DTO: {}", dto);
-            throw new RuntimeException("Vui lòng chọn chi nhánh cửa hàng");
-        }
-
+        log.info("Processing checkout for user: {}", user.getEmail());
+//        System.out.println("DTO: " + dto.toString());
         Orders order = orderService.createOrder(dto, user);
         redirectAttributes.addFlashAttribute("success", order.getOrderCode());
         return "redirect:/order/success";

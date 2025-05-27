@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
@@ -25,12 +26,10 @@ public class Orders {
     private Invoice invoice;
 
     @Size(max = 100)
-//    @NotNull
     @Column(name = "customer_name", nullable = false, length = 100)
     private String customerName;
 
     @Size(max = 20)
-//    @NotNull
     @Column(name = "customer_phone", nullable = false, length = 20)
     private String customerPhone;
 
@@ -39,7 +38,7 @@ public class Orders {
     private String customerEmail;
 
     @Column(name = "customer_address", nullable = false)
-    private String customerAddress; // full string: "Số 10, P. Dịch Vọng, Q. Cầu Giấy, Hà Nội"
+    private String customerAddress;
 
     @Column(name = "city")
     private String city;
@@ -78,5 +77,8 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     @Column(name = "shipping_method", nullable = false)
     private ShippingMethod shippingMethod;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderItem> items;
 
 }
