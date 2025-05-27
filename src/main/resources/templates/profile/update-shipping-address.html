@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vn">
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cập nhật địa chỉ giao hàng</title>
@@ -108,8 +108,8 @@
                         <h2 class="title">Cập nhật địa chỉ giao hàng</h2>
                         <hr>
                     </div>
-                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-                    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+                    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
                     <form class="address-form" method="post" th:action="@{/user/update-address}">
                         <input name="id" th:value="${address != null ? address.id : ''}" type="hidden">
 
@@ -117,15 +117,15 @@
                         <div class="form-group"
                              th:if="${address == null or !address.isDefault}">
                             <label>
-                                <input type="checkbox" name="isDefault" value="true"
-                                       th:checked="${address != null and address.isDefault}">
+                                <input name="isDefault" th:checked="${address != null and address.isDefault}" type="checkbox"
+                                       value="true">
                                 Đặt làm địa chỉ mặc định
                             </label>
                         </div>
 
                         <!-- Nếu đang sửa địa chỉ mặc định: gửi hidden giữ lại trạng thái -->
-                        <input type="hidden" name="isDefault" value="true"
-                               th:if="${address != null and address.isDefault}" />
+                        <input name="isDefault" th:if="${address != null and address.isDefault}" type="hidden"
+                               value="true"/>
 
 
                         <div class="form-group">
@@ -142,26 +142,27 @@
 
                         <div class="form-group">
                             <label class="form-label">Tỉnh/Thành phố:</label>
-                            <select class="form-control" id="city" required onchange="document.getElementsByName('city')[0].value = this.value;">
-                                <option value="">Chọn tỉnh/thành phố</option>
-                            </select>
-                            <input type="hidden" name="city"/>
+                            <input class="form-control" disabled value="Thành phố Hà Nội">
+                            <input name="city" type="hidden" value="Thành phố Hà Nội"/>
                         </div>
+
 
                         <div class="form-group">
                             <label class="form-label">Quận/Huyện:</label>
-                            <select class="form-control" id="district" required onchange="document.getElementsByName('district')[0].value = this.value;">
+                            <select class="form-control" id="district" onchange="document.getElementsByName('district')[0].value = this.value;"
+                                    required>
                                 <option value="">Chọn quận/huyện</option>
                             </select>
-                            <input type="hidden" name="district"/>
+                            <input name="district" type="hidden"/>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Phường/Xã:</label>
-                            <select class="form-control" id="ward" required onchange="document.getElementsByName('ward')[0].value = this.value;">
+                            <select class="form-control" id="ward" onchange="document.getElementsByName('ward')[0].value = this.value;"
+                                    required>
                                 <option value="">Chọn phường/xã</option>
                             </select>
-                            <input type="hidden" name="ward"/>
+                            <input name="ward" type="hidden"/>
                         </div>
 
                         <div class="form-group">
@@ -181,105 +182,68 @@
     </div>
 </div>
 <div th:replace="~{base :: footer}"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        referrerpolicy="no-referrer"></script>
+<script referrerpolicy="no-referrer"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script th:inline="javascript">
-    const host = "https://provinces.open-api.vn/api/";
+    const host = "/api/location";
 
-    // Lấy giá trị từ Thymeleaf
-    let selectedCity = /*[['' + ${address.city}]]*/ '';
+    let selectedCity = /*[['' + ${address.city}]]*/ 'Thành phố Hà Nội';
     let selectedDistrict = /*[['' + ${address.district}]]*/ '';
     let selectedWard = /*[['' + ${address.ward}]]*/ '';
-    // Render dữ liệu vào select
+
     const renderData = (array, select) => {
-        let row = '<option value="" disabled selected>Chọn</option>';
+        let row = '<option value="">Chọn</option>';
         array.forEach(element => {
-            row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`;
+            row += `<option value="${element.name}" data-id="${element.code || ''}">${element.name}</option>`;
         });
         document.querySelector(`#${select}`).innerHTML = row;
     };
 
-    const callAPI = (api) => {
-        return axios.get(api).then((response) => {
-            renderData(response.data, "city");
-
-            if (selectedCity) {
-                $("#city option").filter(function () {
-                    return $(this).val() === selectedCity;
-                }).prop("selected", true);
-
-                document.getElementsByName('city')[0].value = selectedCity;
-
-                const cityId = $("#city option:selected").data("id");
-                if (cityId) {
-                    callApiDistrict(`${host}p/${cityId}?depth=2`);
-                }
-            }
-        });
-    };
-
-    const callApiDistrict = (api) => {
-        return axios.get(api).then((response) => {
-            renderData(response.data.districts, "district");
+    const callApiDistrict = () => {
+        axios.get(`${host}/districts/ha-noi`).then((response) => {
+            renderData(response.data, "district");
 
             if (selectedDistrict) {
-                $("#district option").filter(function () {
-                    return $(this).val() === selectedDistrict;
-                }).prop("selected", true);
-
+                document.querySelector("#district").value = selectedDistrict;
                 document.getElementsByName('district')[0].value = selectedDistrict;
-
-                const districtId = $("#district option:selected").data("id");
-                if (districtId) {
-                    callApiWard(`${host}d/${districtId}?depth=2`);
-                }
+                callApiWard(selectedDistrict);
             }
         });
     };
 
-    const callApiWard = (api) => {
-        return axios.get(api).then((response) => {
-            renderData(response.data.wards, "ward");
+    const callApiWard = (districtName) => {
+        axios.get(`${host}/wards`, {
+            params: {districtName: districtName}
+        }).then((response) => {
+            renderData(response.data, "ward");
 
             if (selectedWard) {
-                $("#ward option").filter(function () {
-                    return $(this).val() === selectedWard;
-                }).prop("selected", true);
-
+                document.querySelector("#ward").value = selectedWard;
                 document.getElementsByName('ward')[0].value = selectedWard;
             }
         });
     };
 
-    // Gán lại hidden input khi người dùng chọn lại dropdown
-    $("#city").change(() => {
-        const value = $("#city").val();
-        document.getElementsByName('city')[0].value = value;
-
-        const cityId = $("#city option:selected").data("id");
-        if (cityId) {
-            callApiDistrict(`${host}p/${cityId}?depth=2`);
-        }
-    });
-
+    // Sự kiện khi người dùng chọn quận
     $("#district").change(() => {
         const value = $("#district").val();
         document.getElementsByName('district')[0].value = value;
-
-        const districtId = $("#district option:selected").data("id");
-        if (districtId) {
-            callApiWard(`${host}d/${districtId}?depth=2`);
-        }
+        callApiWard(value);
     });
 
+    // Sự kiện khi chọn phường
     $("#ward").change(() => {
         const value = $("#ward").val();
         document.getElementsByName('ward')[0].value = value;
     });
 
-    // Gọi API ban đầu
-    callAPI(`${host}?depth=1`);
+    // Gán sẵn thành phố Hà Nội
+    document.getElementsByName('city')[0].value = selectedCity;
+
+    // Gọi dữ liệu khởi tạo
+    callApiDistrict();
 </script>
+
 </body>
 </html> 

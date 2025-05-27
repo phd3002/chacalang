@@ -37,7 +37,7 @@
                     <!-- Thông báo -->
                     <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
                     <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
-                    <form class="contact-form" method="post" th:action="@{/profile}" th:object="${user}">
+                    <form class="contact-form" method="post" th:action="@{/user/profile}" th:object="${user}">
                         <div class="form-group">
                             <label>Họ</label>
                             <input class="form-control" placeholder="Nhập họ của bạn" required th:field="*{firstName}"
