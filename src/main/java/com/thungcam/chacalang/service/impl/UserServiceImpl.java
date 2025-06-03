@@ -4,6 +4,7 @@ import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.*;
 import com.thungcam.chacalang.enums.UserStatus;
 import com.thungcam.chacalang.exception.BusinessException;
+import com.thungcam.chacalang.repository.BranchRepository;
 import com.thungcam.chacalang.repository.OtpTokenRepository;
 import com.thungcam.chacalang.repository.RoleRepository;
 import com.thungcam.chacalang.repository.UserRepository;
@@ -11,6 +12,7 @@ import com.thungcam.chacalang.service.MailService;
 import com.thungcam.chacalang.service.UserService;
 import com.thungcam.chacalang.utils.UrlUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,25 +27,22 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
+
     private final PasswordEncoder passwordEncoder;
+
     private final RoleRepository roleRepo;
+
     private final OtpTokenRepository otpTokenRepo;
+
     private final MailService mailService;
 
-    public UserServiceImpl(UserRepository userRepo,
-                           PasswordEncoder passwordEncoder,
-                           RoleRepository roleRepo,
-                           OtpTokenRepository otpTokenRepo,
-                           MailService mailService) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepo = roleRepo;
-        this.otpTokenRepo = otpTokenRepo;
-        this.mailService = mailService;
-    }
+    private final BranchRepository branchRepo;
+
+    private static final Long STAFF_ROLE_ID = 3L;
 
     @Override
     public void validateUser(User user) {
@@ -268,6 +267,45 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
+    }
+
+    @Override
+    public List<User> findAllStaff() {
+        return userRepo.findByRoleId(STAFF_ROLE_ID);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
+    }
+
+    @Override
+    public void saveStaff(User user) {
+        // Gán Role từ DB theo ID = 3
+        Role staffRole = roleRepo.findById(STAFF_ROLE_ID)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy role STAFF"));
+        user.setRole(staffRole);
+
+        // Gán Branch từ DB theo ID
+        Branch branch = branchRepo.findById(user.getBranch().getId())
+                .orElseThrow(() -> new RuntimeException("Chi nhánh không hợp lệ"));
+        user.setBranch(branch);
+
+        // Nếu là tạo mới hoặc cập nhật mật khẩu
+        if (user.getId() == null || (user.getPassword() != null && !user.getPassword().isBlank())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            User existing = userRepo.findById(user.getId()).orElseThrow();
+            user.setPassword(existing.getPassword());
+        }
+        user.setCreatedAt(LocalDateTime.now());
+        userRepo.save(user);
+    }
+
+    @Override
+    public void deleteStaffById(Long id) {
+        userRepo.deleteById(id);
     }
 }
 

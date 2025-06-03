@@ -58,7 +58,11 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "branch_id") // thêm cột này trong bảng `users`
+    private Branch branch;
+
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 

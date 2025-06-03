@@ -42,7 +42,6 @@ public class Review {
     @Column(name = "content")
     private String content;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private Instant createdAt;
 

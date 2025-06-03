@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 //@Service
 public interface UserService extends UserDetailsService {
     boolean existsByEmail(String email);
@@ -41,4 +43,12 @@ public interface UserService extends UserDetailsService {
     void updateProfile(Authentication auth, User updatedUser); // cập nhật thông tin người dùng
 
     void changePassword(Authentication auth, String currentPassword, String newPassword, String confirmPassword);
+
+    List<User> findAllStaff();
+
+    User findById(Long id);
+
+    void saveStaff(User user);
+
+    void deleteStaffById(Long id);
 }

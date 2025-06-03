@@ -12,16 +12,19 @@
 <body>
 
 <div class="admin-sidebar">
-    <a th:class="${activePage == 'dashboard' ? 'active' : ''}" href="/admin/dashboard">
+    <a th:class="${activePage == 'dashboard' ? 'active' : ''}" th:href="@{/admin/dashboard}">
         <i class="fa fa-line-chart"></i> Dashboard
     </a>
-    <a th:class="${activePage == 'reservation' ? 'active' : ''}" href="/admin/reservations">
+    <a th:class="${activePage == 'reservation' ? 'active' : ''}" th:href="@{/admin/reservations}">
         <i class="fa fa-calendar"></i> Đặt bàn
     </a>
-    <a th:class="${activePage == 'menu' ? 'active' : ''}" href="/admin/menu">
+    <a th:class="${activePage == 'menu' ? 'active' : ''}" th:href="@{/admin/menu}">
         <i class="fa fa-cutlery"></i> Quản lý món
     </a>
-    <a th:class="${activePage == 'contact' ? 'active' : ''}" href="/admin/contacts">
+    <a th:class="${activePage == 'staff' ? 'active' : ''}" th:href="@{/admin/staff-management}">
+        <i class="fa fa-users"></i> Quản lý nhân viên
+    </a>
+    <a th:class="${activePage == 'contact' ? 'active' : ''}" th:href="@{/admin/contacts}">
         <i class="fa fa-envelope"></i> Quản lý liên hệ
     </a>
 </div>
