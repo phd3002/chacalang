@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     private final BranchRepository branchRepo;
 
-    private static final Long STAFF_ROLE_ID = 3L;
+    private static final Long STAFF_ROLE_ID = (Long) 3L;
 
     @Override
     public void validateUser(User user) {

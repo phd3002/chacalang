@@ -32,10 +32,11 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     @Transactional
-    public void createUserAddress(User user, UserAddress address, boolean isDefault) {
+    public void createUserAddress(User user, UserAddress address, Boolean isDefault) {
         if (isDefault) {
             unsetAllDefaultForUser(user);
         }
+        address.setCity("Thành Phố Hà Nội");
         address.setUser(user);
         address.setIsDefault(isDefault);
         address.setId(null); // đảm bảo là địa chỉ mới
@@ -44,7 +45,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     @Transactional
-    public void updateUserAddress(User user, UserAddress address, boolean isDefault) {
+    public void updateUserAddress(User user, UserAddress address, Boolean isDefault) {
         UserAddress existing = getUserAddressByIdAndUser(address.getId(), user);
 
         if (isDefault && !Boolean.TRUE.equals(existing.getIsDefault())) {
@@ -66,7 +67,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         userAddressRepository.findAllByUserOrderByIsDefaultDescUpdatedAtDesc(user).stream()
                 .filter(a -> Boolean.TRUE.equals(a.getIsDefault()))
                 .forEach(a -> {
-                    a.setIsDefault(false);
+                    a.setIsDefault(Boolean.FALSE);
                     userAddressRepository.save(a);
                 });
     }

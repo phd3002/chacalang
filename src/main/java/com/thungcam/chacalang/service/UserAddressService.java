@@ -10,9 +10,9 @@ public interface UserAddressService {
 
     UserAddress getUserAddressByIdAndUser(Long id, User user);
 
-    void createUserAddress(User user, UserAddress address, boolean isDefault);
+    void createUserAddress(User user, UserAddress address, Boolean isDefault);
 
-    void updateUserAddress(User user, UserAddress address, boolean isDefault);
+    void updateUserAddress(User user, UserAddress address, Boolean isDefault);
 
     void deleteAddress(User user, Long addressId);
 

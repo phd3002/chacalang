@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -81,7 +82,7 @@ public class HomeController {
     public String submitReservation(@ModelAttribute("reservation") Reservation reservation,
                                     RedirectAttributes redirectAttributes) {
         reservationService.save(reservation);
-        redirectAttributes.addFlashAttribute("success", true);
+        redirectAttributes.addFlashAttribute("success", Optional.of(true));
         redirectAttributes.addFlashAttribute("reservation", new Reservation()); // 👈 thêm lại object
         return "redirect:/#reservation";
     }
@@ -90,7 +91,7 @@ public class HomeController {
     public String submitContact(@ModelAttribute("contact") Contact contact,
                                 RedirectAttributes redirectAttributes) {
         contactService.save(contact);
-        redirectAttributes.addFlashAttribute("contactSuccess", true);
+        redirectAttributes.addFlashAttribute("contactSuccess", Optional.of(true));
         return "redirect:/#contact";
     }
 }

@@ -105,7 +105,10 @@
             <div class="col-md-8">
                 <div class="profile-wrapper">
                     <div class="section-header text-center">
-                        <h2 class="title">Cập nhật địa chỉ giao hàng</h2>
+                        <h2 class="title"
+                            th:text="${address != null and address.id != null ? 'Cập nhật địa chỉ giao hàng' : 'Thêm địa chỉ giao hàng'}">
+                            Cập nhật địa chỉ giao hàng
+                        </h2>
                         <hr>
                     </div>
                     <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
@@ -117,7 +120,8 @@
                         <div class="form-group"
                              th:if="${address == null or !address.isDefault}">
                             <label>
-                                <input name="isDefault" th:checked="${address != null and address.isDefault}" type="checkbox"
+                                <input name="isDefault" th:checked="${address != null and address.isDefault}"
+                                       type="checkbox"
                                        value="true">
                                 Đặt làm địa chỉ mặc định
                             </label>
@@ -143,13 +147,15 @@
                         <div class="form-group">
                             <label class="form-label">Tỉnh/Thành phố:</label>
                             <input class="form-control" disabled value="Thành phố Hà Nội">
-                            <input name="city" type="hidden" value="Thành phố Hà Nội"/>
+                            <input name="city" type="hidden"
+                                   th:value="${address != null ? address.city : 'Thành phố Hà Nội'}"/>
                         </div>
 
 
                         <div class="form-group">
                             <label class="form-label">Quận/Huyện:</label>
-                            <select class="form-control" id="district" onchange="document.getElementsByName('district')[0].value = this.value;"
+                            <select class="form-control" id="district"
+                                    onchange="document.getElementsByName('district')[0].value = this.value;"
                                     required>
                                 <option value="">Chọn quận/huyện</option>
                             </select>
@@ -158,7 +164,8 @@
 
                         <div class="form-group">
                             <label class="form-label">Phường/Xã:</label>
-                            <select class="form-control" id="ward" onchange="document.getElementsByName('ward')[0].value = this.value;"
+                            <select class="form-control" id="ward"
+                                    onchange="document.getElementsByName('ward')[0].value = this.value;"
                                     required>
                                 <option value="">Chọn phường/xã</option>
                             </select>
@@ -172,7 +179,10 @@
                         </div>
 
                         <div class="form-group text-center">
-                            <button class="btn-submit" type="submit">Lưu địa chỉ</button>
+                            <button class="btn-submit" type="submit"
+                                    th:text="${address != null and address.id != null ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ'}">
+                                Thêm/Cập nhật
+                            </button>
                             <a class="btn-cancel" href="/user/user-address">Hủy</a>
                         </div>
                     </form>

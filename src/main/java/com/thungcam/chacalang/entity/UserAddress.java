@@ -44,7 +44,7 @@ public class UserAddress {
     private String city;
 
     @Column(name = "is_default")
-    private Boolean isDefault = false;
+    private Boolean isDefault = (Boolean) false;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

@@ -54,7 +54,7 @@ public class UserAddressController {
                               RedirectAttributes redirectAttributes) {
         User user = userService.getAuthenticatedUser(authentication);
         try {
-            boolean isDefaultFlag = (address.getId() != null && address.getIsDefault()) || Boolean.TRUE.equals(isDefault);
+            Boolean isDefaultFlag = (address.getId() != null && address.getIsDefault()) || Boolean.TRUE.equals(isDefault);
 
             if (address.getId() == null) {
                 userAddressService.createUserAddress(user, address, isDefaultFlag);

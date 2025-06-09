@@ -91,3 +91,28 @@ form.form-inline .form-control {
     padding: 30px;
 }
 
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+}
+
+.status-badge i {
+    margin-right: 5px;
+}
+
+.status-badge.active {
+    background-color: #28a745; /* Màu xanh lá */
+}
+
+.status-badge.inactive {
+    background-color: #dc3545; /* Màu đỏ */
+}
+
+.status-badge.unknown {
+    background-color: #6c757d; /* Màu xám */
+}
+
