@@ -17,7 +17,10 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+        String username = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        System.out.println("==> Người dùng '" + username + "' đăng nhập với quyền:");
+        authorities.forEach(auth -> System.out.println(" - " + auth.getAuthority()));
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
             if (role.equals("ROLE_ADMIN")) {
