@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê chi nhánh | Branch Manager</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="branch-layout">
+    <nav class="branch-sidebar">
+        <div class="sidebar-header">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+            <h2>Chi nhánh</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li class="active"><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+        </ul>
+    </nav>
+    <main class="branch-main-content">
+        <div class="branch-page-header">
+            <h1>Thống kê chi nhánh</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="statistic-block">
+                    <h4>Biểu đồ số lượng đơn hàng theo tháng</h4>
+                    <canvas id="ordersChart" height="180"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="statistic-block">
+                    <h4>Biểu đồ tổng doanh thu theo tháng</h4>
+                    <canvas id="revenueChart" height="180"></canvas>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="statistic-block">
+                    <h4>Top 5 món bán chạy</h4>
+                    <canvas id="topMenuChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+// Dữ liệu mẫu cho biểu đồ
+const ordersData = {
+    labels: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6'],
+    datasets: [{
+        label: 'Đơn hàng',
+        data: [120, 150, 180, 140, 200, 170],
+        backgroundColor: '#f8b400',
+        borderColor: '#f8b400',
+        borderWidth: 2
+    }]
+};
+const revenueData = {
+    labels: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6'],
+    datasets: [{
+        label: 'Doanh thu (triệu ₫)',
+        data: [85, 92, 110, 98, 120, 105],
+        backgroundColor: '#28a745',
+        borderColor: '#28a745',
+        borderWidth: 2
+    }]
+};
+const topMenuData = {
+    labels: ['Chả cá lăng nướng', 'Lẩu cá lăng', 'Chả cá lăng chiên xù', 'Cá lăng om chuối', 'Cá lăng hấp'],
+    datasets: [{
+        label: 'Số lượng bán',
+        data: [320, 280, 250, 210, 180],
+        backgroundColor: ['#f8b400', '#28a745', '#17a2b8', '#dc3545', '#ffc107']
+    }]
+};
+new Chart(document.getElementById('ordersChart'), {
+    type: 'bar',
+    data: ordersData,
+    options: {responsive: true, plugins: {legend: {display: false}}}
+});
+new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: revenueData,
+    options: {responsive: true, plugins: {legend: {display: false}}}
+});
+new Chart(document.getElementById('topMenuChart'), {
+    type: 'bar',
+    data: topMenuData,
+    options: {responsive: true, plugins: {legend: {display: false}}}
+});
+</script>
+</body>
+</html> 

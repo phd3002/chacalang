@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực đơn tại chi nhánh | Branch Manager</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+</head>
+<body>
+<div class="branch-layout">
+    <nav class="branch-sidebar">
+        <div class="sidebar-header">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+            <h2>Chi nhánh</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li class="active"><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+        </ul>
+    </nav>
+    <main class="branch-main-content">
+        <div class="branch-page-header">
+            <h1>Thực đơn tại chi nhánh</h1>
+        </div>
+        <div class="branch-menu-table-wrapper">
+            <table class="table table-striped branch-menu-table">
+                <thead>
+                    <tr>
+                        <th>Tên món</th>
+                        <th>Giá</th>
+                        <th>Số lượng tồn kho</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Chả cá lăng nướng</td>
+                        <td>180,000₫</td>
+                        <td>25</td>
+                        <td><span class="badge badge-success">Còn hàng</span></td>
+                    </tr>
+                    <tr>
+                        <td>Lẩu cá lăng</td>
+                        <td>350,000₫</td>
+                        <td>0</td>
+                        <td><span class="badge badge-danger">Hết hàng</span></td>
+                    </tr>
+                    <tr>
+                        <td>Chả cá lăng chiên xù</td>
+                        <td>200,000₫</td>
+                        <td>12</td>
+                        <td><span class="badge badge-success">Còn hàng</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</body>
+</html> 

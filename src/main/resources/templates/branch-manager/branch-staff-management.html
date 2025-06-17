@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý nhân viên chi nhánh | Branch Manager</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+</head>
+<body>
+<div class="branch-layout">
+    <nav class="branch-sidebar">
+        <div class="sidebar-header">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+            <h2>Chi nhánh</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li class="active"><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+        </ul>
+    </nav>
+    <main class="branch-main-content">
+        <div class="branch-page-header d-flex justify-content-between align-items-center">
+            <h1>Quản lý nhân viên chi nhánh</h1>
+            <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm nhân viên</a>
+        </div>
+        <div class="branch-staff-table-wrapper">
+            <table class="table table-striped branch-staff-table">
+                <thead>
+                    <tr>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Ngày tạo</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nguyễn Văn D</td>
+                        <td>nguyenvand@example.com</td>
+                        <td>0901234567</td>
+                        <td>2024-05-10</td>
+                        <td><span class="badge badge-success">Đang hoạt động</span></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i> Sửa</a>
+                            <a href="#" class="btn btn-sm btn-warning"><i class="fa fa-refresh"></i> Đặt lại mật khẩu</a>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Xóa</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Trần Thị E</td>
+                        <td>tranthie@example.com</td>
+                        <td>0912345678</td>
+                        <td>2024-04-22</td>
+                        <td><span class="badge badge-danger">Đã khóa</span></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i> Sửa</a>
+                            <a href="#" class="btn btn-sm btn-warning"><i class="fa fa-refresh"></i> Đặt lại mật khẩu</a>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Xóa</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</body>
+</html> 

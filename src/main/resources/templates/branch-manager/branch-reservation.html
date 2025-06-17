@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đặt bàn | Branch Manager</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+</head>
+<body>
+<div class="branch-layout">
+    <nav class="branch-sidebar">
+        <div class="sidebar-header">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+            <h2>Chi nhánh</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li class="active"><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+        </ul>
+    </nav>
+    <main class="branch-main-content">
+        <div class="branch-page-header">
+            <h1>Quản lý đặt bàn tại chi nhánh</h1>
+        </div>
+        <div class="branch-reservation-table-wrapper">
+            <table class="table table-striped branch-reservation-table">
+                <thead>
+                    <tr>
+                        <th>Khách hàng</th>
+                        <th>Ngày giờ</th>
+                        <th>Số người</th>
+                        <th>Ghi chú</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Phạm Minh H</td>
+                        <td>2024-06-10 18:30</td>
+                        <td>6</td>
+                        <td>Bàn gần cửa sổ</td>
+                        <td><span class="badge badge-warning">Chờ xác nhận</span></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Xác nhận</a>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Hủy</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Đỗ Thị K</td>
+                        <td>2024-06-11 12:00</td>
+                        <td>4</td>
+                        <td></td>
+                        <td><span class="badge badge-success">Đã xác nhận</span></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Hủy</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ngô Văn L</td>
+                        <td>2024-06-12 19:00</td>
+                        <td>10</td>
+                        <td>Sinh nhật</td>
+                        <td><span class="badge badge-danger">Đã hủy</span></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</body>
+</html> 
