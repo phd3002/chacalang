@@ -48,7 +48,9 @@ public interface UserService extends UserDetailsService {
 
     User findById(Long id);
 
-    void saveStaff(User user);
+    void saveUser(User user);
 
-    void deleteStaffById(Long id);
+    void deleteUserById(Long id);
+
+    List<User> findAll(); // lấy danh sách nhân viên đã tạo, sắp xếp theo ngày tạo mới nhất
 }

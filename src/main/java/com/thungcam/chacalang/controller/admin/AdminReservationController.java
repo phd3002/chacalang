@@ -49,7 +49,7 @@ public class AdminReservationController {
         Reservation reservation = reservationService.getById(id);
         if (reservation != null) {
             reservation.setStatus(status);
-            reservationService.save(reservation);
+            reservationService.saveChange(reservation);
             redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.UPDATE_STATUS_SUCCESS);
         }
         return "redirect:/admin/reservations";

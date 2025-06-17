@@ -24,8 +24,8 @@
     <a th:class="${activePage == 'menu' ? 'active' : ''}" th:href="@{/admin/menu}">
         <i class="fa fa-cutlery"></i> Quản lý món
     </a>
-    <a th:class="${activePage == 'staff' ? 'active' : ''}" th:href="@{/admin/staff-management}">
-        <i class="fa fa-users"></i> Quản lý nhân viên
+    <a th:class="${activePage == 'user' ? 'active' : ''}" th:href="@{/admin/user-management}">
+        <i class="fa fa-users"></i> Quản lý người dùng
     </a>
     <a th:class="${activePage == 'contact' ? 'active' : ''}" th:href="@{/admin/contacts}">
         <i class="fa fa-envelope"></i> Quản lý liên hệ
@@ -33,15 +33,15 @@
 </div>
 
 <div class="admin-content">
-    <h2>Quản lý nhân viên</h2>
+    <h2>Quản lý người dùng</h2>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <form class="form-inline">
             <input type="text" class="form-control" placeholder="Tìm kiếm nhân viên...">
             <button type="submit" class="btn btn-primary ms-2">Tìm kiếm</button>
         </form>
-        <a th:href="@{/admin/create-or-edit-staff}" class="btn btn-success">
-            <i class="fas fa-plus"></i> Thêm nhân viên mới
+        <a th:href="@{/admin/create-or-edit-user}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Thêm người dùng mới
         </a>
     </div>
 
@@ -60,12 +60,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="staff : ${staffList}">
+            <tr th:each="staff : ${userList}">
                 <td th:text="${staff.id}"></td>
                 <td th:text="${staff.firstName + ' ' + staff.lastName}"></td>
                 <td th:text="${staff.email}"></td>
                 <td th:text="${staff.phone}"></td>
-                <td th:text="${staff.branch.name}"></td>
+                <td th:text="${staff.branch != null ? staff.branch.name : 'Không có chi nhánh'}"></td>
                 <td>
                     <span th:switch="${staff.status.name()}">
                         <span th:case="'ACTIVE'" class="status-badge active">
@@ -80,10 +80,10 @@
 
                 <td th:text="${#temporals.format(staff.createdAt, 'dd/MM/yyyy')}"></td>
                 <td>
-                    <a th:href="@{/admin/create-or-edit-staff/{id}(id=${staff.id})}" class="btn btn-primary btn-sm">
+                    <a th:href="@{/admin/create-or-edit-user/{id}(id=${staff.id})}" class="btn btn-primary btn-sm">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <button class="btn btn-danger btn-sm" th:onclick="'deleteStaff(' + ${staff.id} + ')'">
+                    <button class="btn btn-danger btn-sm" th:onclick="'deleteUser(' + ${staff.id} + ')'">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -95,10 +95,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function deleteStaff(id) {
-        if (confirm('Bạn có chắc chắn muốn xóa nhân viên này?')) {
+    function deleteUser(id) {
+        if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
             // Gọi API xóa nhân viên
-            fetch('/admin/api/admin/staff/' + id, {
+            fetch('/admin/api/admin/user/' + id, {
                 method: 'DELETE'
             })
                 .then(response => {

@@ -281,31 +281,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveStaff(User user) {
-        // Gán Role từ DB theo ID = 3
-        Role staffRole = roleRepo.findById(STAFF_ROLE_ID)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy role STAFF"));
-        user.setRole(staffRole);
+    public void saveUser(User user) {
+        // Lấy Role từ DB theo ID được chọn
+        Role role = roleRepo.findById(user.getRole().getId())
+                .orElseThrow(() -> new RuntimeException("Vai trò không hợp lệ"));
+        user.setRole(role);
 
-        // Gán Branch từ DB theo ID
-        Branch branch = branchRepo.findById(user.getBranch().getId())
-                .orElseThrow(() -> new RuntimeException("Chi nhánh không hợp lệ"));
-        user.setBranch(branch);
+        // Nếu là STAFF hoặc BRANCH_MANAGER thì bắt buộc chọn chi nhánh
+        if ("STAFF".equalsIgnoreCase(role.getName()) || "BRANCH_MANAGER".equalsIgnoreCase(role.getName())) {
+            if (user.getBranch() == null || user.getBranch().getId() == null) {
+                throw new IllegalArgumentException("Vui lòng chọn chi nhánh cho nhân viên hoặc quản lý chi nhánh.");
+            }
 
-        // Nếu là tạo mới hoặc cập nhật mật khẩu
+            // Gán chi nhánh
+            Branch branch = branchRepo.findById(user.getBranch().getId())
+                    .orElseThrow(() -> new RuntimeException("Chi nhánh không hợp lệ"));
+            user.setBranch(branch);
+        } else {
+            // Nếu là CUSTOMER hoặc ADMIN thì cho phép branch null
+            user.setBranch(null);
+        }
+
+        // Xử lý mật khẩu
         if (user.getId() == null || (user.getPassword() != null && !user.getPassword().isBlank())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         } else {
             User existing = userRepo.findById(user.getId()).orElseThrow();
             user.setPassword(existing.getPassword());
         }
+
         user.setCreatedAt(LocalDateTime.now());
+
         userRepo.save(user);
     }
 
+
+
     @Override
-    public void deleteStaffById(Long id) {
+    public void deleteUserById(Long id) {
         userRepo.deleteById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepo.findAll();
     }
 }
 
