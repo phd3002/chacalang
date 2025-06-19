@@ -3,12 +3,10 @@ package com.thungcam.chacalang.entity;
 import com.thungcam.chacalang.enums.OrderStatus;
 import com.thungcam.chacalang.enums.ShippingMethod;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -80,5 +78,15 @@ public class Orders {
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItem> items;
+
+    public String getStatusColor() {
+        return switch (status) {
+            case PENDING -> "badge-warning";
+            case CONFIRMED, PREPARING, SHIPPING -> "badge-info";
+            case COMPLETED -> "badge-success";
+            case CANCELLED -> "badge-danger";
+            default -> "badge-secondary";
+        };
+    }
 
 }

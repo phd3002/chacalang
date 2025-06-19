@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng | Branch Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/branch-manager/branch-manager.css}">
+</head>
+<style>
+    .badge-warning {
+        background-color: #f0ad4e;
+        color: #fff;
+    }
+
+    .badge-info {
+        background-color: #5bc0de;
+        color: #fff;
+    }
+
+    .badge-success {
+        background-color: #5cb85c;
+        color: #fff;
+    }
+
+    .badge-danger {
+        background-color: #d9534f;
+        color: #fff;
+    }
+
+    .badge-secondary {
+        background-color: #777;
+        color: #fff;
+    }
+</style>
+<body>
+<div class="branch-layout">
+    <nav class="branch-sidebar">
+        <div class="sidebar-header">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+            <h2>Chi nhánh</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{'/branch-manager/branch-dashboard'(branchId=${branchId})}"><i
+                    class="fa fa-home"></i> Dashboard</a></li>
+            <li class="active"><a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
+                    class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}">
+                    <i class="fa fa-users"></i> Nhân viên chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}">
+                    <i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}">
+                    <i class="fa fa-calendar"></i> Quản lý đặt bàn
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}">
+                    <i class="fa fa-bar-chart"></i> Thống kê chi nhánh
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main class="branch-main-content">
+        <div class="branch-page-header">
+            <h1>Chi tiết đơn hàng #1001</h1>
+            <a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+
+        <div class="order-detail-container">
+            <!-- Thông tin cơ bản -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Thông tin đơn hàng</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Mã đơn hàng:</strong> <span th:text="${order.orderCode}">#...</span></p>
+                            <p><strong>Ngày đặt:</strong> <span
+                                    th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}">...</span></p>
+                            <p><strong>Trạng thái:</strong> <span class="badge" th:classappend="${order.statusColor}"
+                                                                  th:text="${order.status.label}">...</span>
+                            </p>
+                        </div>
+                        <!--                        <div class="col-md-6">-->
+                        <!--                            <p><strong>Khách hàng:</strong> Nguyễn Văn A</p>-->
+                        <!--                            <p><strong>Số điện thoại:</strong> 0123456789</p>-->
+                        <!--                            <p><strong>Địa chỉ:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</p>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chi tiết món ăn -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Chi tiết đơn hàng</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Món ăn</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${orderItems}">
+                            <td th:text="${item.menu.name}">Tên món</td>
+                            <td th:text="${item.quantity}">SL</td>
+                            <td th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'COMMA')} + '₫'">Giá</td>
+                            <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + '₫'">Tổng
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>Tổng tiền:</strong></td>
+                            <td><strong
+                                    th:text="${#numbers.formatDecimal(invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'"></strong>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!-- Thông tin người đặt -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Thông tin người đặt</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Họ tên:</strong> <span th:text="${order.customerName}">Tên KH</span></p>
+                            <p><strong>Số điện thoại:</strong> <span th:text="${order.customerPhone}">SĐT</span></p>
+                            <p><strong>Email:</strong> <span th:text="${order.customerEmail}">Email</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <div th:if="${order.shippingMethod.name() == 'DELIVERY'}">
+                                <p><strong>Địa chỉ:</strong> <span th:text="${order.customerAddress}">Địa chỉ</span></p>
+                                <p><strong>Phường/Xã:</strong> <span th:text="${order.ward}">Phường</span></p>
+                                <p><strong>Quận/Huyện:</strong> <span th:text="${order.district}">Quận</span></p>
+                                <p><strong>Thành phố:</strong> <span th:text="${order.city}">TP</span></p>
+                            </div>
+                            <div th:if="${order.shippingMethod.name() == 'PICKUP'}">
+                                <p><strong>Chi nhánh nhận hàng:</strong> <span th:text="${order.branch.name}">Tên chi nhánh</span>
+                                </p>
+                                <p><strong>Địa chỉ chi nhánh:</strong> <span th:text="${order.branch.address}">Địa chỉ chi nhánh</span>
+                                </p>
+                                <p><strong>Hotline chi nhánh:</strong> <span th:text="${order.branch.phone}">SĐT</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</html> 

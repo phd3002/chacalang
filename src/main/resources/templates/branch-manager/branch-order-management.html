@@ -4,10 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý đơn hàng | Branch Manager</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+<!--    <link rel="stylesheet" href="/css/bootstrap.min.css">-->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/branch-manager/branch-manager.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+    .badge-warning {
+        background-color: #f0ad4e;
+        color: #fff;
+    }
+
+    .badge-info {
+        background-color: #5bc0de;
+        color: #fff;
+    }
+
+    .badge-success {
+        background-color: #5cb85c;
+        color: #fff;
+    }
+
+    .badge-danger {
+        background-color: #d9534f;
+        color: #fff;
+    }
+
+    .badge-secondary {
+        background-color: #777;
+        color: #fff;
+    }
+
+    /*.modal {*/
+    /*    z-index: 1055 !important;*/
+    /*    display: block !important;*/
+    /*    opacity: 1 !important;*/
+    /*}*/
+
+    /*.modal-backdrop {*/
+    /*    z-index: 1050 !important;*/
+    /*    opacity: 0.5;*/
+    /*}*/
+
+    .modal-dialog {
+        transform: translate(0, 0); /* reset translate */
+        margin-top: 10vh; /* đẩy nhẹ xuống */
+    }
+</style>
 <body>
 <div class="branch-layout">
     <nav class="branch-sidebar">
@@ -16,12 +59,36 @@
             <h2>Chi nhánh</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li class="active"><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
-            <li><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
-            <li><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-dashboard'(branchId=${branchId})}"><i
+                        class="fa fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="active">
+                <a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
+                        class="fa fa-list"></i> Quản lý đơn hàng
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}">
+                    <i class="fa fa-users"></i> Nhân viên chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}">
+                    <i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}">
+                    <i class="fa fa-calendar"></i> Quản lý đặt bàn
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}">
+                    <i class="fa fa-bar-chart"></i> Thống kê chi nhánh
+                </a>
+            </li>
         </ul>
     </nav>
     <main class="branch-main-content">
@@ -31,52 +98,105 @@
         <div class="branch-order-table-wrapper">
             <table class="table table-striped branch-order-table">
                 <thead>
-                    <tr>
-                        <th>Mã đơn</th>
-                        <th>Khách hàng</th>
-                        <th>Ngày đặt</th>
-                        <th>Tổng tiền</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Giao hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>#1001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>2024-06-01</td>
-                        <td>1,200,000₫</td>
-                        <td><span class="badge badge-warning">Đang xử lý</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-eye"></i> Xem</a>
-                            <a href="#" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Hoàn thành</a>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Hủy</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#1002</td>
-                        <td>Trần Thị B</td>
-                        <td>2024-06-02</td>
-                        <td>850,000₫</td>
-                        <td><span class="badge badge-info">Đã hoàn thành</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-eye"></i> Xem</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#1003</td>
-                        <td>Lê Văn C</td>
-                        <td>2024-06-03</td>
-                        <td>650,000₫</td>
-                        <td><span class="badge badge-danger">Đã hủy</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-eye"></i> Xem</a>
-                        </td>
-                    </tr>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderCode}">#Mã đơn</td>
+                    <td th:text="${order.customerName}">Tên KH</td>
+                    <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}">Ngày</td>
+                    <td th:text="${order.shippingMethod.label}">
+                        Hình thức
+                    </td>
+                    <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">Tổng tiền
+                    </td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${order.statusColor}"
+                              th:text="${order.status.label}">
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/branch-manager/branch-order-detail-management'(orderId=${order.id})}"
+                           class="btn btn-sm btn-info">
+                            <i class="fa fa-eye"></i> Xem
+                        </a>
+                        <!-- Nút mở modal -->
+                        <button type="button"
+                                class="btn btn-sm btn-primary"
+                                th:attr="data-bs-toggle='modal', data-bs-target='#modal-update-' + ${order.id}">
+                            <i class="fa fa-pencil"></i> Cập nhật
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </main>
+
+</div>
+<div th:each="order : ${orders}">
+    <div class="modal fade"
+         th:id="'modal-update-' + ${order.id}"
+         tabindex="-1"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post"
+                      th:action="@{/branch-manager/branch-order-management/update-status}">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái đơn hàng</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="orderId" th:value="${order.id}"/>
+                        <input type="hidden" name="branchId" th:value="${branchId}"/>
+                        <label>Chọn trạng thái mới:</label>
+                        <select name="newStatus" class="form-control" required>
+                            <option th:each="s : ${T(com.thungcam.chacalang.enums.OrderStatus).values()}"
+                                    th:value="${s}"
+                                    th:text="${s.label}"
+                                    th:selected="${s} == ${order.status}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-</html> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(btn => {
+            btn.addEventListener("click", () => {
+                console.log("Đã click cập nhật:", btn.getAttribute("data-bs-target"));
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('shown.bs.modal', () => {
+                console.log("Modal hiển thị:", modal.id);
+            });
+        });
+    });
+</script>
+
+</html>

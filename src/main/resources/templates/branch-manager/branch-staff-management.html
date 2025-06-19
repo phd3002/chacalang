@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý nhân viên chi nhánh | Branch Manager</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/branch-manager/branch-manager.css}">
 </head>
 <body>
 <div class="branch-layout">
@@ -16,60 +16,152 @@
             <h2>Chi nhánh</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
-            <li class="active"><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
-            <li><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-dashboard'(branchId=${branchId})}"><i
+                    class="fa fa-home"></i> Dashboard</a></li>
+            <li><a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
+                    class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li class="active">
+                <a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}">
+                    <i class="fa fa-users"></i> Nhân viên chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}">
+                    <i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}">
+                    <i class="fa fa-calendar"></i> Quản lý đặt bàn
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}">
+                    <i class="fa fa-bar-chart"></i> Thống kê chi nhánh
+                </a>
+            </li>
         </ul>
     </nav>
     <main class="branch-main-content">
         <div class="branch-page-header d-flex justify-content-between align-items-center">
             <h1>Quản lý nhân viên chi nhánh</h1>
-            <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i> Thêm nhân viên</a>
+            <a th:href="@{'/branch-manager/branch-staff-create'(branchId=${branchId})}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Thêm nhân viên
+            </a>
         </div>
         <div class="branch-staff-table-wrapper">
             <table class="table table-striped branch-staff-table">
                 <thead>
-                    <tr>
-                        <th>Họ tên</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Ngày tạo</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Nguyễn Văn D</td>
-                        <td>nguyenvand@example.com</td>
-                        <td>0901234567</td>
-                        <td>2024-05-10</td>
-                        <td><span class="badge badge-success">Đang hoạt động</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i> Sửa</a>
-                            <a href="#" class="btn btn-sm btn-warning"><i class="fa fa-refresh"></i> Đặt lại mật khẩu</a>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Xóa</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Trần Thị E</td>
-                        <td>tranthie@example.com</td>
-                        <td>0912345678</td>
-                        <td>2024-04-22</td>
-                        <td><span class="badge badge-danger">Đã khóa</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i> Sửa</a>
-                            <a href="#" class="btn btn-sm btn-warning"><i class="fa fa-refresh"></i> Đặt lại mật khẩu</a>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Xóa</a>
-                        </td>
-                    </tr>
+                <tr th:each="user : ${staffList}">
+                    <td th:text="${user.lastName + ' ' + user.firstName}">Họ tên</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.phone}">SĐT</td>
+                    <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">Ngày tạo</td>
+                    <td>
+                        <form th:action="@{/branch-manager/branch-staff/toggle-status}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}"/>
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <button type="submit"
+                                    th:class="${#strings.equals(user.status?.name(), 'ACTIVE')} ? 'btn btn-sm btn-success' : 'btn btn-sm btn-secondary'">
+                                <i class="fa fa-power-off"></i>
+                                <span th:text="${#strings.equals(user.status?.name(), 'ACTIVE')} ? ' Hoạt động' : ' Bị khóa'"></span>
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#editModal-' + ${user.id}">
+                            <i class="fa fa-pencil"></i> Sửa
+                        </button>
+
+                        <button class="btn btn-sm btn-danger"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#deleteModal-' + ${user.id}">
+                            <i class="fa fa-trash"></i> Xóa
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
+        <div th:each="user : ${staffList}">
+            <div class="modal fade" th:id="'editModal-' + ${user.id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form th:action="@{/branch-manager/branch-staff/update}" method="post">
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <input type="hidden" name="id" th:value="${user.id}"/>
+                            <div class="modal-header">
+                                <h5 class="modal-title">Cập nhật nhân viên</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>Họ</label>
+                                    <input name="firstName" class="form-control" th:value="${user.firstName}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Tên</label>
+                                    <input name="lastName" class="form-control" th:value="${user.lastName}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input name="email" type="email" class="form-control" th:value="${user.email}"
+                                           required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Số điện thoại</label>
+                                    <input name="phone" class="form-control" th:value="${user.phone}" required/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:each="user : ${staffList}">
+            <div class="modal fade" th:id="'deleteModal-' + ${user.id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form th:action="@{/branch-manager/branch-staff/delete}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}"/>
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger">Xác nhận xóa</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn xóa nhân viên
+                                <strong th:text="${user.lastName + ' ' + user.firstName}">Tên</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </html> 

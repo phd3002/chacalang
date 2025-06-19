@@ -4,56 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Chi nhánh | Thung Cấm</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/branch-manager/branch-manager.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/branch-manager/branch-manager.css}">
 </head>
 <body>
-    <div class="branch-dashboard-container">
-        <header class="branch-dashboard-header">
-            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm" class="branch-logo">
-            <h1>Dashboard Quản lý Chi nhánh</h1>
-        </header>
-        <section class="branch-dashboard-summary">
-            <div class="summary-card">
-                <div class="summary-icon bg-primary"><i class="fa fa-shopping-cart"></i></div>
-                <div class="summary-info">
-                    <h2>120</h2>
-                    <p>Tổng đơn hàng</p>
+<div class="branch-layout">
+    <nav class="branch-sidebar">
+        <div class="sidebar-header">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+            <h2>Chi nhánh</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a th:href="@{'/branch-manager/branch-dashboard'(branchId=${branchId})}"><i
+                    class="fa fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
+                    class="fa fa-list"></i> Quản lý đơn hàng
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}">
+                    <i class="fa fa-users"></i> Nhân viên chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}">
+                    <i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}">
+                    <i class="fa fa-calendar"></i> Quản lý đặt bàn
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}">
+                    <i class="fa fa-bar-chart"></i> Thống kê chi nhánh
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main class="branch-main-content">
+        <div class="branch-page-header">
+            <h1>Dashboard Chi nhánh</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon bg-primary">
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                    <div class="dashboard-card-info">
+                        <h3 th:text="${dashboard.totalOrders}">0</h3>
+                        <p>Tổng đơn hàng</p>
+                    </div>
                 </div>
             </div>
-            <div class="summary-card">
-                <div class="summary-icon bg-success"><i class="fa fa-money"></i></div>
-                <div class="summary-info">
-                    <h2>85,000,000₫</h2>
-                    <p>Doanh thu</p>
+            <div class="col-md-4 mb-4">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon bg-success">
+                        <i class="fa fa-money"></i>
+                    </div>
+                    <div class="dashboard-card-info">
+                        <h3 th:text="${#numbers.formatDecimal(dashboard.totalRevenue, 0, 'POINT', 0, 'COMMA')} + ' ₫'">
+                            0₫</h3>
+                        <p>Doanh thu</p>
+                    </div>
                 </div>
             </div>
-            <div class="summary-card">
-                <div class="summary-icon bg-warning"><i class="fa fa-hourglass-half"></i></div>
-                <div class="summary-info">
-                    <h2>15</h2>
-                    <p>Đơn đang xử lý</p>
+            <div class="col-md-4 mb-4">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon bg-warning">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <div class="dashboard-card-info">
+                        <h3 th:text="${dashboard.todayReservations}">0</h3>
+                        <p>Đặt bàn hôm nay</p>
+                    </div>
                 </div>
             </div>
-            <div class="summary-card">
-                <div class="summary-icon bg-info"><i class="fa fa-check-circle"></i></div>
-                <div class="summary-info">
-                    <h2>100</h2>
-                    <p>Đơn hoàn thành</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="dashboard-block">
+                    <h4>Trạng thái đơn hàng</h4>
+                    <div class="order-status-list">
+                        <div class="order-status-item">
+                            <div class="status-icon bg-warning">
+                                <i class="fa fa-hourglass-half"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.pendingOrders}">0</h5>
+                                <p>Đơn đang xử lý</p>
+                            </div>
+                        </div>
+                        <div class="order-status-item">
+                            <div class="status-icon bg-info">
+                                <i class="fa fa-check-circle"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.completedOrders}">0</h5>
+                                <p>Đơn hoàn thành</p>
+                            </div>
+                        </div>
+                        <div class="order-status-item">
+                            <div class="status-icon bg-danger">
+                                <i class="fa fa-times-circle"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.cancelledOrders}">0</h5>
+                                <p>Đơn đã hủy</p>
+                            </div>
+                        </div>
+                        <div class="order-status-item">
+                            <div class="status-icon bg-primary">
+                                <i class="fa fa-check-square"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.confirmedOrders}">0</h5>
+                                <p>Đơn đã xác nhận</p>
+                            </div>
+                        </div>
+
+                        <div class="order-status-item">
+                            <div class="status-icon bg-secondary">
+                                <i class="fa fa-cutlery"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.preparingOrders}">0</h5>
+                                <p>Đơn đang chuẩn bị</p>
+                            </div>
+                        </div>
+
+                        <div class="order-status-item">
+                            <div class="status-icon bg-info">
+                                <i class="fa fa-truck"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.shippingOrders}">0</h5>
+                                <p>Đơn đang giao</p>
+                            </div>
+                        </div>
+
+                        <div class="order-status-item">
+                            <div class="status-icon bg-dark">
+                                <i class="fa fa-undo"></i>
+                            </div>
+                            <div class="status-info">
+                                <h5 th:text="${dashboard.refundedOrders}">0</h5>
+                                <p>Đơn hoàn tiền</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="summary-card">
-                <div class="summary-icon bg-danger"><i class="fa fa-times-circle"></i></div>
-                <div class="summary-info">
-                    <h2>5</h2>
-                    <p>Đơn đã hủy</p>
+            <div class="col-md-6 mb-4">
+                <div class="dashboard-block">
+                    <h4>Món ăn hết hàng</h4>
+                    <div class="out-of-stock-list">
+                        <div th:if="${#lists.isEmpty(outOfStockItems)}">
+                            <span class="text-muted">Không có món ăn nào hết hàng</span>
+                        </div>
+                        <div th:each="stock : ${outOfStockItems}" class="out-of-stock-item">
+                            <i class="fa fa-exclamation-circle text-danger"></i>
+                            <span th:text="${stock.menu.name}">Tên món</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-        <footer class="branch-dashboard-footer">
-            <p>&copy; 2024 Chả Cá Lăng Thung Cấm</p>
-        </footer>
-    </div>
+        </div>
+    </main>
+</div>
 </body>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const BRANCH_ID = parseInt(urlParams.get("branchId"));
+</script>
+<script src="/js/branch-manager/branch-manager.js"></script>
 </html> 

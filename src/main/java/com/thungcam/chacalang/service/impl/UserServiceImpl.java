@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -326,5 +327,6 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return userRepo.findAll();
     }
+
 }
 

@@ -84,6 +84,7 @@
 /* Sidebar layout */
 .branch-layout {
     display: flex;
+    overflow: visible;
     min-height: 100vh;
 }
 .branch-sidebar {
@@ -308,4 +309,111 @@
     color: #f8b400;
     font-weight: 700;
     margin-bottom: 18px;
+}
+
+/* Dashboard cards */
+.dashboard-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(248,180,0,0.08);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+.dashboard-card:hover {
+    transform: translateY(-4px);
+}
+.dashboard-card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    font-size: 24px;
+    color: #fff;
+}
+.dashboard-card-info h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+.dashboard-card-info p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Dashboard blocks */
+.dashboard-block {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(248,180,0,0.08);
+    padding: 24px;
+    height: 100%;
+}
+.dashboard-block h4 {
+    color: #f8b400;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Order status list */
+.order-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.order-status-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+.status-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    font-size: 20px;
+    color: #fff;
+}
+.status-info h5 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+.status-info p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Out of stock list */
+.out-of-stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.out-of-stock-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+.out-of-stock-item i {
+    font-size: 20px;
+    margin-right: 12px;
+}
+.out-of-stock-item span {
+    font-size: 15px;
+    color: #333;
 } 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
@@ -24,5 +25,10 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     @Query("SELECT DATE(i.issuedDate), SUM(i.totalAmount) FROM Invoice i WHERE i.issuedDate >= :fromDate AND i.paymentStatus = com.thungcam.chacalang.enums.PaymentStatus.PAID GROUP BY DATE(i.issuedDate) ORDER BY DATE(i.issuedDate)")
     List<Object[]> getDailyRevenue(@Param("fromDate") LocalDateTime fromDate);
+
+    @Query("SELECT COALESCE(SUM(i.finalAmount), 0) FROM Invoice i WHERE i.order.branch.id = :branchId and i.order.status = com.thungcam.chacalang.enums.OrderStatus.COMPLETED")
+    BigDecimal sumFinalAmountByBranch(@Param("branchId") Long branchId);
+
+    Optional<Invoice> findByOrderId(Long orderId);
 }
 

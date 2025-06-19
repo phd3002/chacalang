@@ -52,5 +52,8 @@ public interface UserService extends UserDetailsService {
 
     void deleteUserById(Long id);
 
-    List<User> findAll(); // lấy danh sách nhân viên đã tạo, sắp xếp theo ngày tạo mới nhất
+    List<User> findAll();
+
+
+
 }
