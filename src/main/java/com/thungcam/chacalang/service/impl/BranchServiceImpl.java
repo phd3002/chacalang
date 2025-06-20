@@ -18,4 +18,10 @@ public class BranchServiceImpl implements BranchService {
     public List<Branch> getAllBranches() {
         return branchRepository.findAll();
     }
+
+    @Override
+    public Branch getBranchById(Long id) {
+        return branchRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Branch not found with id: " + id));
+    }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/branch-manager")
 @RequiredArgsConstructor
 public class BranchStaffController {
+
     private final BranchStaffService branchStaffService;
 
     @GetMapping("/branch-staff-management")
@@ -62,7 +63,6 @@ public class BranchStaffController {
                               @RequestParam String phone,
                               @RequestParam String password,
                               @RequestParam Long branchId) {
-
         branchStaffService.createStaff(branchId, firstName, lastName, username, email, phone, password);
         return "redirect:/branch-manager/branch-staff-management?branchId=" + branchId;
     }

@@ -20,24 +20,17 @@
                     class="fa fa-home"></i> Dashboard</a></li>
             <li><a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
                     class="fa fa-list"></i> Quản lý đơn hàng</a></li>
-            <li class="active">
-                <a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}">
-                    <i class="fa fa-users"></i> Nhân viên chi nhánh
-                </a>
-            </li>
+            <li class="active"><a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}"><i
+                    class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}"><i
+                    class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}"><i
+                    class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li><a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}"><i
+                    class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
             <li>
-                <a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}">
-                    <i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh
-                </a>
-            </li>
-            <li>
-                <a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}">
-                    <i class="fa fa-calendar"></i> Quản lý đặt bàn
-                </a>
-            </li>
-            <li>
-                <a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}">
-                    <i class="fa fa-bar-chart"></i> Thống kê chi nhánh
+                <a href="/logout">
+                    <i class="fa fa-sign-out"></i> Đăng xuất
                 </a>
             </li>
         </ul>

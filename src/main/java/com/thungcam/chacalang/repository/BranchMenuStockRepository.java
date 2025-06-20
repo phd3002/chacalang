@@ -2,13 +2,16 @@ package com.thungcam.chacalang.repository;
 
 import com.thungcam.chacalang.entity.BranchMenuStock;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface BranchMenuStockRepository extends JpaRepository<BranchMenuStock, Long> {
-    List<BranchMenuStock> findByBranch_IdAndQuantity(int branchId, int quantity); // dùng nếu muốn tùy
+    @Query("SELECT s FROM BranchMenuStock s JOIN FETCH s.menu WHERE s.branch.id = :branchId")
+    List<BranchMenuStock> findByBranchIdWithMenu(@Param("branchId") Long branchId);
 
     List<BranchMenuStock> findByBranch_IdAndQuantityLessThanEqual(Long branchId, int quantity);
 }

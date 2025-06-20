@@ -16,64 +16,128 @@
             <h2>Chi nhánh</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
-            <li><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
-            <li class="active"><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
-            <li><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-dashboard'(branchId=${branchId})}"><i
+                    class="fa fa-home"></i> Dashboard</a></li>
+            <li><a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
+                    class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li><a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}"><i
+                    class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}"><i
+                    class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li class="active"><a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}"><i
+                    class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li><a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}"><i
+                    class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+            <li>
+                <a href="/logout">
+                    <i class="fa fa-sign-out"></i> Đăng xuất
+                </a>
+            </li>
         </ul>
     </nav>
     <main class="branch-main-content">
         <div class="branch-page-header">
-            <h1>Quản lý đặt bàn tại chi nhánh</h1>
+            <h1>Quản lý đặt bàn tại chi nhánh <span th:text="${branchName}"></span></h1>
         </div>
         <div class="branch-reservation-table-wrapper">
             <table class="table table-striped branch-reservation-table">
                 <thead>
-                    <tr>
-                        <th>Khách hàng</th>
-                        <th>Ngày giờ</th>
-                        <th>Số người</th>
-                        <th>Ghi chú</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
+                <tr>
+                    <th>Khách hàng</th>
+                    <th>Ngày giờ</th>
+                    <th>Số người</th>
+                    <th>Ghi chú</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Phạm Minh H</td>
-                        <td>2024-06-10 18:30</td>
-                        <td>6</td>
-                        <td>Bàn gần cửa sổ</td>
-                        <td><span class="badge badge-warning">Chờ xác nhận</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Xác nhận</a>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Hủy</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Đỗ Thị K</td>
-                        <td>2024-06-11 12:00</td>
-                        <td>4</td>
-                        <td></td>
-                        <td><span class="badge badge-success">Đã xác nhận</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Hủy</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Ngô Văn L</td>
-                        <td>2024-06-12 19:00</td>
-                        <td>10</td>
-                        <td>Sinh nhật</td>
-                        <td><span class="badge badge-danger">Đã hủy</span></td>
-                        <td></td>
-                    </tr>
+                <tr th:each="reservation : ${reservations}">
+                    <td th:text="${reservation.customerName}"></td>
+                    <td>
+                        <span th:text="${reservation.reservationDate}"></span>
+                        <span th:text="${reservation.reservationTime}"></span>
+                    </td>
+                    <td th:text="${reservation.numberOfPeople}"></td>
+                    <td th:text="${reservation.note}"></td>
+                    <td>
+                        <span th:switch="${#strings.trim(reservation.status)}">
+                            <span th:case="'PENDING'" class="badge bg-warning text-dark">
+                                <i class="fa fa-hourglass-half"></i> Chờ xác nhận
+                            </span>
+                            <span th:case="'CONFIRMED'" class="badge bg-success">
+                                <i class="fa fa-check"></i> Đã xác nhận
+                            </span>
+                            <span th:case="'CANCELLED'" class="badge bg-danger">
+                                <i class="fa fa-times"></i> Đã hủy
+                            </span>
+                            <span th:case="*">
+                                <span class="badge bg-secondary">-</span>
+                            </span>
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button"
+                                class="btn btn-sm btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#updateStatusModal"
+                                th:attr="data-id=${reservation.id}, data-status=${reservation.status}, data-branch=${reservation.branch.id}">
+                            <i class="fa fa-edit"></i> Cập nhật
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </main>
+    <!-- Modal cập nhật trạng thái -->
+    <div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" id="updateStatusForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateStatusModalLabel">Cập nhật trạng thái đặt bàn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="branchId" id="modalBranchId"/>
+                        <div class="mb-3">
+                            <label for="modalStatus" class="form-label">Trạng thái mới</label>
+                            <select class="form-select" id="modalStatus" name="status">
+                                <option value="PENDING">Chờ xác nhận</option>
+                                <option value="CONFIRMED">Đã xác nhận</option>
+                                <option value="CANCELLED">Đã hủy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+<script>
+    const modal = document.getElementById('updateStatusModal');
+    modal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const reservationId = button.getAttribute('data-id');
+        const currentStatus = button.getAttribute('data-status');
+        const branchId = button.getAttribute('data-branch');
+        // Set form action động
+        const form = document.getElementById('updateStatusForm');
+        form.action = `/branch-manager/branch-reservation/${reservationId}/status`;
+        // Set giá trị branchId hidden
+        document.getElementById('modalBranchId').value = branchId;
+        // Chọn đúng status hiện tại
+        document.getElementById('modalStatus').value = currentStatus;
+    });
+</script>
+<!-- Nhớ thêm Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html> 

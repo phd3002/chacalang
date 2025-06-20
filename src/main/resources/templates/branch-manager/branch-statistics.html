@@ -17,17 +17,90 @@
             <h2>Chi nhánh</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="/branch-manager/branch-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-            <li><a href="/branch-manager/branch-order-management"><i class="fa fa-list"></i> Quản lý đơn hàng</a></li>
-            <li><a href="/branch-manager/branch-staff-management"><i class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-menu"><i class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
-            <li><a href="/branch-manager/branch-reservation"><i class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
-            <li class="active"><a href="/branch-manager/branch-statistics"><i class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-dashboard'(branchId=${branchId})}"><i
+                    class="fa fa-home"></i> Dashboard</a></li>
+            <li><a th:href="@{'/branch-manager/branch-order-management'(branchId=${branchId})}"><i
+                    class="fa fa-list"></i> Quản lý đơn hàng</a></li>
+            <li><a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}"><i
+                    class="fa fa-users"></i> Nhân viên chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-menu'(branchId=${branchId})}"><i
+                    class="fa fa-cutlery"></i> Thực đơn tại chi nhánh</a></li>
+            <li><a th:href="@{'/branch-manager/branch-reservation'(branchId=${branchId})}"><i
+                    class="fa fa-calendar"></i> Quản lý đặt bàn</a></li>
+            <li class="active"><a th:href="@{'/branch-manager/branch-statistics'(branchId=${branchId})}"><i
+                    class="fa fa-bar-chart"></i> Thống kê chi nhánh</a></li>
+            <li>
+                <a href="/logout">
+                    <i class="fa fa-sign-out"></i> Đăng xuất
+                </a>
+            </li>
         </ul>
     </nav>
     <main class="branch-main-content">
         <div class="branch-page-header">
             <h1>Thống kê chi nhánh</h1>
+        </div>
+        <div class="row mb-4">
+
+            <form class="row g-2 mb-3 align-items-end" method="get" th:action="@{/branch-manager/branch-statistics}">
+                <input type="hidden" name="branchId" th:value="${branchId}"/>
+                <div class="col-auto">
+                    <label for="fromDate" class="form-label mb-0">Từ ngày</label>
+                    <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}" max="9999-12-31"/>
+                </div>
+                <div class="col-auto">
+                    <label for="toDate" class="form-label mb-0">Đến ngày</label>
+                    <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}" max="9999-12-31"/>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Lọc</button>
+                </div>
+            </form>
+            <div class="col-12">
+                <div id="dateError" class="text-danger"></div>
+            </div>
+            <script>
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    const fromDate = document.getElementById('fromDate').value;
+                    const toDate = document.getElementById('toDate').value;
+                    if (fromDate && toDate && fromDate > toDate) {
+                        e.preventDefault();
+                        document.getElementById('dateError').textContent = 'Từ ngày không được sau Đến ngày!';
+                    }
+                });
+            </script>
+
+
+            <div class="col-md-2 col-6 mb-2">
+                <div class="card text-center border-0 shadow-sm py-3">
+                    <div class="fs-2 fw-bold text-primary" id="kpiOrders">0</div>
+                    <div class="small">Tổng đơn hàng</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6 mb-2">
+                <div class="card text-center border-0 shadow-sm py-3">
+                    <div class="fs-2 fw-bold text-success" id="kpiRevenue">0</div>
+                    <div class="small">Tổng doanh thu (triệu ₫)</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6 mb-2">
+                <div class="card text-center border-0 shadow-sm py-3">
+                    <div class="fs-2 fw-bold text-info" id="kpiReservations">0</div>
+                    <div class="small">Lượt đặt bàn</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6 mb-2">
+                <div class="card text-center border-0 shadow-sm py-3">
+                    <div class="fs-2 fw-bold text-danger" id="kpiCancelRate">0%</div>
+                    <div class="small">Tỷ lệ hủy</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="card text-center border-0 shadow-sm py-3">
+                    <div class="fw-bold" id="kpiTopMenu">Đang tải...</div>
+                    <div class="small">Món bán chạy nhất</div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-6 mb-4">
@@ -51,51 +124,60 @@
         </div>
     </main>
 </div>
-<script>
-// Dữ liệu mẫu cho biểu đồ
-const ordersData = {
-    labels: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6'],
-    datasets: [{
-        label: 'Đơn hàng',
-        data: [120, 150, 180, 140, 200, 170],
-        backgroundColor: '#f8b400',
-        borderColor: '#f8b400',
-        borderWidth: 2
-    }]
-};
-const revenueData = {
-    labels: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6'],
-    datasets: [{
-        label: 'Doanh thu (triệu ₫)',
-        data: [85, 92, 110, 98, 120, 105],
-        backgroundColor: '#28a745',
-        borderColor: '#28a745',
-        borderWidth: 2
-    }]
-};
-const topMenuData = {
-    labels: ['Chả cá lăng nướng', 'Lẩu cá lăng', 'Chả cá lăng chiên xù', 'Cá lăng om chuối', 'Cá lăng hấp'],
-    datasets: [{
-        label: 'Số lượng bán',
-        data: [320, 280, 250, 210, 180],
-        backgroundColor: ['#f8b400', '#28a745', '#17a2b8', '#dc3545', '#ffc107']
-    }]
-};
-new Chart(document.getElementById('ordersChart'), {
-    type: 'bar',
-    data: ordersData,
-    options: {responsive: true, plugins: {legend: {display: false}}}
-});
-new Chart(document.getElementById('revenueChart'), {
-    type: 'line',
-    data: revenueData,
-    options: {responsive: true, plugins: {legend: {display: false}}}
-});
-new Chart(document.getElementById('topMenuChart'), {
-    type: 'bar',
-    data: topMenuData,
-    options: {responsive: true, plugins: {legend: {display: false}}}
-});
+<script th:inline="javascript">
+    // KPI
+    document.getElementById('kpiOrders').textContent = [[${totalOrders}]];
+    document.getElementById('kpiRevenue').textContent = [[${totalRevenue}]];
+    document.getElementById('kpiReservations').textContent = [[${totalReservations}]];
+    document.getElementById('kpiCancelRate').textContent = '[[${cancelRate}]]%';
+    document.getElementById('kpiTopMenu').textContent = '[[${topMenu}]]';
+
+    // Biểu đồ đơn hàng
+    const ordersData = {
+        // labels: [[${ordersLabels}]],
+        datasets: [{
+            label: 'Đơn hàng',
+            data: [[${ordersValues}]],
+            backgroundColor: '#f8b400',
+            borderColor: '#f8b400',
+            borderWidth: 2
+        }]
+    };
+    // Biểu đồ doanh thu
+    const revenueData = {
+        labels: [[${revenueLabels}]],
+        datasets: [{
+            label: 'Doanh thu (triệu ₫)',
+            data: [[${revenueValues}]],
+            backgroundColor: '#28a745',
+            borderColor: '#28a745',
+            borderWidth: 2
+        }]
+    };
+    // Top 5 món bán chạy
+    const topMenuData = {
+        labels: [[${topMenuLabels}]],
+        datasets: [{
+            label: 'Số lượng bán',
+            data: [[${topMenuValues}]],
+            backgroundColor: ['#f8b400', '#28a745', '#17a2b8', '#dc3545', '#ffc107']
+        }]
+    };
+    new Chart(document.getElementById('ordersChart'), {
+        type: 'bar',
+        data: ordersData,
+        options: {responsive: true, plugins: {legend: {display: false}}}
+    });
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: revenueData,
+        options: {responsive: true, plugins: {legend: {display: false}}}
+    });
+    new Chart(document.getElementById('topMenuChart'), {
+        type: 'bar',
+        data: topMenuData,
+        options: {responsive: true, plugins: {legend: {display: false}}}
+    });
 </script>
 </body>
 </html> 

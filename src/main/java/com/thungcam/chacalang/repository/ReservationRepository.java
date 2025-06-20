@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -15,4 +17,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT COUNT(r) FROM Reservation r WHERE r.branch.id = :branchId AND r.reservationDate = :date")
     Long countByBranchIdAndDate(@Param("branchId") Long branchId, @Param("date") LocalDate date);
+
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.branch.id = :branchId AND r.createdAt >= :fromDate AND r.createdAt <= :toDate")
+    long countByBranch(Long branchId, LocalDateTime fromDate, LocalDateTime toDate);
+
 }
