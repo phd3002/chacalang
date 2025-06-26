@@ -113,77 +113,57 @@
                     </div>
                     <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
                     <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
-                    <form class="address-form" method="post" th:action="@{/user/update-address}">
-                        <input name="id" th:value="${address != null ? address.id : ''}" type="hidden">
+                    <form id="addressForm" th:action="@{/user/update-address}" method="post" class="address-form">
+                        <input type="hidden" name="id" th:value="${address.id}"/>
 
-                        <!-- Nếu là thêm mới hoặc sửa địa chỉ phụ -->
-                        <div class="form-group"
-                             th:if="${address == null or !address.isDefault}">
+                        <div class="form-group">
+                            <label>Họ và tên:</label>
+                            <input class="form-control" name="fullName" th:value="${address.fullName}" required/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số điện thoại:</label>
+                            <input class="form-control" name="phone" th:value="${address.phone}" required/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Quận/Huyện:</label>
+                            <select class="form-control" name="districtId" id="districtId" required>
+                                <option value="">Chọn quận/huyện</option>
+                                <th:block th:each="d : ${districts}">
+                                    <option th:value="${d.id}" th:text="${d.name}"
+                                            th:selected="${address.district != null and d.id == address.district.id}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+
+                        <div class="form-group" th:if="${not #lists.isEmpty(wards)}">
+                            <label>Phường/Xã:</label>
+                            <select class="form-control" name="wardId" id="wardId" required>
+                                <option value="">Chọn phường/xã</option>
+                                <th:block th:each="w : ${wards}">
+                                    <option th:value="${w.id}" th:text="${w.name}"
+                                            th:selected="${address.ward != null and w.id == address.ward.id}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Địa chỉ chi tiết:</label>
+                            <input class="form-control" name="address" th:value="${address.address}" required/>
+                        </div>
+
+                        <div class="form-group">
                             <label>
-                                <input name="isDefault" th:checked="${address != null and address.isDefault}"
-                                       type="checkbox"
-                                       value="true">
+                                <input type="checkbox" name="isDefault" value="true"
+                                       th:checked="${address.isDefault}"/>
                                 Đặt làm địa chỉ mặc định
                             </label>
                         </div>
 
-                        <!-- Nếu đang sửa địa chỉ mặc định: gửi hidden giữ lại trạng thái -->
-                        <input name="isDefault" th:if="${address != null and address.isDefault}" type="hidden"
-                               value="true"/>
-
-
-                        <div class="form-group">
-                            <label class="form-label">Họ và tên người nhận:</label>
-                            <input class="form-control" name="fullName" required
-                                   th:value="${address.fullName}" type="text">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Số điện thoại:</label>
-                            <input class="form-control" name="phone" required
-                                   th:value="${address.phone}" type="tel">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Tỉnh/Thành phố:</label>
-                            <input class="form-control" disabled value="Thành phố Hà Nội">
-                            <input name="city" type="hidden"
-                                   th:value="${address != null ? address.city : 'Thành phố Hà Nội'}"/>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="form-label">Quận/Huyện:</label>
-                            <select class="form-control" id="district"
-                                    onchange="document.getElementsByName('district')[0].value = this.value;"
-                                    required>
-                                <option value="">Chọn quận/huyện</option>
-                            </select>
-                            <input name="district" type="hidden"/>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Phường/Xã:</label>
-                            <select class="form-control" id="ward"
-                                    onchange="document.getElementsByName('ward')[0].value = this.value;"
-                                    required>
-                                <option value="">Chọn phường/xã</option>
-                            </select>
-                            <input name="ward" type="hidden"/>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Địa chỉ chi tiết:</label>
-                            <input class="form-control" name="address" required
-                                   th:value="${address != null ? address.address : ''}" type="text">
-                        </div>
-
                         <div class="form-group text-center">
-                            <button class="btn-submit" type="submit"
-                                    th:text="${address != null and address.id != null ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ'}">
-                                Thêm/Cập nhật
-                            </button>
-                            <a class="btn-cancel" href="/user/user-address">Hủy</a>
+                            <button type="submit" class="btn-submit">Lưu địa chỉ</button>
+                            <a href="/user/user-address" class="btn-cancel">Hủy</a>
                         </div>
                     </form>
                 </div>
@@ -195,65 +175,63 @@
 <script referrerpolicy="no-referrer"
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script th:inline="javascript">
-    const host = "/api/location";
-
-    let selectedCity = /*[['' + ${address.city}]]*/ 'Thành phố Hà Nội';
-    let selectedDistrict = /*[['' + ${address.district}]]*/ '';
-    let selectedWard = /*[['' + ${address.ward}]]*/ '';
-
-    const renderData = (array, select) => {
-        let row = '<option value="">Chọn</option>';
-        array.forEach(element => {
-            row += `<option value="${element.name}" data-id="${element.code || ''}">${element.name}</option>`;
-        });
-        document.querySelector(`#${select}`).innerHTML = row;
-    };
-
-    const callApiDistrict = () => {
-        axios.get(`${host}/districts/ha-noi`).then((response) => {
-            renderData(response.data, "district");
-
-            if (selectedDistrict) {
-                document.querySelector("#district").value = selectedDistrict;
-                document.getElementsByName('district')[0].value = selectedDistrict;
-                callApiWard(selectedDistrict);
-            }
-        });
-    };
-
-    const callApiWard = (districtName) => {
-        axios.get(`${host}/wards`, {
-            params: {districtName: districtName}
-        }).then((response) => {
-            renderData(response.data, "ward");
-
-            if (selectedWard) {
-                document.querySelector("#ward").value = selectedWard;
-                document.getElementsByName('ward')[0].value = selectedWard;
-            }
-        });
-    };
-
-    // Sự kiện khi người dùng chọn quận
-    $("#district").change(() => {
-        const value = $("#district").val();
-        document.getElementsByName('district')[0].value = value;
-        callApiWard(value);
+<script>
+    $('#districtId').on('change', function () {
+        var districtId = $(this).val();
+        var $ward = $('#wardId');
+        // Lưu lại wardId cũ nếu có
+        var oldWardId = $ward.val();
+        $ward.empty();
+        $ward.append('<option value="">Chọn phường/xã</option>');
+        if (districtId) {
+            $.ajax({
+                url: '/api/user-address/wards?districtId=' + districtId,
+                type: 'GET',
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $ward.append('<option value="' + item.id + '">' + item.name + '</option>');
+                    });
+                    // Nếu oldWardId còn trong danh sách thì set lại
+                    if (oldWardId && $ward.find('option[value="' + oldWardId + '"]').length > 0) {
+                        $ward.val(oldWardId);
+                    }
+                }
+            });
+        }
     });
-
-    // Sự kiện khi chọn phường
-    $("#ward").change(() => {
-        const value = $("#ward").val();
-        document.getElementsByName('ward')[0].value = value;
-    });
-
-    // Gán sẵn thành phố Hà Nội
-    document.getElementsByName('city')[0].value = selectedCity;
-
-    // Gọi dữ liệu khởi tạo
-    callApiDistrict();
 </script>
+
+
+<!--<script th:inline="javascript">-->
+<!--    const host = "/api/location";-->
+<!--    let selectedWard = /*[[${address.ward != null ? '"' + address.ward.id + '"' : '""'}]]*/ "";-->
+<!--    const renderWards = (data) => {-->
+<!--        const wardSelect = document.getElementById("ward");-->
+<!--        let options = '<option value="">Chọn phường/xã</option>';-->
+<!--        data.forEach(w => {-->
+<!--            options += `<option value="${w.name}">${w.name}</option>`;-->
+<!--        });-->
+<!--        wardSelect.innerHTML = options;-->
+
+<!--        if (selectedWard) {-->
+<!--            wardSelect.value = selectedWard;-->
+<!--        }-->
+<!--    };-->
+
+<!--    document.getElementById("district").addEventListener("change", function () {-->
+<!--        const districtId = this.value;-->
+<!--        document.querySelector("input[name='district']").value = this.options[this.selectedIndex].text;-->
+
+<!--        // 🔥 Redirect để nạp lại form kèm districtId-->
+<!--        const currentUrl = window.location.origin + window.location.pathname;-->
+<!--        const urlParams = new URLSearchParams(window.location.search);-->
+<!--        urlParams.set("districtId", districtId);-->
+<!--        const idParam = document.querySelector("input[name='id']");-->
+<!--        if (idParam) urlParams.set("id", idParam.value);-->
+
+<!--        window.location.href = `${currentUrl}?${urlParams.toString()}`;-->
+<!--    });-->
+<!--</script>-->
 
 </body>
 </html> 

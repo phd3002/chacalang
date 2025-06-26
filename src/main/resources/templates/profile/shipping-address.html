@@ -148,8 +148,8 @@
                                         <div><strong>Họ tên:</strong> <span th:text="${address.fullName}"></span></div>
                                         <div><strong>Địa chỉ:</strong>
                                             <span th:text="${address.address}"></span>,
-                                            <span th:text="${address.ward}"></span>,
-                                            <span th:text="${address.district}"></span>,
+                                            <span th:text="${address.ward.name}"></span>,
+                                            <span th:text="${address.district.name}"></span>,
                                             <span th:text="${address.city}"></span>
                                         </div>
                                         <div><strong>SĐT:</strong> <span th:text="${address.phone}"></span></div>
@@ -185,8 +185,8 @@
                                         <div><strong>Họ tên:</strong> <span th:text="${address.fullName}"></span></div>
                                         <div><strong>Địa chỉ:</strong>
                                             <span th:text="${address.address}"></span>,
-                                            <span th:text="${address.ward}"></span>,
-                                            <span th:text="${address.district}"></span>,
+                                            <span th:text="${address.ward.name}"></span>,
+                                            <span th:text="${address.district.name}"></span>,
                                             <span th:text="${address.city}"></span>
                                         </div>
                                         <div><strong>SĐT:</strong> <span th:text="${address.phone}"></span></div>
@@ -209,7 +209,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <a class="back-link" href="/profile-manager">
+                        <a class="back-link" href="/user/profile-manager">
                             <i class="fa fa-chevron-left"></i> Quay lại quản lý tài khoản
                         </a>
                     </div>
@@ -220,4 +220,4 @@
 </div>
 <div th:replace="~{base :: footer}"></div>
 </body>
-</html> 
+</html>

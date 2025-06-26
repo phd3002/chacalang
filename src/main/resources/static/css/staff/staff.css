@@ -1,0 +1,346 @@
+/* staff.css - Dành riêng cho giao diện staff */
+
+body {
+    background-color: #f9f9f9;
+    background-image: url('../../img/adminBG.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* Cải thiện bảng trên nền vàng */
+.table {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.table thead th {
+    background-color: #ffc107;
+    color: #212529;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.98);
+}
+
+.table td, .table th {
+    border-color: #e0e0e0;
+    vertical-align: middle;
+}
+
+.table .btn {
+    min-width: 60px;
+}
+
+.alert-success {
+    margin-top: 20px;
+}
+
+form.form-inline .form-control {
+    margin-right: 10px;
+    min-width: 200px;
+}
+
+/* Sidebar staff */
+.staff-sidebar {
+    width: 220px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #343a40;
+    padding-top: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.staff-sidebar a {
+    display: block;
+    color: #ddd;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+    transition: 0.3s;
+}
+
+.staff-sidebar a:hover,
+.staff-sidebar a.active {
+    background-color: #495057;
+    color: #fff;
+    border-left: 4px solid #ffc107;
+}
+
+.staff-sidebar .logout-btn {
+    margin-top: auto;
+    margin-bottom: 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    border-left: 4px solid #dc3545;
+}
+
+.staff-sidebar .logout-btn:hover {
+    background-color: #c82333;
+    border-left-color: #c82333;
+}
+
+.staff-content {
+    margin-left: 230px;
+    padding: 30px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+}
+
+.status-badge i {
+    margin-right: 5px;
+}
+
+.status-badge.active {
+    background-color: #28a745; /* Màu xanh lá */
+}
+
+.status-badge.inactive {
+    background-color: #dc3545; /* Màu đỏ */
+}
+
+.status-badge.unknown {
+    background-color: #6c757d; /* Màu xám */
+}
+
+/* Card styles */
+.card {
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+    transition: transform 0.12s;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+}
+
+.card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card h4 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+/* Background gradients */
+.bg-success {
+    background: linear-gradient(120deg, #43e97b 0%, #38f9d7 100%) !important;
+    color: #fff !important;
+}
+
+.bg-warning {
+    background: linear-gradient(120deg, #f7971e 0%, #ffd200 100%) !important;
+    color: #333 !important;
+}
+
+.bg-info {
+    background: linear-gradient(120deg, #56ccf2 0%, #2f80ed 100%) !important;
+    color: #fff !important;
+}
+
+.bg-danger {
+    background: linear-gradient(120deg, #ff6b6b 0%, #ee5a24 100%) !important;
+    color: #fff !important;
+}
+
+/* Notification styles */
+.notification-item {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #ffc107;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.notification-item.urgent {
+    border-left-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+.notification-item.warning {
+    border-left-color: #ffc107;
+    background: rgba(255, 193, 7, 0.05);
+}
+
+.notification-item.info {
+    border-left-color: #17a2b8;
+    background: rgba(23, 162, 184, 0.05);
+}
+
+/* Order status styles */
+.order-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #fff;
+}
+
+.status-pending { background-color: #ffc107; color: #333; }
+.status-confirmed { background-color: #17a2b8; }
+.status-preparing { background-color: #fd7e14; }
+.status-delivering { background-color: #6f42c1; }
+.status-completed { background-color: #28a745; }
+.status-cancelled { background-color: #dc3545; }
+
+/* Order item styles */
+.order-item {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 4px solid #ffc107;
+}
+
+.order-item.urgent {
+    border-left-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+/* Search box styles */
+.search-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Note box styles */
+.note-box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    border-left: 3px solid #17a2b8;
+}
+
+/* Payment status styles */
+.payment-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #fff;
+}
+
+.status-pending { background-color: #ffc107; color: #333; }
+.status-paid { background-color: #28a745; }
+.status-failed { background-color: #dc3545; }
+.status-refunded { background-color: #6c757d; }
+
+/* Invoice item styles */
+.invoice-item {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 4px solid #17a2b8;
+}
+
+.invoice-item.overdue {
+    border-left-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+/* Payment method styles */
+.payment-method {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #e9ecef;
+    color: #495057;
+}
+
+.payment-method.cash { background: #d4edda; color: #155724; }
+.payment-method.card { background: #cce5ff; color: #004085; }
+.payment-method.bank { background: #fff3cd; color: #856404; }
+
+/* Contact and review styles */
+.contact-item, .review-item {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 4px solid #ffc107;
+}
+
+.review-item {
+    border-left: 4px solid #17a2b8;
+}
+
+.response-box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    border-left: 3px solid #28a745;
+}
+
+/* Profile styles */
+.profile-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.form-group label { 
+    font-weight: 600; 
+}

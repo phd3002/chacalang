@@ -70,7 +70,6 @@ public class CheckoutController {
                                   RedirectAttributes redirectAttributes) {
         User user = userService.findByEmail(userDetails.getUsername());
         log.info("Processing checkout for user: {}", user.getEmail());
-//        System.out.println("DTO: " + dto.toString());
         Orders order = orderService.createOrder(dto, user);
         redirectAttributes.addFlashAttribute("success", order.getOrderCode());
         return "redirect:/order/success";

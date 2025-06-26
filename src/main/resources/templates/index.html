@@ -32,11 +32,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <![endif]-->
-<style>
-    .logo img {
-        filter: drop-shadow(0 0 4px #000000aa);
-    }
-</style>
+    <style>
+        .logo img {
+            filter: drop-shadow(0 0 4px #000000aa);
+        }
+    </style>
 
 </head>
 <body>
@@ -119,7 +119,7 @@
 
                 <!-- button nav -->
                 <ul class="cta-nav">
-                    <li><a class="main-button" href="#reservation">Reserve</a></li>
+                    <li><a class="main-button" th:href="@{/order/home}">Order</a></li>
                 </ul>
                 <!-- button nav -->
 
@@ -191,10 +191,15 @@
 
             <!-- about content -->
             <div class="col-md-7">
-                <p>Hạnh phúc của nhà hàng chả cá lăng Thung Cấm là được nhìn thấy không gian nhà hàng lấp đầy bởi những
-                    niềm vui, khoảnh khắc ngọt ngào và sum họp ấm cúng của thực khách. Những lời khen về món ăn, hay đơn
-                    giản là chia sẻ về “lí do” lựa chọn Thung Cấm của bạn luôn là động lực giúp nhà hàng phát triển mỗi
-                    ngày.</p>
+                <p>"Từng miếng cá lăng được lọc xương, thái
+                    miếng vuông vắn ướp cùng riềng, nghệ vắt lấy
+                    nước, mẻ, mắm tôm đến khi thấm đều sau đó,
+                    lần lượt kẹp vào những kẹp tre tươi, nướng
+                    trên than hoa đỏ hồng đến khi miếng chả dần
+                    chuyển màu vàng óng ả ngậy lên mùi thơm đặc
+                    trưng là vừa tới. "
+                    Tại Thung Cấm, chúng tôi luôn cố gắng để những giá trị truyền thống
+                    được gìn giữ một cách tuyệt đối nhất.</p>
             </div>
             <!-- /about content -->
 
@@ -383,7 +388,8 @@
                            type="number">
                 </div>
                 <div class="col-md-12">
-                    <textarea class="input" placeholder="Ghi chú thêm" th:field="*{note}" style="resize: vertical;"></textarea>
+                    <textarea class="input" placeholder="Ghi chú thêm" th:field="*{note}"
+                              style="resize: vertical;"></textarea>
                 </div>
                 <div class="col-md-12 text-center">
                     <button class="main-button" type="submit">Đặt bàn</button>

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 
@@ -80,8 +81,8 @@ public class OrderServiceImpl implements OrderService {
             order.setCustomerName(address.getFullName());
             order.setCustomerPhone(address.getPhone());
             order.setCustomerAddress(address.getAddress());
-            order.setWard(address.getWard());
-            order.setDistrict(address.getDistrict());
+            order.setWard(String.valueOf(address.getWard()));
+            order.setDistrict(String.valueOf(address.getDistrict()));
             order.setCity(address.getCity());
         } else {
             if (dto.getBranchId() == null)
@@ -132,19 +133,5 @@ public class OrderServiceImpl implements OrderService {
         cartService.clearCart(user.getId());
 
         return order;
-    }
-
-
-
-
-    private String buildFullAddress(OrderCheckoutDTO dto) {
-        if ("pickup".equals(dto.getShippingMethod())) {
-            return dto.getPickupStore() + ", " + dto.getPickupCity();
-        }
-        return dto.getCustomerAddress() + ", " + dto.getWard() + ", " + dto.getDistrict() + ", " + dto.getCity();
-    }
-
-    private String generateCode() {
-        return "HD" + System.currentTimeMillis();
     }
 }

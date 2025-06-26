@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -40,6 +41,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         address.setUser(user);
         address.setIsDefault(isDefault);
         address.setId(null); // đảm bảo là địa chỉ mới
+        address.setCreatedAt(LocalDateTime.now());
         userAddressRepository.save(address);
     }
 
@@ -57,8 +59,9 @@ public class UserAddressServiceImpl implements UserAddressService {
         existing.setAddress(address.getAddress());
         existing.setWard(address.getWard());
         existing.setDistrict(address.getDistrict());
-        existing.setCity(address.getCity());
+        existing.setCity("Thành Phố Hà Nội");
         existing.setIsDefault(isDefault);
+        existing.setUpdatedAt(LocalDateTime.now());
 
         userAddressRepository.save(existing);
     }

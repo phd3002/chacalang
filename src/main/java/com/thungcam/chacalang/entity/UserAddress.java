@@ -20,7 +20,6 @@ public class UserAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Liên kết với bảng users
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -34,11 +33,13 @@ public class UserAddress {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "ward", length = 100)
-    private String ward;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_id", nullable = false)
+    private District district;
 
-    @Column(name = "district", length = 100)
-    private String district;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ward_id", nullable = false)
+    private Ward ward;
 
     @Column(name = "city", length = 100)
     private String city;
