@@ -141,7 +141,9 @@
                                 </div>
                             </div>
                             <div class="cart-item-price"
-                                 th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
+                                 th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                                0₫
+                            </div>
                         </div>
                     </div>
                     <div class="order-summary">
@@ -193,7 +195,10 @@
                             <option value="">-- Chọn địa chỉ --</option>
                             <th:block th:each="address : ${addresses}">
                                 <option th:selected="${address.isDefault}"
-                                        th:text="${address.fullName + ' - ' + address.phone + ' - ' + address.address + ', ' + address.ward + ', ' + address.district + ', ' + address.city}"
+                                        th:text="${address.fullName + ' - ' + address.phone + ' - ' + address.address
+            + (address.ward != null ? ', ' + address.ward.name : '')
+            + (address.district != null ? ', ' + address.district.name : '')
+            + (address.city != null ? ', ' + address.city : '')}"
                                         th:value="${address.id}"></option>
                             </th:block>
                         </select>

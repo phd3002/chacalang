@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Dashboard - Thống kê nhanh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/staff/staff.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            border-radius: 18px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1.5px 4px rgba(0, 0, 0, 0.04);
+            transition: transform 0.12s;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+        }
+
+        .card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h4 {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .bg-success {
+            background: linear-gradient(120deg, #43e97b 0%, #38f9d7 100%) !important;
+            color: #fff !important;
+        }
+
+        .bg-warning {
+            background: linear-gradient(120deg, #f7971e 0%, #ffd200 100%) !important;
+            color: #333 !important;
+        }
+
+        .bg-info {
+            background: linear-gradient(120deg, #56ccf2 0%, #2f80ed 100%) !important;
+            color: #fff !important;
+        }
+
+        .bg-danger {
+            background: linear-gradient(120deg, #ff6b6b 0%, #ee5a24 100%) !important;
+            color: #fff !important;
+        }
+
+        .notification-item {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffc107;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-item.urgent {
+            border-left-color: #dc3545;
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .notification-item.warning {
+            border-left-color: #ffc107;
+            background: rgba(255, 193, 7, 0.05);
+        }
+
+        .notification-item.info {
+            border-left-color: #17a2b8;
+            background: rgba(23, 162, 184, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="staff-sidebar">
+    <div class="sidebar-header">
+        <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+        <h2>Nhân viên</h2>
+    </div>
+    <ul class="staff-sidebar-menu">
+        <li th:classappend="${activePage == 'dashboard'} ? 'active'">
+            <a th:href="@{/staff/dashboard}"><i class="fa fa-tachometer"></i> Dashboard</a>
+        </li>
+        <li th:classappend="${activePage == 'orders'} ? 'active'">
+            <a th:href="@{/staff/orders}"><i class="fa fa-shopping-cart"></i> Quản lý đơn hàng</a>
+        </li>
+        <li th:classappend="${activePage == 'invoices'} ? 'active'">
+            <a th:href="@{/staff/invoices}"><i class="fa fa-file-invoice"></i> Quản lý hóa đơn</a>
+        </li>
+        <li th:classappend="${activePage == 'contacts'} ? 'active'">
+            <a th:href="@{/staff/contacts}"><i class="fa fa-envelope"></i> Liên hệ & Đánh giá</a>
+        </li>
+        <li th:classappend="${activePage == 'profile'} ? 'active'">
+            <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
+        </li>
+        <li>
+            <a class="logout-btn" th:href="@{/logout}"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="staff-content">
+    <h2 class="text-center">Dashboard - Thống kê nghiệp vụ nhân viên</h2>
+    <hr>
+    <!-- Thống kê nhanh trạng thái đơn hàng -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card bg-success text-white p-3">
+                <h4><i class="fa fa-plus-square"></i> Đơn mới</h4>
+                <h2 th:text="${ordersNew}">0</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-info text-white p-3">
+                <h4><i class="fa fa-spinner"></i> Đang chuẩn bị</h4>
+                <h2 th:text="${ordersPreparing}">0</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-warning text-dark p-3">
+                <h4><i class="fa fa-motorcycle"></i> Đang giao</h4>
+                <h2 th:text="${ordersShipping}">0</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-primary text-white p-3">
+                <h4><i class="fa fa-check"></i> Hoàn thành</h4>
+                <h2 th:text="${ordersCompleted}">0</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-danger text-white p-3">
+                <h4><i class="fa fa-times"></i> Đã huỷ</h4>
+                <h2 th:text="${ordersCancelled}">0</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-secondary text-white p-3">
+                <h4><i class="fa fa-money-bill"></i> Doanh thu hôm nay</h4>
+                <h2 th:text="${#numbers.formatDecimal(todayRevenue, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng cảnh báo tồn kho + Công việc cần làm + Đặt bàn hôm nay -->
+    <div class="row mb-4">
+        <!-- Cảnh báo tồn kho thấp -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4><i class="fa fa-exclamation-triangle"></i> Cảnh báo tồn kho thấp</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            th:each="item : ${stockAlerts}">
+                            <span th:text="${item.menuName}">Tên món</span>
+                            <span class="badge badge-danger badge-pill" th:text="${item.quantity}">0</span>
+                        </li>
+                        <li class="list-group-item text-muted text-center" th:if="${#lists.isEmpty(stockAlerts)}">
+                            Không có món nào tồn kho thấp.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Công việc cần làm -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4><i class="fa fa-tasks"></i> Công việc cần làm</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Đơn chờ xác nhận
+                            <span class="badge badge-warning badge-pill" th:text="${ordersNew}">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Đơn cần chuẩn bị
+                            <span class="badge badge-info badge-pill" th:text="${ordersPreparing}">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Đơn đang giao
+                            <span class="badge badge-primary badge-pill" th:text="${ordersShipping}">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Đánh giá chưa xử lý
+                            <span class="badge badge-secondary badge-pill" th:text="${pendingReviews}">0</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Đặt bàn hôm nay -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4><i class="fa fa-chair"></i> Đặt bàn hôm nay</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            th:each="r : ${todayReservations}">
+                            <span>
+                                <b th:text="${r.customerName}">Tên khách</b> -
+                                <span th:text="${#temporals.format(r.reservationTime, 'HH:mm')}">Giờ</span> -
+                                <span th:text="${r.numberOfPeople}">0</span> người
+                            </span>
+                            <span class="badge badge-success" th:text="${r.status}">Đặt chỗ</span>
+                        </li>
+                        <li class="list-group-item text-muted text-center" th:if="${#lists.isEmpty(todayReservations)}">
+                            Không có đặt bàn hôm nay.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông báo mới nhất -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4><i class="fa fa-bell"></i> Thông báo nội bộ</h4>
+                </div>
+                <div class="card-body">
+                    <div th:each="notification : ${notifications}"
+                         th:class="'notification-item ' + ${notification.type}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 th:text="${notification.title}">Tiêu đề thông báo</h6>
+                                <p th:text="${notification.message}" class="mb-1">Nội dung thông báo</p>
+                                <small class="text-muted"
+                                       th:text="${#temporals.format(notification.createdAt, 'dd/MM/yyyy HH:mm')}">Thời
+                                    gian</small>
+                            </div>
+                            <span th:if="${notification.type == 'urgent'}" class="badge bg-danger">Khẩn cấp</span>
+                            <span th:if="${notification.type == 'warning'}"
+                                  class="badge bg-warning text-dark">Cảnh báo</span>
+                            <span th:if="${notification.type == 'info'}" class="badge bg-info">Thông tin</span>
+                        </div>
+                    </div>
+                    <div th:if="${#lists.isEmpty(notifications)}" class="text-center text-muted">
+                        <i class="fa fa-inbox fa-3x mb-3"></i>
+                        <p>Không có thông báo mới</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html> 

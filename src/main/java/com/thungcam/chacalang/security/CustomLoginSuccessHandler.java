@@ -48,7 +48,16 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 response.sendRedirect("/branch-manager/branch-dashboard?branchId=" + branchId);
                 return;
             } else if (role.equals("ROLE_STAFF")) {
-                response.sendRedirect("/user/staff");
+                User user = userRepository.findByEmail(username);
+                System.out.println("==> Tìm kiếm người dùng '" + username + "' trong cơ sở dữ liệu...");
+                System.out.println("Chi nhánh của người dùng '" + username + "': " + user.getBranch());
+                if (user == null || user.getBranch() == null) {
+                    response.sendRedirect("/error?reason=unauthorized");
+                    return;
+                }
+                Long branchId = user.getBranch().getId();
+                System.out.println("==> Người dùng '" + username + "' có chi nhánh ID: " + branchId);
+                response.sendRedirect("/staff/staff-dashboard?branchId=" + branchId);
                 return;
             }
         }

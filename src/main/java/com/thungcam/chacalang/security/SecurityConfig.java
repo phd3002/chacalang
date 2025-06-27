@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/location/**").permitAll()
                         .requestMatchers("/admin/**").permitAll() // Các trang admin yêu cầu login (sẽ config sau)
                         .requestMatchers("/branch-manager/**").permitAll() // Chỉ cho phép Branch Manager và Admin truy cập
+                        .requestMatchers("/staff/**").permitAll() // Chỉ cho phép Staff, Branch Manager và Admin truy cập
                         .requestMatchers("/", "/lien-he", "/dat-ban", "/menu/**", "/error/**")
                         .permitAll()
                 )

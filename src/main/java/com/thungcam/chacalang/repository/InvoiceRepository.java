@@ -1,6 +1,7 @@
 package com.thungcam.chacalang.repository;
 
 import com.thungcam.chacalang.entity.Invoice;
+import com.thungcam.chacalang.enums.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,5 +31,19 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     BigDecimal sumFinalAmountByBranch(@Param("branchId") Long branchId);
 
     Optional<Invoice> findByOrderId(Long orderId);
+
+    @Query("SELECT COALESCE(SUM(i.finalAmount), 0) FROM Invoice i WHERE DATE(i.issuedDate) = CURRENT_DATE")
+    double getTodayRevenue();
+
+    @Query("SELECT SUM(i.finalAmount) FROM Invoice i " +
+            "WHERE i.paymentStatus = :status " +
+            "AND i.issuedDate BETWEEN :start AND :end " +
+            "AND i.order.branch.id = :branchId")
+    BigDecimal sumFinalAmountByStatusAndBranchAndDate(
+            @Param("status") PaymentStatus paymentStatus,
+            @Param("branchId") Long branchId,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
 }
 

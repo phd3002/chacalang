@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý liên hệ & đánh giá - Staff</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+  <link rel="stylesheet" th:href="@{/css/staff/staff.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .contact-item, .review-item {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid #ffc107;
+    }
+    .review-item {
+      border-left: 4px solid #17a2b8;
+    }
+    .response-box {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      border-left: 3px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="staff-sidebar">
+    <div class="sidebar-header">
+        <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+        <h2>Nhân viên</h2>
+    </div>
+    <ul class="staff-sidebar-menu">
+        <li th:classappend="${activePage == 'dashboard'} ? 'active'">
+            <a th:href="@{/staff/dashboard}"><i class="fa fa-tachometer"></i> Dashboard</a>
+        </li>
+        <li th:classappend="${activePage == 'orders'} ? 'active'">
+            <a th:href="@{/staff/orders}"><i class="fa fa-shopping-cart"></i> Quản lý đơn hàng</a>
+        </li>
+        <li th:classappend="${activePage == 'invoices'} ? 'active'">
+            <a th:href="@{/staff/invoices}"><i class="fa fa-file-invoice"></i> Quản lý hóa đơn</a>
+        </li>
+        <li th:classappend="${activePage == 'contacts'} ? 'active'">
+            <a th:href="@{/staff/contacts}"><i class="fa fa-envelope"></i> Liên hệ & Đánh giá</a>
+        </li>
+        <li th:classappend="${activePage == 'profile'} ? 'active'">
+            <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
+        </li>
+        <li>
+            <a class="logout-btn" th:href="@{/logout}"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="staff-content">
+  <h2 class="text-center">Quản lý liên hệ & đánh giá</h2>
+  <hr>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h4><i class="fa fa-envelope"></i> Danh sách liên hệ</h4>
+      <div th:each="contact : ${contacts}" class="contact-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong th:text="${contact.name}">Tên khách</strong> - <span th:text="${contact.email}">email@email.com</span>
+            <p th:text="${contact.message}">Nội dung liên hệ</p>
+            <small class="text-muted" th:text="${#temporals.format(contact.createdAt, 'dd/MM/yyyy HH:mm')}">Thời gian</small>
+          </div>
+          <button class="btn btn-sm btn-primary" th:onclick="'replyContact(' + ${contact.id} + ')'">
+            <i class="fa fa-reply"></i> Phản hồi
+          </button>
+        </div>
+        <div th:if="${contact.response}" class="response-box">
+          <strong>Phản hồi:</strong> <span th:text="${contact.response}">Nội dung phản hồi</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h4><i class="fa fa-star"></i> Danh sách đánh giá</h4>
+      <div th:each="review : ${reviews}" class="review-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong th:text="${review.customerName}">Tên khách</strong>
+            <span th:utext="${review.starsHtml}"></span>
+            <p th:text="${review.comment}">Nội dung đánh giá</p>
+            <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}">Thời gian</small>
+          </div>
+          <button class="btn btn-sm btn-primary" th:onclick="'replyReview(' + ${review.id} + ')'">
+            <i class="fa fa-reply"></i> Phản hồi
+          </button>
+        </div>
+        <div th:if="${review.response}" class="response-box">
+          <strong>Phản hồi:</strong> <span th:text="${review.response}">Nội dung phản hồi</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+function replyContact(contactId) {
+  var response = prompt('Nhập nội dung phản hồi cho liên hệ:');
+  if (response !== null) {
+    $.post('/staff/contacts/' + contactId + '/reply', {
+      response: response,
+      _csrf: $('meta[name="_csrf"]').attr('content')
+    }, function(res) {
+      if (res.success) {
+        location.reload();
+      } else {
+        alert('Có lỗi xảy ra: ' + res.message);
+      }
+    });
+  }
+}
+function replyReview(reviewId) {
+  var response = prompt('Nhập nội dung phản hồi cho đánh giá:');
+  if (response !== null) {
+    $.post('/staff/reviews/' + reviewId + '/reply', {
+      response: response,
+      _csrf: $('meta[name="_csrf"]').attr('content')
+    }, function(res) {
+      if (res.success) {
+        location.reload();
+      } else {
+        alert('Có lỗi xảy ra: ' + res.message);
+      }
+    });
+  }
+}
+</script>
+
+</body>
+</html> 

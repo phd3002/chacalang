@@ -42,6 +42,7 @@ public class CheckoutController {
         List<CartItem> cartItems = cartService.getCartItems(user.getId());
         List<PaymentMethod> paymentMethods = paymentMethodService.findAllActive();
         List<UserAddress> addresses = userAddressService.getAddressesByUserId(user);
+        System.out.println("Addresses: " + addresses.toString());
         List<Branch> branches = branchService.getAllBranches();
 
         BigDecimal subtotal = cartItems.stream()

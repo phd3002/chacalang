@@ -57,35 +57,66 @@ form.form-inline .form-control {
     min-width: 200px;
 }
 
-/* Sidebar staff */
+/* Sidebar staff - updated for vertical, modern look */
 .staff-sidebar {
-    width: 220px;
+    width: 240px;
+    background: #f8b400;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 32px;
+    box-shadow: 2px 0 12px rgba(248,180,0,0.08);
     height: 100vh;
     position: fixed;
     left: 0;
     top: 0;
-    background-color: #343a40;
-    padding-top: 20px;
     z-index: 1000;
+}
+
+.staff-sidebar .sidebar-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.staff-sidebar .sidebar-header img {
+    width: 60px;
+    margin-bottom: 8px;
+}
+.staff-sidebar .sidebar-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.staff-sidebar-menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+.staff-sidebar-menu li {
+    width: 100%;
+}
+.staff-sidebar-menu li a {
     display: flex;
-    flex-direction: column;
-}
-
-.staff-sidebar a {
-    display: block;
-    color: #ddd;
-    padding: 12px 20px;
-    text-decoration: none;
-    font-weight: 500;
-    border-left: 4px solid transparent;
-    transition: 0.3s;
-}
-
-.staff-sidebar a:hover,
-.staff-sidebar a.active {
-    background-color: #495057;
+    align-items: center;
+    padding: 14px 32px;
     color: #fff;
-    border-left: 4px solid #ffc107;
+    text-decoration: none;
+    font-size: 1.08rem;
+    transition: background 0.18s, color 0.18s;
+    border-left: 4px solid transparent;
+}
+.staff-sidebar-menu li.active a,
+.staff-sidebar-menu li a:hover {
+    background: #fff3cd;
+    color: #f8b400;
+    border-left: 4px solid #fff;
+    font-weight: 600;
+}
+.staff-sidebar-menu i {
+    margin-right: 12px;
+    font-size: 1.2rem;
 }
 
 .staff-sidebar .logout-btn {
@@ -96,16 +127,20 @@ form.form-inline .form-control {
     border: none;
     border-radius: 0;
     border-left: 4px solid #dc3545;
+    width: 100%;
+    padding: 14px 32px;
+    text-align: left;
+    transition: background 0.18s, border-left-color 0.18s;
 }
-
 .staff-sidebar .logout-btn:hover {
     background-color: #c82333;
-    border-left-color: #c82333;
+    border-left-color: #fff;
 }
 
 .staff-content {
-    margin-left: 230px;
-    padding: 30px;
+    margin-left: 250px;
+    padding: 40px 48px;
+    min-height: 100vh;
 }
 
 .status-badge {

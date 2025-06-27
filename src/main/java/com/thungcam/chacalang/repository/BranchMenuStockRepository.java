@@ -14,5 +14,8 @@ public interface BranchMenuStockRepository extends JpaRepository<BranchMenuStock
     List<BranchMenuStock> findByBranchIdWithMenu(@Param("branchId") Long branchId);
 
     List<BranchMenuStock> findByBranch_IdAndQuantityLessThanEqual(Long branchId, int quantity);
+
+    @Query("SELECT bms FROM BranchMenuStock bms WHERE bms.branch.id = :branchId AND bms.quantity <= :minStock")
+    List<BranchMenuStock> findLowStockByBranch(@Param("branchId") Long branchId, @Param("minStock") Integer minStock);
 }
 

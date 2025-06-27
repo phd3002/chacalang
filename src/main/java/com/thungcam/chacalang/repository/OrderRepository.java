@@ -5,11 +5,13 @@ import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +44,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     @Query("SELECT oi.menu.name, SUM(oi.quantity) AS total FROM OrderItem oi WHERE oi.order.branch.id = :branchId AND oi.order.createdAt >= :fromDate AND oi.order.createdAt <= :toDate GROUP BY oi.menu.id, oi.menu.name ORDER BY total DESC")
     List<Object[]> findTopMenusByBranch(Long branchId, LocalDateTime fromDate, LocalDateTime toDate);
+
+    long countByStatusAndBranchId(OrderStatus status, Long branch_id);
+
+    long countByStatusInAndBranchId(Collection<OrderStatus> status, Long branch_id);
 
 }

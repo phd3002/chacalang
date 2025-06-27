@@ -11,9 +11,6 @@ import java.time.LocalDateTime;
 @Table(name = "user_address")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class UserAddress {
 
     @Id
@@ -33,11 +30,13 @@ public class UserAddress {
     @Column(name = "address", length = 255)
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "district_id", nullable = false)
     private District district;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "ward_id", nullable = false)
     private Ward ward;
 

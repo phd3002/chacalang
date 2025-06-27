@@ -41,6 +41,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final InvoiceService invoiceService;
 
+    private final BranchDistrictRepository branchDistrictRepository;
+
     @Transactional
     @Override
     public Orders createOrder(OrderCheckoutDTO dto, User user) {
@@ -78,12 +80,20 @@ public class OrderServiceImpl implements OrderService {
             UserAddress address = userAddressService.getAddressById(dto.getAddressId());
             if (address == null) throw new RuntimeException("Địa chỉ không tồn tại");
 
+            District district = address.getDistrict();
+            BranchDistrict branchDistrict = branchDistrictRepository.findFirstByDistrict(district);
+            if (branchDistrict == null) {
+                throw new RuntimeException("Không tìm thấy chi nhánh giao cho quận này");
+            }
+            Branch branch = branchDistrict.getBranch();
+
             order.setCustomerName(address.getFullName());
             order.setCustomerPhone(address.getPhone());
             order.setCustomerAddress(address.getAddress());
-            order.setWard(String.valueOf(address.getWard()));
-            order.setDistrict(String.valueOf(address.getDistrict()));
+            order.setWard(String.valueOf(address.getWard().getName()));
+            order.setDistrict(String.valueOf(address.getDistrict().getName()));
             order.setCity(address.getCity());
+            order.setBranch(branch);
         } else {
             if (dto.getBranchId() == null)
                 throw new RuntimeException("Vui lòng chọn chi nhánh cửa hàng");
