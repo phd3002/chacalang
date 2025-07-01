@@ -8,14 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -39,7 +36,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 User user = userRepository.findByEmail(username);
                 System.out.println("==> Tìm kiếm người dùng '" + username + "' trong cơ sở dữ liệu...");
                 System.out.println("Chi nhánh của người dùng '" + username + "': " + user.getBranch());
-                if (user == null || user.getBranch() == null) {
+                if (user.getBranch() == null) {
                     response.sendRedirect("/error?reason=unauthorized");
                     return;
                 }
@@ -51,13 +48,13 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 User user = userRepository.findByEmail(username);
                 System.out.println("==> Tìm kiếm người dùng '" + username + "' trong cơ sở dữ liệu...");
                 System.out.println("Chi nhánh của người dùng '" + username + "': " + user.getBranch());
-                if (user == null || user.getBranch() == null) {
+                if (user.getBranch() == null) {
                     response.sendRedirect("/error?reason=unauthorized");
                     return;
                 }
                 Long branchId = user.getBranch().getId();
                 System.out.println("==> Người dùng '" + username + "' có chi nhánh ID: " + branchId);
-                response.sendRedirect("/staff/staff-dashboard?branchId=" + branchId);
+                response.sendRedirect("/staff/dashboard?branchId=" + branchId);
                 return;
             }
         }

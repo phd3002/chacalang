@@ -9,6 +9,7 @@ public enum OrderStatus {
     CONFIRMED("Đã Xác Nhận"),      // Đã xác nhận bởi nhân viên
     PREPARING("Đang Chuẩn Bị"),      // Đang chuẩn bị món
     SHIPPING("Đang Giao Hàng"),       // Đang giao hàng (nếu có)
+    WAITING_FOR_PICKUP("Chờ Nhận Tại Quán"), // Chờ khách đến nhận tại quán
     COMPLETED("Hoàn Tất"),      // Giao hàng thành công / khách nhận tại quán
     CANCELLED("Đã Huỷ"),       // Khách huỷ hoặc hết món
     REFUNDED("Hoàn Tiền");       // Đã hoàn tiền cho khách

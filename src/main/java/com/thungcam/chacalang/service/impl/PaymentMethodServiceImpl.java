@@ -22,4 +22,9 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public PaymentMethod findById(Long id) {
         return paymentMethodRepository.getReferenceById(id);
     }
+
+    @Override
+    public PaymentMethod findByNameIgnoreCase(String name) {
+        return paymentMethodRepository.findByNameIgnoreCase(name);
+    }
 }

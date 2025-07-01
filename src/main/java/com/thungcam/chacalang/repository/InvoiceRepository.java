@@ -2,7 +2,11 @@ package com.thungcam.chacalang.repository;
 
 import com.thungcam.chacalang.entity.Invoice;
 import com.thungcam.chacalang.enums.PaymentStatus;
+import com.thungcam.chacalang.enums.ShippingMethod;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
+public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice> {
 
     @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.paymentStatus = com.thungcam.chacalang.enums.PaymentStatus.PAID")
     BigDecimal sumTotalRevenue();
@@ -45,5 +49,25 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
+    @Query("SELECT i FROM Invoice i " +
+            "JOIN i.order o " +
+            "WHERE o.branch.id = :branchId AND o.shippingMethod = 'PICKUP' " +
+            "AND (:search IS NULL OR i.invoiceCode LIKE %:search% OR o.customerName LIKE %:search%) " +
+            "AND (:paymentStatus IS NULL OR i.paymentStatus = :paymentStatus) " +
+            "AND (:paymentMethodId IS NULL OR i.paymentMethod.id = :paymentMethodId) " +
+            "AND (COALESCE(:dateFrom, NULL) IS NULL OR i.issuedDate >= :dateFrom) " +
+            "AND (COALESCE(:dateTo, NULL) IS NULL OR i.issuedDate <= :dateTo)")
+    Page<Invoice> searchInvoices(
+            @Param("branchId") Long branchId,
+            @Param("search") String search,
+            @Param("paymentStatus") PaymentStatus paymentStatus,
+            @Param("paymentMethodId") Long paymentMethodId,
+            @Param("dateFrom") LocalDateTime dateFrom,
+            @Param("dateTo") LocalDateTime dateTo,
+            Pageable pageable
+    );
+
+    List<Invoice> findByOrderBranchIdAndOrderShippingMethod(Long branchId, ShippingMethod shippingMethod);
 }
 

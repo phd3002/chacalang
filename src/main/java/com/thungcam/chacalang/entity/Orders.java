@@ -76,7 +76,7 @@ public class Orders {
     @Column(name = "shipping_method", nullable = false)
     private ShippingMethod shippingMethod;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> items;
 
     public String getStatusColor() {

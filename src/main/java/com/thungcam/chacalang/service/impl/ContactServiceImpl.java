@@ -3,7 +3,6 @@ package com.thungcam.chacalang.service.impl;
 import com.thungcam.chacalang.entity.Contact;
 import com.thungcam.chacalang.repository.ContactRepository;
 import com.thungcam.chacalang.service.ContactService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,5 +27,13 @@ public class ContactServiceImpl implements ContactService {
     public void save(Contact contact) {
         contact.setCreatedAt(LocalDateTime.now());
         contactRepository.save(contact);
+    }
+
+    @Override
+    public List<Contact> getContactsByBranch(Long branchId) {
+        if (branchId == null) {
+            return contactRepository.findAllByOrderByCreatedAtDesc();
+        }
+        return contactRepository.findAllByBranch_IdOrderByCreatedAtDesc(branchId);
     }
 }

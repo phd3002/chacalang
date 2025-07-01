@@ -63,7 +63,7 @@
                     <td>
                         <span th:switch="${#strings.trim(reservation.status)}">
                             <span th:case="'PENDING'" class="badge bg-warning text-dark">
-                                <i class="fa fa-hourglass-half"></i> Chờ xác nhận
+                                <i class="fa fa-hourglass-half"></i> Đang Xử Lý
                             </span>
                             <span th:case="'CONFIRMED'" class="badge bg-success">
                                 <i class="fa fa-check"></i> Đã xác nhận

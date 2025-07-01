@@ -3,14 +3,11 @@ package com.thungcam.chacalang.controller.staff;
 import com.thungcam.chacalang.dto.StaffDashboardDTO;
 import com.thungcam.chacalang.service.StaffDashboardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/staff")
@@ -18,7 +15,7 @@ import java.security.Principal;
 public class StaffDashboardController {
     private final StaffDashboardService staffDashboardService;
 
-    @GetMapping("/staff-dashboard")
+    @GetMapping("/dashboard")
     public String dashboard(Model model, @RequestParam("branchId") Long branchId) {
 
         StaffDashboardDTO dto = staffDashboardService.getDashboardData(branchId);
@@ -35,6 +32,7 @@ public class StaffDashboardController {
         model.addAttribute("notifications", dto.getNotifications());
 
         model.addAttribute("activePage", "dashboard");
+        model.addAttribute("branchId", branchId);
 
         return "staff/staff-dashboard";
     }

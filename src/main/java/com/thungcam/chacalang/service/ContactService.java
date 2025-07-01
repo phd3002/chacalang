@@ -8,4 +8,6 @@ public interface ContactService {
     List<Contact> getAllContacts();
 
     void save(Contact contact);
+
+    List<Contact> getContactsByBranch(Long branchId);
 }

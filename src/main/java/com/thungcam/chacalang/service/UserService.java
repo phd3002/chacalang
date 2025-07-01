@@ -6,7 +6,6 @@ import com.thungcam.chacalang.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -54,6 +53,6 @@ public interface UserService extends UserDetailsService {
 
     List<User> findAll();
 
-
+    User updateStaffProfile(String username, String firstName, String lastName, String phone);
 
 }

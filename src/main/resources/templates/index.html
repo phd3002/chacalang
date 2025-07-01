@@ -435,8 +435,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Tiêu đề</label>
-                            <input class="input form-control" placeholder="Tiêu đề liên hệ" th:field="*{subject}"
+                            <label>Tiêu đề *</label>
+                            <input class="input form-control" placeholder="Tiêu đề liên hệ" required th:field="*{subject}"
                                    type="text">
                         </div>
 
@@ -444,6 +444,14 @@
                             <label>Số điện thoại *</label>
                             <input class="input form-control" placeholder="Nhập số điện thoại" required
                                    th:field="*{phone}" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cơ sở cần liên hệ *</label>
+                            <select class="input form-control" required th:field="*{branch}">
+                                <option disabled selected value="">Chọn cơ sở</option>
+                                <option th:each="b : ${branches}" th:value="${b.id}" th:text="${b.name}"></option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -459,7 +467,6 @@
                 </form>
             </div>
 
-            <!-- THÔNG TIN LIÊN HỆ BÊN PHẢI -->
             <div class="col-md-5">
                 <div class="section-header">
                     <h4 class="sub-title">Liên Hệ</h4>
@@ -474,12 +481,6 @@
                         <p><b>Hotline:</b> <span th:text="${branch.phone}"></span></p>
                         <hr>
                     </div>
-                    <!--                    <ul class="list-inline">-->
-                    <!--                        <li><p>Theo Dõi Chúng Tôi:</p></li>-->
-                    <!--                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
-                    <!--                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>-->
-                    <!--                        <li><a href="#"><i class="fa fa-youtube"></i></a></li>-->
-                    <!--                    </ul>-->
                 </div>
             </div>
         </div>

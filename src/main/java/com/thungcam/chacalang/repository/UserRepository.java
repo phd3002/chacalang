@@ -1,6 +1,5 @@
 package com.thungcam.chacalang.repository;
 
-import com.thungcam.chacalang.entity.Role;
 import com.thungcam.chacalang.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +25,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.branch.id = :branchId AND u.role.id = :roleId")
     List<User> findByBranchIdAndRoleId(@Param("branchId") Long branchId, @Param("roleId") Long roleId);
-
 
 }

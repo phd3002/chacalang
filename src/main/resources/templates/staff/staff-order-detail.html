@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng - Staff</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/staff/staff.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .order-detail-box {
+            background: #fffdfa;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+            padding: 32px 28px 28px 28px;
+            max-width: 700px;
+            margin: 36px auto 32px auto;
+        }
+
+        .order-status {
+            padding: 6px 14px;
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .status-confirmed {
+            background-color: #17a2b8;
+        }
+
+        .status-preparing {
+            background-color: #fd7e14;
+        }
+
+        .status-completed {
+            background-color: #28a745;
+        }
+
+        .status-cancelled {
+            background-color: #dc3545;
+        }
+
+        .note-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            border-left: 3px solid #17a2b8;
+        }
+
+        .btn-back {
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+<nav class="staff-sidebar">
+    <div class="sidebar-header">
+        <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+        <h2>Nhân viên</h2>
+    </div>
+    <ul class="staff-sidebar-menu">
+        <li th:classappend="${activePage == 'dashboard'} ? 'active'">
+            <a th:href="@{'/staff/dashboard'(branchId=${branchId})}"><i class="fa fa-tachometer"></i> Dashboard</a>
+        </li>
+        <li th:classappend="${activePage == 'order'} ? 'active'">
+            <a th:href="@{'/staff/orders'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng</a>
+        </li>
+        <li th:classappend="${activePage == 'invoices'} ? 'active'">
+            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa đơn</a>
+        </li>
+        <li th:classappend="${activePage == 'contacts'} ? 'active'">
+            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh giá</a>
+        </li>
+        <li th:classappend="${activePage == 'profile'} ? 'active'">
+            <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
+        </li>
+        <li>
+            <a class="logout-btn" th:href="@{/logout}"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="staff-content">
+    <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">
+        <i class="fa fa-chevron-left"></i> Quay lại danh sách
+    </a>
+
+    <div class="order-detail-box">
+        <h4>Chi tiết đơn hàng <span class="text-secondary" th:text="'#' + ${order.orderCode}"></span></h4>
+        <hr>
+        <div class="mb-2">
+            <b>Khách hàng:</b> <span th:text="${order.customerName}"></span>
+        </div>
+        <div class="mb-2">
+            <b>Trạng thái:</b>
+            <span class="order-status"
+                  th:class="'order-status status-' + ${#strings.toLowerCase(order.status.name())}"
+                  th:text="${order.status.label}">Trạng thái</span>
+        </div>
+        <div class="mb-2">
+            <b>Thời gian đặt:</b>
+            <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+        </div>
+        <div th:if="${order.note}" class="note-box">
+            <b>Ghi chú:</b>
+            <span th:text="${order.note}"></span>
+        </div>
+
+        <hr>
+        <h6>Danh sách món:</h6>
+        <table class="table table-sm table-bordered mb-3">
+            <thead>
+            <tr>
+                <th>Món</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.menu.name}">Tên món</td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></td>
+                <td th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${invoice != null}" class="mb-2">
+            <b>Tổng hóa đơn:</b>
+            <span th:text="${#numbers.formatDecimal(invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></span>
+            <span class="ms-3"><b>Thanh toán:</b> <span th:text="${invoice.paymentStatus}"></span></span>
+        </div>
+        <hr>
+
+        <!-- Form cập nhật trạng thái đơn -->
+        <form th:action="@{'/staff/orders/update/' + ${order.id}}" method="post" class="mb-3">
+            <input type="hidden" name="branchId" th:value="${branchId}"/>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label class="form-label"><b>Cập nhật trạng thái:</b></label>
+                    <select name="newStatus" class="form-select" required>
+                        <option th:value="PENDING" th:selected="${order.status.name() == 'PENDING'}">Đang xử lý
+                        </option>
+                        <option th:value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}">Đã xác nhận
+                        </option>
+                        <option th:value="PREPARING" th:selected="${order.status.name() == 'PREPARING'}">Đang chuẩn bị
+                        </option>
+                        <option th:value="COMPLETED" th:selected="${order.status.name() == 'COMPLETED'}">Hoàn thành
+                        </option>
+                        <option th:value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">Đã huỷ</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><b>Ghi chú cho đơn hàng:</b></label>
+                    <input type="text" name="note" class="form-control" th:value="${order.note}">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary ms-2">Huỷ</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

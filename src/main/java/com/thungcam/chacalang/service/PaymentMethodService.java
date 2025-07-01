@@ -8,4 +8,6 @@ public interface PaymentMethodService {
     List<PaymentMethod> findAllActive();
 
     PaymentMethod findById(Long id);
+
+    PaymentMethod findByNameIgnoreCase(String name);
 }

@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Setter
@@ -38,6 +36,10 @@ public class Contact {
     @Lob
     @Column(name = "message")
     private String message;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
 //    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")

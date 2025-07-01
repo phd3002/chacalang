@@ -24,14 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     private final BranchRepository branchRepo;
 
-    private static final Long STAFF_ROLE_ID = (Long) 3L;
+    private static final Long STAFF_ROLE_ID = 3L;
 
     @Override
     public void validateUser(User user) {
@@ -60,10 +59,10 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().matches(AuthConst.VALIDATE.REGEX_PASSWORD)) {
             throw new BusinessException(AuthConst.ERROR.INVALID_PASSWORD_FORMAT);
         }
-        if (userRepo.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new BusinessException(AuthConst.ERROR.EMAIL_ALREADY_EXISTS);
         }
-        if (userRepo.existsByPhone(user.getPhone())) {
+        if (userRepository.existsByPhone(user.getPhone())) {
             throw new BusinessException(AuthConst.ERROR.PHONE_ALREADY_EXISTS);
         }
     }
@@ -99,7 +98,7 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepo.findById(1);
         user.setRole(role);
         user.setStatus(UserStatus.ACTIVE);
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -109,10 +108,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String input) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(input);
+        User user = userRepository.findByUsername(input);
 
         if (user == null) {
-            user = userRepo.findByEmail(input);
+            user = userRepository.findByEmail(input);
         }
 
         if (user == null) {
@@ -130,29 +129,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean existsByEmail(String email) {
-        return userRepo.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 
     @Override
     public boolean existsByPhone(String phone) {
-        return userRepo.existsByPhone(phone);
+        return userRepository.existsByPhone(phone);
     }
 
     @Override
     public User findByEmail(String email) {
-        return userRepo.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
     public User findByUsername(String username) {
-        return userRepo.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public User getAuthenticatedUser(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName();
-            return userRepo.findByEmail(email);
+            return userRepository.findByEmail(email);
         }
         return null;
     }
@@ -180,7 +179,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendResetPasswordLink(String email, HttpServletRequest request) {
-        User user = userRepo.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new BusinessException(AuthConst.ERROR.EMAIL_NOT_EXISTS);
         }
@@ -211,7 +210,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(AuthConst.ERROR.OTP_NOT_FOUND);
         }
 
-        User user = userRepo.findByEmail(otpToken.getEmail());
+        User user = userRepository.findByEmail(otpToken.getEmail());
         if (user == null) {
             throw new BusinessException(AuthConst.ERROR.EMAIL_NOT_EXISTS);
         }
@@ -219,7 +218,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(AuthConst.ERROR.INVALID_PASSWORD_FORMAT);
         }
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepo.save(user);
+        userRepository.save(user);
         otpTokenRepo.deleteByEmail(otpToken.getEmail());
     }
 
@@ -236,7 +235,7 @@ public class UserServiceImpl implements UserService {
 
         // Nếu người dùng đổi số điện thoại và số mới đã tồn tại
         if (!user.getPhone().equals(updatedUser.getPhone())
-                && userRepo.existsByPhone(updatedUser.getPhone())) {
+                && userRepository.existsByPhone(updatedUser.getPhone())) {
             throw new BusinessException(AuthConst.ERROR.PHONE_ALREADY_EXISTS);
         }
 
@@ -244,7 +243,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(updatedUser.getLastName());
         user.setPhone(updatedUser.getPhone());
 
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -267,17 +266,17 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public List<User> findAllStaff() {
-        return userRepo.findByRoleId(STAFF_ROLE_ID);
+        return userRepository.findByRoleId(STAFF_ROLE_ID);
     }
 
     @Override
     public User findById(Long id) {
-        return userRepo.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
     }
 
@@ -307,25 +306,37 @@ public class UserServiceImpl implements UserService {
         if (user.getId() == null || (user.getPassword() != null && !user.getPassword().isBlank())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         } else {
-            User existing = userRepo.findById(user.getId()).orElseThrow();
+            User existing = userRepository.findById(user.getId()).orElseThrow();
             user.setPassword(existing.getPassword());
         }
 
         user.setCreatedAt(LocalDateTime.now());
 
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
 
 
     @Override
     public void deleteUserById(Long id) {
-        userRepo.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public List<User> findAll() {
-        return userRepo.findAll();
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User updateStaffProfile(String username, String firstName, String lastName, String phone) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPhone(phone);
+            return userRepository.save(user);
+        }
+        return null;
     }
 
 }

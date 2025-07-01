@@ -3,13 +3,11 @@ package com.thungcam.chacalang.repository;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.enums.OrderStatus;
+import com.thungcam.chacalang.enums.ShippingMethod;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -48,5 +46,29 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     long countByStatusAndBranchId(OrderStatus status, Long branch_id);
 
     long countByStatusInAndBranchId(Collection<OrderStatus> status, Long branch_id);
+
+    // Lấy tất cả đơn pickup của 1 chi nhánh
+    List<Orders> findAllByShippingMethodAndBranch_IdOrderByCreatedAtDesc(ShippingMethod shippingMethod, Long branchId);
+
+    // Lấy đơn pickup có filter (JPQL)
+    @Query("SELECT o FROM Orders o " +
+            "WHERE o.shippingMethod = :shippingMethod " +
+            "AND o.branch.id = :branchId " +
+            "AND (:status IS NULL OR o.status = :status) " +
+            "AND (:search IS NULL OR :search = '' OR LOWER(o.orderCode) LIKE %:search% OR LOWER(o.customerName) LIKE %:search%) " +
+            "AND (:dateFrom IS NULL OR o.createdAt >= :dateFrom) " +
+            "AND (:dateTo IS NULL OR o.createdAt <= :dateTo) " +
+            "ORDER BY o.createdAt DESC")
+    List<Orders> searchPickupOrdersByBranch(
+            ShippingMethod shippingMethod,
+            Long branchId,
+            OrderStatus status,
+            String search,
+            LocalDateTime dateFrom,
+            LocalDateTime dateTo
+    );
+
+    long countByShippingMethodAndStatusAndBranch_Id(ShippingMethod shippingMethod, OrderStatus status, Long branchId);
+
 
 }
