@@ -28,4 +28,16 @@ public class WardServiceImp implements WardService {
         return wardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Ward not found with id: " + id));
     }
+
+    @Override
+    public List<Ward> getWardsByDistrict(Long districtId) {
+        return wardRepository.findByDistrict_Id(districtId);
+    }
+
+    @Override
+    public String getWardNameById(Long id) {
+        return wardRepository.findById(id)
+                .map(Ward::getName)
+                .orElseThrow(() -> new IllegalArgumentException("Ward not found with id: " + id));
+    }
 }

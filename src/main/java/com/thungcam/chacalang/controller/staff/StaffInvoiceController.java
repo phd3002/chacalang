@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -41,7 +40,6 @@ public class StaffInvoiceController {
             @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
             @RequestParam(value = "page", defaultValue = "1") int page
     ) {
-        System.out.println("Branch ID: " + branchId);
         Long paymentMethodId = null;
         if (StringUtils.hasText(paymentMethodName)) {
             PaymentMethod pm = paymentMethodService.findByNameIgnoreCase(paymentMethodName);
@@ -67,7 +65,8 @@ public class StaffInvoiceController {
                 "paymentStatus", paymentStatus == null ? "" : paymentStatus.name(),
                 "paymentMethod", paymentMethodName == null ? "" : paymentMethodName,
                 "dateFrom", dateFrom == null ? "" : dateFrom.toString(),
-                "dateTo", dateTo == null ? "" : dateTo.toString()
+                "dateTo", dateTo == null ? "" : dateTo.toString(),
+                "branchId", branchId
         ));
         model.addAttribute("stats", invoiceService.getStats(branchId));
         model.addAttribute("totalRevenue", invoiceService.getTotalRevenue(branchId));
@@ -76,26 +75,6 @@ public class StaffInvoiceController {
         return "staff/staff-invoices";
     }
 
-//    @GetMapping("/invoices/export")
-//    public void exportInvoices(HttpServletResponse response, Authentication authentication) throws IOException {
-//        Long branchId = getCurrentStaffBranchId(authentication);
-//        List<Invoice> invoices = invoiceService.searchInvoices(branchId, null, null, null, null, null, Pageable.unpaged()).getContent();
-//        response.setContentType("text/csv");
-//        response.setHeader("Content-Disposition", "attachment; filename=invoices.csv");
-//        PrintWriter writer = response.getWriter();
-//        writer.println("Mã hóa đơn,Khách hàng,Số tiền,Trạng thái,Phương thức,Ngày tạo");
-//        for (Invoice inv : invoices) {
-//            writer.printf("%s,%s,%s,%s,%s,%s\n",
-//                    inv.getInvoiceCode(),
-//                    inv.getOrder().getCustomerName(),
-//                    inv.getTotalAmount(),
-//                    inv.getPaymentStatus(),
-//                    inv.getPaymentMethod().getName(),
-//                    inv.getIssuedDate()
-//            );
-//        }
-//        writer.flush();
-//    }
 }
 
 

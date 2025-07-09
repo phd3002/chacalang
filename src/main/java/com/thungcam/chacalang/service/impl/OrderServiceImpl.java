@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 
 @Service
@@ -27,8 +25,6 @@ public class OrderServiceImpl implements OrderService {
 
     final private CartService cartService;
 
-    final private MenuRepository menuRepository;
-
     final private InvoiceRepository invoiceRepository;
 
     final private PaymentMethodRepository paymentMethodRepository;
@@ -38,8 +34,6 @@ public class OrderServiceImpl implements OrderService {
     private final UserAddressService userAddressService;
 
     private final BranchRepository branchRepository;
-
-    private final InvoiceService invoiceService;
 
     private final BranchDistrictRepository branchDistrictRepository;
 
@@ -63,13 +57,10 @@ public class OrderServiceImpl implements OrderService {
         // Tạo đơn hàng
         Orders order = new Orders();
         order.setUser(user);
+        order.setCustomerEmail(user.getEmail());
         order.setOrderCode("HD" + System.currentTimeMillis());
         order.setStatus(OrderStatus.PENDING);
         order.setCreatedAt(LocalDateTime.now());
-        order.setShippingMethod(
-                ShippingMethod.valueOf(dto.getShippingMethod().trim().toUpperCase())
-        );
-
         ShippingMethod method = ShippingMethod.valueOf(dto.getShippingMethod().trim().toUpperCase());
         order.setShippingMethod(method);
 
@@ -136,10 +127,8 @@ public class OrderServiceImpl implements OrderService {
 
         invoiceRepository.save(invoice);
 
-        // Gửi email xác nhận (nếu có)
         mailService.sendOrderConfirmation(order);
 
-        // Xoá giỏ hàng
         cartService.clearCart(user.getId());
 
         return order;

@@ -73,11 +73,17 @@
             <a th:href="@{'/staff/orders'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
                 hàng</a>
         </li>
+        <li th:classappend="${activePage == 'order-ship'} ? 'active'">
+            <a th:href="@{'/staff/orders-ship'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng Ship</a>
+        </li>
         <li th:classappend="${activePage == 'invoices'} ? 'active'">
-            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa đơn</a>
+            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa
+                đơn</a>
         </li>
         <li th:classappend="${activePage == 'contacts'} ? 'active'">
-            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh giá</a>
+            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh
+                giá</a>
         </li>
         <li th:classappend="${activePage == 'profile'} ? 'active'">
             <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
@@ -89,9 +95,19 @@
 </nav>
 
 <div class="staff-content">
-    <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">
-        <i class="fa fa-chevron-left"></i> Quay lại danh sách
+<!--    <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">-->
+<!--        <i class="fa fa-chevron-left"></i> Quay lại danh sách-->
+<!--    </a>-->
+
+    <a th:if="${order.shippingMethod.name() == 'PICKUP'}"
+       th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back" >
+        <i class="fa fa-chevron-left"></i> Chi tiết (Nhận tại quán)
     </a>
+    <a th:if="${order.shippingMethod.name() == 'DELIVERY'}"
+       th:href="@{'/staff/orders-ship'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">
+        <i class="fa fa-chevron-left"></i> Chi tiết (Ship)
+    </a>
+
 
     <div class="order-detail-box">
         <h4>Chi tiết đơn hàng <span class="text-secondary" th:text="'#' + ${order.orderCode}"></span></h4>

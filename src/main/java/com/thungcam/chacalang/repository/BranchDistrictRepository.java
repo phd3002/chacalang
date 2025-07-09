@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BranchDistrictRepository extends JpaRepository<BranchDistrict, Long> {
     BranchDistrict findFirstByDistrict(District district);
+
 }

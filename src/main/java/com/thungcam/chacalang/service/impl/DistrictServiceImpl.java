@@ -23,4 +23,16 @@ public class DistrictServiceImpl implements DistrictService {
         return districtRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("District not found with id: " + id));
     }
+
+    @Override
+    public List<District> getDistrictsByBranch(Long branchId) {
+        return districtRepository.findByBranch_Id(branchId);
+    }
+
+    @Override
+    public String getDistrictNameById(Long id) {
+        return districtRepository.findById(id)
+                .map(District::getName)
+                .orElseThrow(() -> new IllegalArgumentException("District not found with id: " + id));
+    }
 }

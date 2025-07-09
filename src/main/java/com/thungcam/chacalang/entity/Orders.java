@@ -79,6 +79,9 @@ public class Orders {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> items;
 
+    @OneToOne(mappedBy = "order")
+    private Review review;
+
     public String getStatusColor() {
         return switch (status) {
             case PENDING -> "badge-warning";

@@ -3,13 +3,10 @@ package com.thungcam.chacalang.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -39,10 +36,6 @@ public class Menu {
     @Column(name = "weight")
     private Integer weight;
 
-//    @ColumnDefault("0")
-//    @Column(name = "stock")
-//    private Integer stock;
-
     @Size(max = 255)
     @Column(name = "main_image")
     private String mainImage;
@@ -54,18 +47,6 @@ public class Menu {
 //    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "menu")
-    private Set<CartItem> cartItems = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "menu")
-    private Set<OrderItem> orderItems = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "menu")
-    private Set<MenuImage> menuImages = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "menu")
-    private Set<com.thungcam.chacalang.entity.Review> reviews = new LinkedHashSet<>();
 
 //    @Column(name = "is_available")
 //    private Boolean isAvailable = true;

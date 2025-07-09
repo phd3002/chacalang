@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng - Staff</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/staff/staff.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+
+        .order-stats-header {
+            background: #ffe082 !important;
+            border-radius: 16px 16px 0 0;
+            border-bottom: 1px solid #ffe082;
+        }
+
+        .order-stats-card {
+            background: #fffde7 !important;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            border: none;
+        }
+
+        .order-stats-list .list-group-item {
+            background: #fffbe7;
+            font-weight: 600;
+            border: none;
+            font-size: 1.08em;
+            color: #444;
+        }
+
+        .order-item.status-pending {
+            border-left: 4px solid #ffc107;
+        }
+
+        .order-item.status-confirmed {
+            border-left: 4px solid #29b6f6;
+        }
+
+        .order-item.status-preparing {
+            border-left: 4px solid #ff9800;
+        }
+
+        .order-item.status-completed {
+            border-left: 4px solid #4caf50;
+        }
+
+        .order-item.status-cancelled {
+            border-left: 4px solid #f44336;
+        }
+
+        .badge-order {
+            min-width: 32px;
+            font-size: 1.03em;
+        }
+
+        /* Badge màu theo trạng thái */
+        .badge-pending {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .badge-confirmed {
+            background-color: #29b6f6;
+        }
+
+        .badge-preparing {
+            background-color: #ff9800;
+        }
+
+        .badge-assigned {
+            background-color: #1b6d85;
+        }
+
+        .badge-shipping {
+            background-color: #673ab7;
+        }
+
+        .badge-completed {
+            background-color: #4caf50;
+        }
+
+        .badge-cancelled {
+            background-color: #f44336;
+        }
+
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .status-confirmed {
+            background-color: #17a2b8;
+        }
+
+        .status-preparing {
+            background-color: #fd7e14;
+        }
+
+        .status-shipping {
+            background-color: #6f42c1;
+        }
+
+        .status-assigned {
+            background-color: #1b6d85;
+        }
+
+        .status-delivered {
+            background-color: #20c997;
+        }
+
+
+
+        .status-completed {
+            background-color: #28a745;
+        }
+
+        .status-cancelled {
+            background-color: #dc3545;
+        }
+
+        .order-item {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #ffc107;
+        }
+
+        .order-item.urgent {
+            border-left-color: #dc3545;
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .note-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid #17a2b8;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="staff-sidebar">
+    <div class="sidebar-header">
+        <img src="/img/LogoThungCam2.png" alt="Logo Thung Cấm">
+        <h2>Nhân viên</h2>
+    </div>
+    <ul class="staff-sidebar-menu">
+        <li th:classappend="${activePage == 'dashboard'} ? 'active'">
+            <a th:href="@{'/staff/dashboard'(branchId=${branchId})}"><i class="fa fa-tachometer"></i> Dashboard</a>
+        </li>
+        <li th:classappend="${activePage == 'order'} ? 'active'">
+            <a th:href="@{'/staff/orders'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng</a>
+        </li>
+        <li th:classappend="${activePage == 'order-ship'} ? 'active'">
+            <a th:href="@{'/staff/orders-ship'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng Ship</a>
+        </li>
+        <li th:classappend="${activePage == 'invoices'} ? 'active'">
+            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa
+                đơn</a>
+        </li>
+        <li th:classappend="${activePage == 'contacts'} ? 'active'">
+            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh
+                giá</a>
+        </li>
+        <li th:classappend="${activePage == 'profile'} ? 'active'">
+            <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
+        </li>
+        <li>
+            <a class="logout-btn" th:href="@{/logout}"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="staff-content">
+    <h2 class="text-center">Quản lý đơn lấy tại cửa hàng</h2>
+    <hr>
+
+    <!-- Tìm kiếm và lọc -->
+    <div class="search-box">
+        <form th:action="@{/staff/orders-ship}" method="get" class="row">
+            <input type="hidden" name="branchId" th:value="${branchId}">
+            <div class="col-md-3">
+                <input type="text" name="search" th:value="${param.search}"
+                       class="form-control" placeholder="Tìm theo mã đơn, tên khách...">
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-control">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="PENDING" th:selected="${param.status == 'PENDING'}">Đang Xử Lý</option>
+                    <option value="CONFIRMED" th:selected="${param.status == 'CONFIRMED'}">Đã xác nhận</option>
+                    <option value="PREPARING" th:selected="${param.status == 'PREPARING'}">Đang chuẩn bị</option>
+                    <option value="COMPLETED" th:selected="${param.status == 'COMPLETED'}">Hoàn thành</option>
+                    <option value="CANCELLED" th:selected="${param.status == 'CANCELLED'}">Đã hủy</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="dateFrom" th:value="${param.dateFrom}"
+                       class="form-control" placeholder="Từ ngày">
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="dateTo" th:value="${param.dateTo}"
+                       class="form-control" placeholder="Đến ngày">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-search"></i> Tìm kiếm
+                </button>
+                <a th:href="@{/staff/orders}" class="btn btn-secondary">
+                    <i class="fa fa-refresh"></i> Làm mới
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Success and error messages -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Danh sách đơn hàng -->
+    <div class="row">
+        <div class="col-md-8">
+            <div th:each="order : ${orders}" th:with="orderId=${order.id}"
+                 th:class="'order-item mb-3 status-' + ${#strings.toLowerCase(order.status)}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong class="fs-6">#<span th:text="${order.orderCode}">ORD001</span></strong>
+                        <span class="ms-2 text-muted" style="font-size: 13px;">
+                <i class="fa fa-clock-o"></i>
+                <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+            </span>
+                    </div>
+                    <div>
+            <span th:class="'order-status status-' + ${#strings.toLowerCase(order.status)}"
+                  th:text="${order.status.label}">Trạng thái</span>
+                    </div>
+                </div>
+                <div class="mt-2 d-flex justify-content-between align-items-end">
+                    <div>
+                        <span class="fw-bold">👤</span>
+                        <span th:text="${order.customerName}">Tên khách</span>
+                        <span th:if="${order.note}" class="note-box ms-2 py-1 px-2 d-inline-block">
+                <strong class="me-1"><i class="fa fa-sticky-note"></i> Ghi chú:</strong>
+                <span th:text="${order.note}">Nội dung ghi chú</span>
+            </span>
+                    </div>
+                    <div>
+                        <a class="btn btn-sm btn-primary"
+                           th:href="@{'/staff/orders/update/' + ${orderId} + '?branchId=' + ${branchId}}">
+                            <i class="fa fa-eye"></i> Chi tiết
+                        </a>
+                        <a type="button" class="btn btn-sm btn-success"
+                                th:onclick="'showAssignShipperModal(' + ${orderId} + ');'">
+                            <i class="fa fa-truck"></i> Giao phó
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Phân trang -->
+            <nav th:if="${totalPages > 1}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/staff/orders-ship(page=${currentPage - 1}, search=${param.search}, status=${param.status}, dateFrom=${param.dateFrom}, dateTo=${param.dateTo})}">Trước</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${#numbers.sequence(1, totalPages)}"
+                        th:classappend="${page == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/staff/orders-ship(page=${page}, search=${param.search}, status=${param.status}, dateFrom=${param.dateFrom}, dateTo=${param.dateTo})}"
+                           th:text="${page}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/staff/orders-ship(page=${currentPage + 1}, search=${param.search}, status=${param.status}, dateFrom=${param.dateFrom}, dateTo=${param.dateTo})}">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Thống kê nhanh -->
+        <div class="col-md-4">
+            <div class="card order-stats-card">
+                <div class="card-header order-stats-header">
+                    <h4 class="mb-0"><i class="fa fa-chart-pie"></i> Thống kê đơn hàng</h4>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush order-stats-list">
+                        <div th:each="stat : ${stats}">
+                            <div class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                <span th:text="${stat.key.label}">Trạng thái</span>
+                                <span th:classappend="
+                            ${stat.key.name() == 'PENDING'} ? 'badge badge-order badge-pending' :
+                            (${stat.key.name() == 'CONFIRMED'} ? 'badge badge-order badge-confirmed' :
+                            (${stat.key.name() == 'PREPARING'} ? 'badge badge-order badge-preparing' :
+                            (${stat.key.name() == 'ASSIGNED'} ? 'badge badge-order badge-assigned' :
+                            (${stat.key.name() == 'SHIPPING'} ? 'badge badge-order badge-shipping' :
+                            (${stat.key.name() == 'COMPLETED'} ? 'badge badge-order badge-completed' :
+                            (${stat.key.name() == 'CANCELLED'} ? 'badge badge-order badge-cancelled' : 'badge badge-order badge-secondary'))))))"
+                                      th:text="${stat.value}">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal phân công shipper -->
+    <div class="modal fade" id="assignShipperModal" tabindex="-1" aria-labelledby="assignShipperModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form id="assignShipperForm" method="post" th:action="@{/staff/assign}">
+                <input type="hidden" name="orderId" id="assignOrderId">
+                <input type="hidden" name="branchId" th:value="${branchId}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assignShipperModalLabel"><i class="fa fa-truck"></i> Giao phó đơn cho shipper</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="shipperId" class="form-label">Chọn shipper</label>
+                            <select class="form-select" name="shipperId" id="shipperId" required>
+                                <option value="">-- Chọn shipper --</option>
+                                <option th:each="shipper : ${shippers}" th:value="${shipper.id}"
+                                        th:text="${shipper.fullName + ' - ' + shipper.phone}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Xác nhận phân công</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script>
+    function updateOrderStatus(orderId, status) {
+        if (confirm('Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này?')) {
+            $.post('/staff/orders/' + orderId + '/status', {
+                status: status,
+                _csrf: $('meta[name="_csrf"]').attr('content')
+            }, function (response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra: ' + response.message);
+                }
+            });
+        }
+    }
+
+    function addNote(orderId) {
+        var note = prompt('Nhập ghi chú cho đơn hàng:');
+        if (note !== null) {
+            $.post('/staff/' + orderId + '/note', {
+                note: note,
+                _csrf: $('meta[name="_csrf"]').attr('content')
+            }, function (response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra: ' + response.message);
+                }
+            });
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function showAssignShipperModal(orderId) {
+        document.getElementById("assignOrderId").value = orderId;
+        var modal = new bootstrap.Modal(document.getElementById('assignShipperModal'));
+        modal.show();
+    }
+</script>
+</body>
+</html>

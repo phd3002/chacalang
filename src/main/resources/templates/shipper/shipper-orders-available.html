@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đơn chờ nhận giao - Shipper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/shipper/shipper.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="shipper-layout d-flex">
+    <nav class="shipper-sidebar">
+        <div class="sidebar-header text-center py-4">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cẩm" style="width: 60px;">
+            <h2 class="mt-2">Shipper</h2>
+        </div>
+        <ul class="sidebar-menu nav flex-column">
+            <li th:classappend="${activePage == 'dashboard-active'} ? 'active'">
+                <a class="nav-link active"
+                   th:href="@{'/shipper/dashboard'(branchId=${branchId})}"><i
+                        class="fa fa-tachometer-alt"></i> Tổng quan</a></li>
+            <li th:classappend="${activePage == 'orders-available-active'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-available'(branchId=${branchId})}"><i
+                        class="fa fa-list"></i> Đơn chờ nhận giao</a></li>
+            <li th:classappend="${activePage == 'orders-assigned'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-assigned'(branchId=${branchId})}"><i
+                        class="fa fa-shipping-fast"></i> Đơn đang giao</a></li>
+            <li th:classappend="${activePage == 'orders-history-active'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-history'(branchId=${branchId})}"><i
+                        class="fa fa-history"></i> Lịch sử giao hàng</a></li>
+            <li th:classappend="${activePage == 'profile-active'} ? 'active'">
+                <a class="nav-link"
+                   href="/shipper/profile"><i
+                        class="fa fa-user"></i> Hồ sơ cá nhân</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="shipper-content flex-grow-1 p-4">
+        <h2 class="mb-4"><i class="fa fa-list"></i> Đơn chờ nhận giao</h2>
+        <form class="row g-3 mb-3">
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option>Khu vực (District)</option>
+                    <option>Thủ Đức</option>
+                    <option>Bình Thạnh</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option>Phường (Ward)</option>
+                    <option>Hiệp Bình Chánh</option>
+                    <option>Linh Trung</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control" placeholder="Từ ngày">
+            </div>
+            <div class="col-md-3">
+                <button class="shipper-btn-main w-100" type="submit">Lọc</button>
+            </div>
+        </form>
+        <div class="card p-3">
+            <table class="table shipper-table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Mã đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Địa chỉ</th>
+                    <th>Khu vực</th>
+                    <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td><input type="checkbox" th:value="${order.orderId}"></td>
+                    <td th:text="${order.orderCode}">TC12345</td>
+                    <td th:text="${order.customerName}">Nguyễn Văn A</td>
+                    <td th:text="${order.address}">123 Lê Văn Việt</td>
+                    <td th:text="${order.district} + ' - ' + ${order.ward}">Thủ Đức - Hiệp Bình Chánh</td>
+                    <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">2024-06-01 10:00</td>
+                    <td>
+        <span class="shipper-status-badge shipper-status-pending"
+              th:text="${order.status}">PREPARING</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/shipper/order-detail(orderId=${order.orderId},branchId=${branchId})}" class="btn btn-link">Chi tiết</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html> 

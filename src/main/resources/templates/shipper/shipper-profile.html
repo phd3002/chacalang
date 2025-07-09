@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ sơ cá nhân - Shipper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/shipper/shipper.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="shipper-layout d-flex">
+    <nav class="shipper-sidebar">
+        <div class="sidebar-header text-center py-4">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cẩm" style="width: 60px;">
+            <h2 class="mt-2">Shipper</h2>
+        </div>
+        <ul class="sidebar-menu nav flex-column">
+            <li th:classappend="${activePage == 'dashboard'} ? 'active'">
+                <a class="nav-link active"
+                   th:href="@{'/shipper/dashboard'(branchId=${branchId})}"><i
+                        class="fa fa-tachometer-alt"></i> Tổng quan</a></li>
+            <li th:classappend="${activePage == 'orders-available'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-available'(branchId=${branchId})}"><i
+                        class="fa fa-list"></i> Đơn chờ nhận giao</a></li>
+            <li th:classappend="${activePage == 'orders-assigned'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-assigned'(branchId=${branchId})}"><i
+                        class="fa fa-shipping-fast"></i> Đơn đang giao</a></li>
+            <li th:classappend="${activePage == 'orders-history'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-history'(branchId=${branchId})}"><i
+                        class="fa fa-history"></i> Lịch sử giao hàng</a></li>
+            <li th:classappend="${activePage == 'profile'} ? 'active'">
+                <a class="nav-link"
+                   href="/shipper/profile"><i
+                        class="fa fa-user"></i> Hồ sơ cá nhân</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="shipper-content flex-grow-1 p-4">
+        <h2 class="mb-4"><i class="fa fa-user"></i> Hồ sơ cá nhân</h2>
+        <div class="card p-4 mb-4 d-flex align-items-center">
+            <img src="/static/img/avatar.png" class="shipper-avatar me-4" alt="avatar">
+            <div>
+                <h4>Nguyễn Văn Shipper</h4>
+                <div>Chi nhánh: <b>Thủ Đức</b></div>
+                <div>SĐT: 0909xxxxxx</div>
+                <div>Email: shipper@thungcam.vn</div>
+            </div>
+        </div>
+        <div class="card p-4 mb-4">
+            <h5>Chỉnh sửa thông tin cá nhân</h5>
+            <form>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Họ tên</label>
+                        <input type="text" class="form-control" value="Nguyễn Văn Shipper">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" value="0909xxxxxx">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" value="shipper@thungcam.vn">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Chi nhánh</label>
+                        <input type="text" class="form-control" value="Thủ Đức" disabled>
+                    </div>
+                </div>
+                <button class="shipper-btn-main" type="submit">Lưu thay đổi</button>
+            </form>
+        </div>
+        <div class="card p-4">
+            <h5>Đổi mật khẩu</h5>
+            <form>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Mật khẩu cũ</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Mật khẩu mới</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Nhập lại mật khẩu mới</label>
+                        <input type="password" class="form-control">
+                    </div>
+                </div>
+                <button class="shipper-btn-main" type="submit">Đổi mật khẩu</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html> 

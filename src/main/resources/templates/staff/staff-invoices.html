@@ -169,7 +169,7 @@
 
         /* Sửa màu chữ trong thống kê badge */
         .badge-warning, .badge-warning.badge-pill {
-            color: #333 !important;   /* cho badge vàng */
+            color: #333 !important; /* cho badge vàng */
             background-color: #ffc107 !important;
         }
 
@@ -205,11 +205,17 @@
             <a th:href="@{'/staff/orders'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
                 hàng</a>
         </li>
+        <li th:classappend="${activePage == 'order-ship'} ? 'active'">
+            <a th:href="@{'/staff/orders-ship'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng Ship</a>
+        </li>
         <li th:classappend="${activePage == 'invoice'} ? 'active'">
-            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa đơn</a>
+            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa
+                đơn</a>
         </li>
         <li th:classappend="${activePage == 'contacts'} ? 'active'">
-            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh giá</a>
+            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh
+                giá</a>
         </li>
         <li th:classappend="${activePage == 'profile'} ? 'active'">
             <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
@@ -227,6 +233,7 @@
     <!-- Tìm kiếm và lọc -->
     <div class="search-box">
         <form th:action="@{/staff/invoices}" method="get" class="row">
+            <input type="hidden" name="branchId" th:value="${branchId}">
             <div class="col-md-3">
                 <input type="text" name="search" th:value="${param.search}"
                        class="form-control" placeholder="Tìm theo mã hóa đơn, tên khách hàng...">
@@ -236,16 +243,17 @@
                     <option value="">Tất cả trạng thái</option>
                     <option value="PENDING" th:selected="${param.paymentStatus == 'PENDING'}">Chờ thanh toán</option>
                     <option value="PAID" th:selected="${param.paymentStatus == 'PAID'}">Đã thanh toán</option>
-                    <option value="CANCELED" th:selected="${param.paymentStatus == 'CANCELED'}">Thanh toán thất bại</option>
+                    <option value="CANCELED" th:selected="${param.paymentStatus == 'CANCELED'}">Thanh toán thất bại
+                    </option>
                     <option value="REFUNDED" th:selected="${param.paymentStatus == 'REFUNDED'}">Đã hoàn tiền</option>
                 </select>
             </div>
             <div class="col-md-2">
                 <select name="paymentMethod" class="form-control">
                     <option value="">Tất cả phương thức</option>
-                    <option value="CASH" th:selected="${param.paymentMethod == 'COD'}">Thanh toán khi nhận hàng</option>
-                    <option value="CARD" th:selected="${param.paymentMethod == 'VNPAY'}">VNPAY</option>
-<!--                    <option value="BANK" th:selected="${param.paymentMethod == 'BANK'}">Chuyển khoản</option>-->
+                    <option value="COD" th:selected="${param.paymentMethod == 'COD'}">Thanh toán khi nhận hàng</option>
+                    <option value="VNPAY" th:selected="${param.paymentMethod == 'VNPAY'}">VNPAY</option>
+                    <!--                    <option value="BANK" th:selected="${param.paymentMethod == 'BANK'}">Chuyển khoản</option>-->
                 </select>
             </div>
             <div class="col-md-2">

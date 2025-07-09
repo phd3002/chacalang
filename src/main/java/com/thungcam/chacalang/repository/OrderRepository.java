@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +39,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query("SELECT DATE(i.issuedDate), SUM(i.finalAmount) FROM Invoice i WHERE i.order.branch.id = :branchId AND i.order.status = 'COMPLETED' AND i.issuedDate >= :fromDate AND i.issuedDate <= :toDate GROUP BY DATE(i.issuedDate) ORDER BY DATE(i.issuedDate)")
     List<Object[]> sumRevenueByDay(Long branchId, LocalDateTime fromDate, LocalDateTime toDate);
 
-    @Query("SELECT oi.menu.name, SUM(oi.quantity) AS total FROM OrderItem oi WHERE oi.order.branch.id = :branchId AND oi.order.createdAt >= :fromDate AND oi.order.createdAt <= :toDate GROUP BY oi.menu.id, oi.menu.name ORDER BY total DESC")
-    List<Object[]> findTopMenusByBranch(Long branchId, LocalDateTime fromDate, LocalDateTime toDate);
-
     long countByStatusAndBranchId(OrderStatus status, Long branch_id);
-
-    long countByStatusInAndBranchId(Collection<OrderStatus> status, Long branch_id);
 
     // Lấy tất cả đơn pickup của 1 chi nhánh
     List<Orders> findAllByShippingMethodAndBranch_IdOrderByCreatedAtDesc(ShippingMethod shippingMethod, Long branchId);
@@ -70,5 +64,22 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     long countByShippingMethodAndStatusAndBranch_Id(ShippingMethod shippingMethod, OrderStatus status, Long branchId);
 
+    @Query("""
+                SELECT o FROM Orders o
+                WHERE o.branch.id = :branchId
+                  AND o.status IN :statuses
+                  AND o.shippingMethod = 'DELIVERY'
+                  AND NOT EXISTS (
+                      SELECT 1 FROM OrderShipper os WHERE os.order.id = o.id
+                  )
+            """)
+    List<Orders> findOrdersAvailableForShipper(
+            Long branchId,
+            List<OrderStatus> statuses,
+            String district,
+            String ward,
+            LocalDateTime fromDate,
+            LocalDateTime toDate
+    );
 
 }

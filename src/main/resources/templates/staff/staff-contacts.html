@@ -49,6 +49,10 @@
             <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa
                 đơn</a>
         </li>
+        <li th:classappend="${activePage == 'order-ship'} ? 'active'">
+            <a th:href="@{'/staff/orders-ship'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng Ship</a>
+        </li>
         <li th:classappend="${activePage == 'contacts'} ? 'active'">
             <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh
                 giá</a>

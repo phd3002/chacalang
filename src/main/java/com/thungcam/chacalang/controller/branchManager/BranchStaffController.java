@@ -2,7 +2,6 @@ package com.thungcam.chacalang.controller.branchManager;
 
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.BranchStaffService;
-import com.thungcam.chacalang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +19,10 @@ public class BranchStaffController {
     @GetMapping("/branch-staff-management")
     public String viewStaff(@RequestParam Long branchId, Model model) {
         List<User> staffList = branchStaffService.getStaffByBranch(branchId);
+        List<User> shipperList = branchStaffService.getShipperByBranch(branchId);
         model.addAttribute("branchId", branchId);
         model.addAttribute("staffList", staffList);
+        model.addAttribute("shipperList", shipperList);
         return "branch-manager/branch-staff-management";
     }
 

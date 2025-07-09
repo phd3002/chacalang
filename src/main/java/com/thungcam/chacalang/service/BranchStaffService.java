@@ -7,6 +7,8 @@ import java.util.List;
 public interface BranchStaffService {
     List<User> getStaffByBranch(Long branchId);
 
+    List<User> getShipperByBranch(Long branchId);
+
     void updateUserFields(Long id, String firstName, String lastName, String email, String phone);
 
     void deleteStaff(Long userId); // xóa người dùng theo ID

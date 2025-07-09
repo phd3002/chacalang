@@ -3,14 +3,16 @@ package com.thungcam.chacalang.controller.account;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.OrderQueryService;
+import com.thungcam.chacalang.service.ReviewService;
 import com.thungcam.chacalang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
@@ -19,6 +21,7 @@ public class OrderDetailController {
 
     private final OrderQueryService orderQueryService;
     private final UserService userService;
+    private final ReviewService reviewService;
 
     @GetMapping("/orders/{id}")
     public String orderDetail(@PathVariable Long id, Model model, Authentication authentication) {
@@ -30,4 +33,21 @@ public class OrderDetailController {
         model.addAttribute("order", order);
         return "profile/order-detail";
     }
+
+    @PostMapping("/order-review")
+    public String submitReview(
+            @RequestParam("orderId") Long orderId,
+            @RequestParam("rating") int rating,
+            @RequestParam("comment") String comment,
+            Principal principal, RedirectAttributes redirectAttributes
+    ) {
+        String userEmail = principal.getName();
+        User user = userService.findByEmail(userEmail);
+
+        reviewService.createReview(user, orderId, rating, comment);
+
+        redirectAttributes.addFlashAttribute("success", "Đánh giá của bạn đã được ghi nhận!");
+        return "redirect:/user/orders";
+    }
+
 }

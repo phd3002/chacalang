@@ -1,19 +1,13 @@
 package com.thungcam.chacalang.security;
 
-import com.thungcam.chacalang.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -31,18 +25,19 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/img/**", "/js/**", "/fonts/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/gui-otp", "/auth/verify-otp", "/auth/verify-otp-success",
                                 "/auth/login", "/auth/forgot-password", "/auth/reset-password/**").permitAll()
-                        .requestMatchers("/order/**", "/cart/**", "/api/**").permitAll()
-                        .requestMatchers("/checkout/**").permitAll()
-                        .requestMatchers("/user/**","/user/profile/**","/user/profile-manager", "/user/change-password", "/user/user-address").permitAll()
+                        .requestMatchers("/order/**", "/cart/**", "/api/**").hasRole( "ROLE_CUSTOMER" )
+                        .requestMatchers("/checkout/**").hasRole( "ROLE_CUSTOMER" )
+                        .requestMatchers("/user/**","/user/profile/**","/user/profile-manager", "/user/change-password", "/user/user-address").hasRole( "ROLE_CUSTOMER" )
                         .requestMatchers("/api/location/**").permitAll()
-                        .requestMatchers("/admin/**").permitAll() // Các trang admin yêu cầu login (sẽ config sau)
-                        .requestMatchers("/branch-manager/**").permitAll() // Chỉ cho phép Branch Manager và Admin truy cập
-                        .requestMatchers("/staff/**").permitAll() // Chỉ cho phép Staff, Branch Manager và Admin truy cập
-                        .requestMatchers("/", "/lien-he", "/dat-ban", "/menu/**", "/error/**")
+                        .requestMatchers("/admin/**").hasRole( "ROLE_ADMIN" )
+                        .requestMatchers("/branch-manager/**").hasRole( "ROLE_BRANCH_MANAGER" )
+                        .requestMatchers("/staff/**").hasRole("ROLE_STAFF")
+                        .requestMatchers("/shipper/**").hasRole("ROLE_SHIPPER")
+                        .requestMatchers("/", "/lien-he", "/dat-ban", "/menu/**", "/error/**") //Home page, contact, reservation, menu
                         .permitAll()
                 )
                 .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/error/404") // xử lý lỗi 403
+                        .accessDeniedPage("/error/404")
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")

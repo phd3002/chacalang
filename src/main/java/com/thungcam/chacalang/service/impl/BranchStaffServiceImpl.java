@@ -47,7 +47,12 @@ public class BranchStaffServiceImpl implements BranchStaffService {
 
     @Override
     public List<User> getStaffByBranch(Long branchId) {
-        return userRepository.findByBranchIdAndRoleId(branchId, 3L); // giả sử role STAFF = 3
+        return userRepository.findByBranchIdAndRoleId(branchId, 3L);
+    }
+
+    @Override
+    public List<User> getShipperByBranch(Long branchId) {
+        return userRepository.findByBranchIdAndRoleId(branchId, 5L);
     }
 
     @Override

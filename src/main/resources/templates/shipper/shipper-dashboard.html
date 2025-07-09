@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shipper Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/shipper/shipper.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="shipper-layout d-flex">
+    <nav class="shipper-sidebar">
+        <div class="sidebar-header text-center py-4">
+            <img src="/img/LogoThungCam2.png" alt="Logo Thung Cẩm" style="width: 60px;">
+            <h2 class="mt-2">Shipper</h2>
+        </div>
+        <ul class="sidebar-menu nav flex-column">
+            <li th:classappend="${activePage == 'dashboard_active'} ? 'active'">
+                <a class="nav-link active"
+                   th:href="@{'/shipper/dashboard'(branchId=${branchId})}"><i
+                        class="fa fa-tachometer-alt"></i> Tổng quan</a></li>
+            <li th:classappend="${activePage == 'orders-available'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-available'(branchId=${branchId})}"><i
+                        class="fa fa-list"></i> Đơn chờ nhận giao</a></li>
+            <li th:classappend="${activePage == 'orders-assigned'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-assigned'(branchId=${branchId})}"><i
+                        class="fa fa-shipping-fast"></i> Đơn đang giao</a></li>
+            <li th:classappend="${activePage == 'orders-history'} ? 'active'">
+                <a class="nav-link"
+                   th:href="@{'/shipper/orders-history'(branchId=${branchId})}"><i
+                        class="fa fa-history"></i> Lịch sử giao hàng</a></li>
+            <li th:classappend="${activePage == 'profile'} ? 'active'">
+                <a class="nav-link"
+                   href="/shipper/profile"><i
+                        class="fa fa-user"></i> Hồ sơ cá nhân</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-out-alt"></i> Đăng xuất</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="shipper-content flex-grow-1 p-4">
+        <h2 class="mb-4"><i class="fa fa-tachometer-alt"></i> Tổng quan Shipper</h2>
+        <!-- Chỉnh lại 4 box thống kê -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="shipper-status-badge shipper-status-pending mb-2">Chờ giao</div>
+                        <h3 th:text="${dashboard.pendingOrders}">12</h3>
+                        <div>Đơn chờ nhận</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="shipper-status-badge shipper-status-shipping mb-2">Đang giao</div>
+                        <h3 th:text="${dashboard.shippingOrders}">5</h3>
+                        <div>Đơn đang giao</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="shipper-status-badge shipper-status-completed mb-2">Đã giao</div>
+                        <h3 th:text="${dashboard.completedOrders}">30</h3>
+                        <div>Đơn thành công</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="shipper-status-badge shipper-status-cancelled mb-2">Hủy</div>
+                        <h3 th:text="${dashboard.cancelledOrders}">2</h3>
+                        <div>Đơn hủy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p-4 d-flex align-items-center">
+            <!--            <img th:src="${dashboard.avatarUrl != null ? dashboard.avatarUrl : '/static/img/avatar.png'}"-->
+            <!--                 class="shipper-avatar me-4" alt="avatar">-->
+            <div>
+                <h4 th:text="${dashboard.shipperName}">Nguyễn Văn Shipper</h4>
+                <div>Chi nhánh: <b th:text="${dashboard.branchName}">Thủ Đức</b></div>
+                <div>SĐT: <span th:text="${dashboard.phone}">0909xxxxxx</span></div>
+                <div>Email: <span th:text="${dashboard.email}">shipper@thungcam.vn</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html> 

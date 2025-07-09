@@ -33,7 +33,7 @@ public class StaffOrderDetailController {
         model.addAttribute("items", items);
         model.addAttribute("invoice", invoice);
         model.addAttribute("branchId", branchId);
-        model.addAttribute("activePage", "order");
+//        model.addAttribute("activePage", "order");
         return "staff/staff-order-detail";
     }
 
@@ -47,6 +47,7 @@ public class StaffOrderDetailController {
         staffOrderService.updateOrderStatus(orderId, OrderStatus.valueOf(newStatus));
         staffOrderService.updateOrderNote(orderId, note != null ? note.trim() : "");
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công!");
+        System.out.println("Order ID: " + orderId + ", New Status: " + newStatus + ", Note: " + note);
         return "redirect:/staff/orders/update/" + orderId + "?branchId=" + branchId;
     }
 }

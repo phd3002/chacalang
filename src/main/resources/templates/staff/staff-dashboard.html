@@ -8,6 +8,26 @@
     <link rel="stylesheet" th:href="@{/css/staff/staff.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        .card-header.bg-success,
+        .card-header.bg-danger,
+        .card-header.bg-info {
+            color: #fff !important;
+        }
+
+        .card-header.bg-warning,
+        .card-header.bg-light,
+        .card-header.bg-warning {
+            color: #222 !important;
+        }
+
+        .card-header {
+            color: #fff !important;
+            font-weight: 600;
+            font-size: 1.3rem;
+            border-radius: 14px 14px 0 0;
+            border-bottom: none;
+        }
+
         .card {
             border-radius: 18px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1.5px 4px rgba(0, 0, 0, 0.04);
@@ -88,18 +108,25 @@
     </div>
     <ul class="staff-sidebar-menu">
         <li th:classappend="${activePage == 'dashboard'} ? 'active'">
-            <a th:href="@{/staff/dashboard}"><i class="fa fa-tachometer"></i> Dashboard</a>
+            <a th:href="@{'/staff/dashboard'(branchId=${branchId})}"><i class="fa fa-tachometer"></i> Dashboard</a>
         </li>
-        <li th:classappend="${activePage == 'orders'} ? 'active'">
-            <a th:href="@{/staff/orders}"><i class="fa fa-shopping-cart"></i> Quản lý đơn hàng</a>
+        <li th:classappend="${activePage == 'orders_active'} ? 'active'">
+            <a th:href="@{'/staff/orders'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng</a>
         </li>
-        <li th:classappend="${activePage == 'invoices'} ? 'active'">
-            <a th:href="@{/staff/invoices}"><i class="fa fa-file-invoice"></i> Quản lý hóa đơn</a>
+        <li th:classappend="${activePage == 'order-ship'} ? 'active'">
+            <a th:href="@{'/staff/orders-ship'(branchId=${branchId})}"><i class="fa fa-shopping-cart"></i> Quản lý đơn
+                hàng Ship</a>
         </li>
-        <li th:classappend="${activePage == 'contacts'} ? 'active'">
-            <a th:href="@{/staff/contacts}"><i class="fa fa-envelope"></i> Liên hệ & Đánh giá</a>
+        <li th:classappend="${activePage == 'invoices_active'} ? 'active'">
+            <a th:href="@{'/staff/invoices'(branchId=${branchId})}"><i class="fa fa-file-invoice"></i> Quản lý hóa
+                đơn</a>
         </li>
-        <li th:classappend="${activePage == 'profile'} ? 'active'">
+        <li th:classappend="${activePage == 'contacts_active'} ? 'active'">
+            <a th:href="@{'/staff/contacts'(branchId=${branchId})}"><i class="fa fa-envelope"></i> Liên hệ & Đánh
+                giá</a>
+        </li>
+        <li th:classappend="${activePage == 'profile_active'} ? 'active'">
             <a th:href="@{/staff/profile}"><i class="fa fa-user"></i> Tài khoản cá nhân</a>
         </li>
         <li>

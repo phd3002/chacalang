@@ -43,6 +43,7 @@
             </a>
         </div>
         <div class="branch-staff-table-wrapper">
+            <h3 class="mt-4">Nhân viên phục vụ (STAFF)</h3>
             <table class="table table-striped branch-staff-table">
                 <thead>
                 <tr>
@@ -87,6 +88,54 @@
                 </tr>
                 </tbody>
             </table>
+
+            <h3 class="mt-5">Nhân viên giao hàng (SHIPPER)</h3>
+            <table class="table table-striped branch-staff-table">
+                <thead>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${shipperList}" th:if="${user.role.name == 'SHIPPER'}">
+                    <td th:text="${user.lastName + ' ' + user.firstName}">Họ tên</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.phone}">SĐT</td>
+                    <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">Ngày tạo</td>
+                    <td>
+                        <form th:action="@{/branch-manager/branch-staff/toggle-status}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}"/>
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <button type="submit"
+                                    th:class="${#strings.equals(user.status?.name(), 'ACTIVE')} ? 'btn btn-sm btn-success' : 'btn btn-sm btn-secondary'">
+                                <i class="fa fa-power-off"></i>
+                                <span th:text="${#strings.equals(user.status?.name(), 'ACTIVE')} ? ' Hoạt động' : ' Bị khóa'"></span>
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#editModal-' + ${user.id}">
+                            <i class="fa fa-pencil"></i> Sửa
+                        </button>
+
+                        <button class="btn btn-sm btn-danger"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#deleteModal-' + ${user.id}">
+                            <i class="fa fa-trash"></i> Xóa
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
         </div>
         <div th:each="user : ${staffList}">
             <div class="modal fade" th:id="'editModal-' + ${user.id}" tabindex="-1" aria-hidden="true">

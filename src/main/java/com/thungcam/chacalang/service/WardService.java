@@ -10,5 +10,9 @@ public interface WardService {
     List<Ward> getWardsByDistrictId(Long districtId);
 
     Ward getWardById(Long id);
+
+    List<Ward> getWardsByDistrict(Long districtId);
+
+    String getWardNameById(Long id);
 }
 
