@@ -42,15 +42,19 @@
     </nav>
     <div class="shipper-content flex-grow-1 p-4">
         <h2 class="mb-4"><i class="fa fa-history"></i> Lịch sử giao hàng</h2>
-        <form class="row g-3 mb-3">
+        <form class="row g-3 mb-3" th:action="@{/shipper/orders-history}" method="get">
+            <input type="hidden" name="branchId" th:value="${branchId}">
             <div class="col-md-3">
-                <input type="month" class="form-control" placeholder="Chọn tháng">
+                <input type="month" class="form-control" name="month"
+                       th:value="${month}">
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control" placeholder="Từ ngày">
+                <input type="date" class="form-control" name="fromDate"
+                       th:value="${fromDate}">
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control" placeholder="Đến ngày">
+                <input type="date" class="form-control" name="toDate"
+                       th:value="${toDate}">
             </div>
             <div class="col-md-3">
                 <button class="shipper-btn-main w-100" type="submit">Lọc</button>
@@ -59,10 +63,12 @@
         <div class="card p-3 mb-3">
             <div class="row">
                 <div class="col-md-6">
-                    <b>Tổng đơn đã giao:</b> 30
+                    <b>Tổng đơn đã giao:</b>
+                    <span th:text="${totalOrders}">0</span>
                 </div>
                 <div class="col-md-6">
-                    <b>Tổng giá trị:</b> 2.850.000đ
+                    <b>Tổng giá trị:</b>
+                    <span th:text="${#numbers.formatDecimal(totalAmount, 0, 'POINT', 0, 'COMMA')} + 'đ'">0đ</span>
                 </div>
             </div>
         </div>
@@ -79,20 +85,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>TC12340</td>
-                    <td>Nguyễn Văn A</td>
-                    <td>123 Lê Văn Việt</td>
-                    <td>2024-05-30</td>
-                    <td>95,000đ</td>
-                    <td><span class="shipper-status-badge shipper-status-completed">COMPLETED</span></td>
-                </tr>
-                <tr>
-                    <td>TC12341</td>
-                    <td>Trần Thị B</td>
-                    <td>456 Võ Văn Ngân</td>
-                    <td>2024-05-30</td>
-                    <td>120,000đ</td>
+                <tr th:each="os : ${assignedOrders}">
+                    <td th:text="${os.order.orderCode}"></td>
+                    <td th:text="${os.order.customerName}"></td>
+                    <td th:text="${os.order.customerAddress}"></td>
+                    <td th:text="${#temporals.format(os.deliveredAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#numbers.formatDecimal(os.order.invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + 'đ'"></td>
                     <td><span class="shipper-status-badge shipper-status-completed">COMPLETED</span></td>
                 </tr>
                 </tbody>

@@ -25,14 +25,13 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/img/**", "/js/**", "/fonts/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/gui-otp", "/auth/verify-otp", "/auth/verify-otp-success",
                                 "/auth/login", "/auth/forgot-password", "/auth/reset-password/**").permitAll()
-                        .requestMatchers("/order/**", "/cart/**", "/api/**").hasRole( "ROLE_CUSTOMER" )
-                        .requestMatchers("/checkout/**").hasRole( "ROLE_CUSTOMER" )
-                        .requestMatchers("/user/**","/user/profile/**","/user/profile-manager", "/user/change-password", "/user/user-address").hasRole( "ROLE_CUSTOMER" )
-                        .requestMatchers("/api/location/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole( "ROLE_ADMIN" )
-                        .requestMatchers("/branch-manager/**").hasRole( "ROLE_BRANCH_MANAGER" )
-                        .requestMatchers("/staff/**").hasRole("ROLE_STAFF")
-                        .requestMatchers("/shipper/**").hasRole("ROLE_SHIPPER")
+                        .requestMatchers("/order/**", "/cart/**", "/api/**").hasRole( "CUSTOMER" )
+                        .requestMatchers("/checkout/**").hasRole( "CUSTOMER" )
+                        .requestMatchers("/user/**","/user/profile/**","/user/profile-manager", "/user/change-password", "/user/user-address").hasRole( "CUSTOMER" )
+                        .requestMatchers("/admin/**").hasRole( "ADMIN" )
+                        .requestMatchers("/branch-manager/**").hasRole( "BRANCH_MANAGER" )
+                        .requestMatchers("/staff/**").hasRole("STAFF")
+                        .requestMatchers("/shipper/**").hasRole("SHIPPER")
                         .requestMatchers("/", "/lien-he", "/dat-ban", "/menu/**", "/error/**") //Home page, contact, reservation, menu
                         .permitAll()
                 )
@@ -55,10 +54,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // ✅ Spring dùng userService để load user từ DB
-//    @Bean
-//    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService() {
-//        return userService;
-//    }
 }

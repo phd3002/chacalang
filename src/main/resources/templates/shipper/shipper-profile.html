@@ -42,36 +42,42 @@
     </nav>
     <div class="shipper-content flex-grow-1 p-4">
         <h2 class="mb-4"><i class="fa fa-user"></i> Hồ sơ cá nhân</h2>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
         <div class="card p-4 mb-4 d-flex align-items-center">
             <img src="/static/img/avatar.png" class="shipper-avatar me-4" alt="avatar">
             <div>
-                <h4>Nguyễn Văn Shipper</h4>
-                <div>Chi nhánh: <b>Thủ Đức</b></div>
-                <div>SĐT: 0909xxxxxx</div>
-                <div>Email: shipper@thungcam.vn</div>
+                <h4 th:text="${shipper.fullName}">Nguyễn Văn Shipper</h4>
+                <div>Chi nhánh: <b th:text="${shipper.branch.name}">Thủ Đức</b></div>
+                <div>SĐT: <span th:text="${shipper.phone}">0909xxxxxx</span></div>
+                <div>Email: <span th:text="${shipper.email}">shipper@thungcam.vn</span></div>
             </div>
         </div>
         <div class="card p-4 mb-4">
             <h5>Chỉnh sửa thông tin cá nhân</h5>
-            <form>
+            <form th:action="@{/shipper/update}" method="post">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">Họ tên</label>
-                        <input type="text" class="form-control" value="Nguyễn Văn Shipper">
+                        <label class="form-label">Họ</label>
+                        <input type="text" class="form-control" name="firstName" th:value="${shipper.firstName}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tên</label>
+                        <input type="text" class="form-control" name="lastName" th:value="${shipper.lastName}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" value="0909xxxxxx">
+                        <input type="text" class="form-control" name="phone" th:value="${shipper.phone}">
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" value="shipper@thungcam.vn">
+                        <input type="email" class="form-control" th:value="${shipper.email}" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Chi nhánh</label>
-                        <input type="text" class="form-control" value="Thủ Đức" disabled>
+                        <input type="text" class="form-control" th:value="${shipper.branch.name}" disabled>
                     </div>
                 </div>
                 <button class="shipper-btn-main" type="submit">Lưu thay đổi</button>
@@ -79,20 +85,18 @@
         </div>
         <div class="card p-4">
             <h5>Đổi mật khẩu</h5>
-            <form>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Mật khẩu cũ</label>
-                        <input type="password" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Mật khẩu mới</label>
-                        <input type="password" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Nhập lại mật khẩu mới</label>
-                        <input type="password" class="form-control">
-                    </div>
+            <form th:action="@{/shipper/change-password}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu cũ</label>
+                    <input type="password" class="form-control" name="oldPassword">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu mới</label>
+                    <input type="password" class="form-control" name="newPassword">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nhập lại mật khẩu mới</label>
+                    <input type="password" class="form-control" name="confirmPassword">
                 </div>
                 <button class="shipper-btn-main" type="submit">Đổi mật khẩu</button>
             </form>

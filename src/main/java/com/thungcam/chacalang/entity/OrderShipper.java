@@ -40,4 +40,6 @@ public class OrderShipper {
     @Column(name = "note")
     private String note;
 
+
+
 }

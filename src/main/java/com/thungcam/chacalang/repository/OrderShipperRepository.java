@@ -40,4 +40,19 @@ public interface OrderShipperRepository extends JpaRepository<OrderShipper, Long
     """)
     List<OrderShipper> findDeliveredOrdersBefore(LocalDateTime threshold);
 
+    @Query("""
+        SELECT os FROM OrderShipper os
+        JOIN FETCH os.order o
+        WHERE os.shipper.id = :shipperId
+          AND o.status = :status
+          AND (:fromDate IS NULL OR os.deliveredAt >= :fromDate)
+          AND (:toDate IS NULL OR os.deliveredAt <= :toDate)
+    """)
+    List<OrderShipper> findHistoryOrders(
+            Long shipperId,
+            OrderStatus status,
+            LocalDateTime fromDate,
+            LocalDateTime toDate
+    );
+
 }
