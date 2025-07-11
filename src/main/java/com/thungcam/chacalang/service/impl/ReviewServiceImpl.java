@@ -23,7 +23,6 @@ public class ReviewServiceImpl implements ReviewService {
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng!"));
 
-        // Kiểm tra đơn đã có review chưa
         if (reviewRepository.existsByOrder_Id(orderId)) {
             throw new RuntimeException("Đơn này đã được đánh giá!");
         }
@@ -40,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (order.getStatus() != OrderStatus.COMPLETED) {
             order.setStatus(OrderStatus.COMPLETED);
+            order.setUpdatedAt(LocalDateTime.now());
             orderRepository.save(order);
         }
     }

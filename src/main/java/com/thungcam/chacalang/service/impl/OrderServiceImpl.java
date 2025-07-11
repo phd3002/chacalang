@@ -77,7 +77,6 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException("Không tìm thấy chi nhánh giao cho quận này");
             }
             Branch branch = branchDistrict.getBranch();
-
             order.setCustomerName(address.getFullName());
             order.setCustomerPhone(address.getPhone());
             order.setCustomerAddress(address.getAddress());

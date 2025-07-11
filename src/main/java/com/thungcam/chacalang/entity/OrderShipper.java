@@ -37,6 +37,9 @@ public class OrderShipper {
     @Column(name = "delivered_at")
     private LocalDateTime deliveredAt;
 
+    @Column(name = "failed_at")
+    private LocalDateTime failedAt;
+
     @Column(name = "note")
     private String note;
 

@@ -42,7 +42,6 @@ public class CheckoutController {
         List<CartItem> cartItems = cartService.getCartItems(user.getId());
         List<PaymentMethod> paymentMethods = paymentMethodService.findAllActive();
         List<UserAddress> addresses = userAddressService.getAddressesByUserId(user);
-        System.out.println("Addresses: " + addresses.toString());
         List<Branch> branches = branchService.getAllBranches();
 
         BigDecimal subtotal = cartItems.stream()
@@ -58,19 +57,17 @@ public class CheckoutController {
         model.addAttribute("total", total);
         model.addAttribute("paymentMethods", paymentMethods);
         model.addAttribute("addresses", addresses);
-        model.addAttribute("branches", branches); // Thymeleaf dùng "stores" trong checkout.html
+        model.addAttribute("branches", branches);
         model.addAttribute("checkoutRequest", new OrderCheckoutDTO());
 
         return "order/checkout";
     }
-
 
     @PostMapping("/checkout")
     public String processCheckout(@ModelAttribute OrderCheckoutDTO dto,
                                   @AuthenticationPrincipal UserDetails userDetails,
                                   RedirectAttributes redirectAttributes) {
         User user = userService.findByEmail(userDetails.getUsername());
-        log.info("Processing checkout for user: {}", user.getEmail());
         Orders order = orderService.createOrder(dto, user);
         redirectAttributes.addFlashAttribute("success", order.getOrderCode());
         return "redirect:/order/success";

@@ -1,8 +1,10 @@
 package com.thungcam.chacalang.service.impl;
 
+import com.thungcam.chacalang.entity.Invoice;
 import com.thungcam.chacalang.entity.OrderShipper;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.enums.OrderStatus;
+import com.thungcam.chacalang.enums.PaymentStatus;
 import com.thungcam.chacalang.repository.OrderRepository;
 import com.thungcam.chacalang.repository.OrderShipperRepository;
 import com.thungcam.chacalang.service.ShipperAssignedOrderService;
@@ -23,7 +25,6 @@ public class ShipperAssignedOrderServiceImpl implements ShipperAssignedOrderServ
 
     @Override
     public List<OrderShipper> getAssignedOrders(Long shipperId, Long branchId) {
-        // Lấy tất cả đơn SHIPPING được giao cho shipper này tại branch này
         return orderShipperRepository.findAssignedShippingOrdersByShipper(shipperId)
                 .stream()
                 .filter(os -> os.getOrder().getBranch().getId().equals(branchId))
@@ -35,14 +36,21 @@ public class ShipperAssignedOrderServiceImpl implements ShipperAssignedOrderServ
         OrderShipper os = orderShipperRepository.findByOrder_IdAndShipper_Id(orderId, shipperId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hoặc bạn không được phép thao tác!"));
         Orders order = os.getOrder();
+        Invoice invoice = order.getInvoice();
 
         if (status == OrderStatus.SHIPPING) {
             os.setPickedAt(LocalDateTime.now());
             order.setStatus(OrderStatus.SHIPPING);
-        } else if (status == OrderStatus.COMPLETED) {
+        } else if (status == OrderStatus.DELIVERED) {
             os.setDeliveredAt(LocalDateTime.now());
-            order.setStatus(OrderStatus.COMPLETED); // hoặc DELIVERED, tùy enum
+            order.setStatus(OrderStatus.DELIVERED);
+            invoice.setPaymentStatus(PaymentStatus.PAID);
+        } else if (status == OrderStatus.FAILED) {
+            os.setFailedAt(LocalDateTime.now());
+            order.setStatus(OrderStatus.FAILED);
+            invoice.setPaymentStatus(PaymentStatus.CANCELED);
         }
+        order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
         orderShipperRepository.save(os);
     }

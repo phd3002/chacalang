@@ -95,12 +95,12 @@
 </nav>
 
 <div class="staff-content">
-<!--    <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">-->
-<!--        <i class="fa fa-chevron-left"></i> Quay lại danh sách-->
-<!--    </a>-->
+    <!--    <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">-->
+    <!--        <i class="fa fa-chevron-left"></i> Quay lại danh sách-->
+    <!--    </a>-->
 
     <a th:if="${order.shippingMethod.name() == 'PICKUP'}"
-       th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back" >
+       th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary btn-back">
         <i class="fa fa-chevron-left"></i> Chi tiết (Nhận tại quán)
     </a>
     <a th:if="${order.shippingMethod.name() == 'DELIVERY'}"
@@ -164,15 +164,30 @@
                 <div class="col-md-6">
                     <label class="form-label"><b>Cập nhật trạng thái:</b></label>
                     <select name="newStatus" class="form-select" required>
-                        <option th:value="PENDING" th:selected="${order.status.name() == 'PENDING'}">Đang xử lý
+                        <option th:value="PENDING" th:selected="${order.status.name() == 'PENDING'}"
+                        disabled>
+                            Đang xử lý
                         </option>
-                        <option th:value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}">Đã xác nhận
+                        <option th:value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}"
+                        th:disabled="${order.status.name() != 'PENDING'}">
+                            Đã xác nhận
                         </option>
-                        <option th:value="PREPARING" th:selected="${order.status.name() == 'PREPARING'}">Đang chuẩn bị
+                        <option th:value="PREPARING" th:selected="${order.status.name() == 'PREPARING'}"
+                                th:disabled="${order.status.name() != 'PENDING' && order.status.name() != 'CONFIRMED'}">
+                            Đang chuẩn bị
                         </option>
-                        <option th:value="COMPLETED" th:selected="${order.status.name() == 'COMPLETED'}">Hoàn thành
+                        <option th:value="WAITING_FOR_PICKUP"
+                                th:selected="${order.status.name() == 'WAITING_FOR_PICKUP'}"
+                                th:disabled="${order.status.name() != 'PENDING' && order.status.name() != 'CONFIRMED' && order.status.name() != 'PREPARING'}">
+                            Đang chờ lấy
                         </option>
-                        <option th:value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">Đã huỷ</option>
+                        <option th:value="COMPLETED" th:selected="${order.status.name() == 'COMPLETED'}"
+                                th:disabled="${order.status.name() != 'PENDING' && order.status.name() != 'CONFIRMED' && order.status.name() != 'PREPARING' && order.status.name() != 'WAITING_FOR_PICKUP'}">
+                            Hoàn thành
+                        </option>
+                        <option th:value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}"
+                                th:disabled="${order.status.name() != 'PENDING' && order.status.name() != 'CONFIRMED' && order.status.name() != 'PREPARING' && order.status.name() != 'WAITING_FOR_PICKUP'}">
+                            Đã huỷ</option>
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -181,8 +196,13 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-            <a th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary ms-2">Huỷ</a>
+            <a th:if="${order.shippingMethod.name() == 'PICKUP'}"
+               th:href="@{'/staff/orders'(branchId=${branchId})}" class="btn btn-outline-secondary ms-2">Huỷ</a>
+            <a th:if="${order.shippingMethod.name() == 'DELIVERY'}"
+               th:href="@{'/staff/orders-ship'(branchId=${branchId})}" class="btn btn-outline-secondary ms-2">Huỷ</a>
         </form>
+                <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
     </div>
 </div>
 </body>

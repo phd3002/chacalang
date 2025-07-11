@@ -47,7 +47,6 @@ public class Orders {
     @Column(name = "ward")
     private String ward;
 
-    @Lob
     @Column(name = "note")
     private String note;
 

@@ -204,12 +204,20 @@ body {
     background: #ff9800;
 }
 
+.shipper-status-assigned {
+    background: #8e24aa;
+}
+
 .shipper-status-shipping {
     background: #1e88e5;
 }
 
 .shipper-status-completed {
     background: #43a047;
+}
+
+.shipper-status-delivered {
+    background: #00bcd4;
 }
 
 .shipper-status-cancelled {

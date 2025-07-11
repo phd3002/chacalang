@@ -1,8 +1,10 @@
 package com.thungcam.chacalang.service.impl;
+import com.thungcam.chacalang.entity.Invoice;
 import com.thungcam.chacalang.entity.OrderShipper;
 import com.thungcam.chacalang.entity.OrderItem;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.enums.OrderStatus;
+import com.thungcam.chacalang.enums.PaymentStatus;
 import com.thungcam.chacalang.repository.OrderShipperRepository;
 import com.thungcam.chacalang.repository.OrderItemRepository;
 import com.thungcam.chacalang.repository.OrderRepository;
@@ -37,20 +39,30 @@ public class ShipperOrderDetailServiceImpl implements ShipperOrderDetailService 
         OrderShipper os = orderShipperRepository.findByOrder_IdAndShipper_Id(orderId, shipperId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn này!"));
         Orders order = os.getOrder();
+        Invoice invoice = order.getInvoice();
 
         switch (newStatus) {
             case SHIPPING -> {
                 os.setPickedAt(LocalDateTime.now());
                 order.setStatus(OrderStatus.SHIPPING);
+                if (invoice != null) {
+                    invoice.setPaymentStatus(PaymentStatus.PAID);
+                }
             }
-            case COMPLETED -> {
+            case DELIVERED -> {
                 os.setDeliveredAt(LocalDateTime.now());
-                order.setStatus(OrderStatus.COMPLETED);
+                order.setStatus(OrderStatus.DELIVERED);
+                if (invoice != null) {
+                    invoice.setPaymentStatus(PaymentStatus.PAID);
+                }
             }
             case FAILED, CANCELLED -> {
                 os.setDeliveredAt(LocalDateTime.now());
                 order.setStatus(OrderStatus.CANCELLED);
                 os.setNote(failReason);
+                if (invoice != null) {
+                    invoice.setPaymentStatus(PaymentStatus.CANCELED);
+                }
             }
         }
         orderRepository.save(order);

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class ShipperAssignedOrderController {
 
     private final ShipperAssignedOrderService shipperAssignedOrderService;
+
     private final UserService userService;
 
     @GetMapping("/orders-assigned")
@@ -42,16 +44,38 @@ public class ShipperAssignedOrderController {
     }
 
     @PostMapping("/orders-assigned/start-shipping")
-    public String startShipping(@RequestParam("orderId") Long orderId, Authentication authentication) {
+    public String startShipping(@RequestParam("orderId") Long orderId, Authentication authentication, RedirectAttributes redirectAttributes) {
         User shipper = userService.findByEmail(authentication.getName());
-        shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.SHIPPING);
+        try {
+            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.SHIPPING);
+            redirectAttributes.addFlashAttribute("success", "Nhận giao thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Không thể nhận giao: " + e.getMessage());
+        }
         return "redirect:/shipper/orders-assigned?branchId=" + shipper.getBranch().getId();
     }
 
     @PostMapping("/orders-assigned/complete")
-    public String completeOrder(@RequestParam("orderId") Long orderId, Authentication authentication) {
+    public String completeOrder(@RequestParam("orderId") Long orderId, Authentication authentication, RedirectAttributes redirectAttributes) {
         User shipper = userService.findByEmail(authentication.getName());
-        shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.DELIVERED);
+        try {
+            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.DELIVERED);
+            redirectAttributes.addFlashAttribute("success", "Đơn hàng đã giao thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Không thể hoàn thành đơn: " + e.getMessage());
+        }
+        return "redirect:/shipper/orders-assigned?branchId=" + shipper.getBranch().getId();
+    }
+
+    @PostMapping("/orders-assigned/failed")
+    public String failOrder(@RequestParam("orderId") Long orderId, Authentication authentication, RedirectAttributes redirectAttributes) {
+        User shipper = userService.findByEmail(authentication.getName());
+        try {
+            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.FAILED);
+            redirectAttributes.addFlashAttribute("success", "Đơn hàng đã giao thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Không thể hoàn thành đơn: " + e.getMessage());
+        }
         return "redirect:/shipper/orders-assigned?branchId=" + shipper.getBranch().getId();
     }
 

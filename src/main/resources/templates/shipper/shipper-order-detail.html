@@ -123,6 +123,8 @@
                     <i class="fa fa-times"></i> Không giao được
                 </button>
             </form>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
         </div>
     </div>
 </div>

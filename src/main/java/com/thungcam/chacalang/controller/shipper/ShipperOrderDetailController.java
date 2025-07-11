@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -46,19 +47,25 @@ public class ShipperOrderDetailController {
             @RequestParam("action") String action,
             @RequestParam(value = "failReason", required = false) String failReason,
             Authentication authentication,
-            @RequestParam("branchId") Long branchId
+            @RequestParam("branchId") Long branchId,
+            RedirectAttributes redirectAttributes
     ) {
         User shipper = userService.findByEmail(authentication.getName());
+        try {
+            OrderStatus newStatus = switch (action) {
+                case "picked" -> OrderStatus.SHIPPING;
+                case "delivered" -> OrderStatus.DELIVERED;
+                case "failed" -> OrderStatus.FAILED;
+                default -> throw new RuntimeException("Hành động không hợp lệ!");
+            };
+            System.out.println("Updating order status to: " + newStatus);
+            shipperOrderDetailService.updateOrderStatus(orderId, shipper.getId(), newStatus, failReason);
 
-        OrderStatus newStatus = switch (action) {
-            case "picked" -> OrderStatus.SHIPPING;
-            case "delivered" -> OrderStatus.DELIVERED;
-            case "failed" -> OrderStatus.FAILED;
-            default -> throw new RuntimeException("Hành động không hợp lệ!");
-        };
-
-        shipperOrderDetailService.updateOrderStatus(orderId, shipper.getId(), newStatus, failReason);
-        return "redirect:/shipper/orders-assigned?branchId=" + branchId;
+            redirectAttributes.addFlashAttribute("success", "Cập nhật trạng thái đơn hàng thành công!");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("error", "Cập nhật trạng thái thất bại: " + ex.getMessage());
+        }
+        return "redirect:/shipper/order-detail?orderId=" + orderId + "&branchId=" + branchId;
     }
 }
 

@@ -3,7 +3,6 @@ package com.thungcam.chacalang.controller.shipper;
 import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.ShipperProfileService;
-import com.thungcam.chacalang.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -46,7 +45,6 @@ public class ShipperProfileController {
         user.setPhone(phone);
         shipperProfileService.save(user);
 
-        // Add thông báo thành công
         redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.UPDATE_PROFILE_SUCCESS );
         return "redirect:/shipper/profile";
     }

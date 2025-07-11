@@ -4,6 +4,7 @@ import com.thungcam.chacalang.entity.Invoice;
 import com.thungcam.chacalang.entity.OrderItem;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.enums.OrderStatus;
+import com.thungcam.chacalang.enums.PaymentStatus;
 import com.thungcam.chacalang.enums.ShippingMethod;
 import com.thungcam.chacalang.repository.InvoiceRepository;
 import com.thungcam.chacalang.repository.OrderItemRepository;
@@ -67,14 +68,22 @@ public class StaffOrderServiceImpl implements StaffOrderService {
         Orders order = orderRepository.findById(orderId).orElse(null);
         if (order == null) return false;
         order.setStatus(status);
+        order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
+        if(status == OrderStatus.COMPLETED){
+            Invoice invoice = invoiceRepository.findByOrderId(orderId)
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy hóa đơn với orderId = " + orderId));
+            invoice.setPaymentStatus(PaymentStatus.PAID);
+        }
         return true;
     }
 
     @Override
     public boolean updateOrderNote(Long orderId, String note) {
         Orders order = orderRepository.findById(orderId).orElse(null);
-        if (order == null) return false;
+        if (note != null && note.trim().isEmpty()) {
+            note = null;
+        }
         order.setNote(note);
         orderRepository.save(order);
         return true;

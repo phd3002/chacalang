@@ -42,6 +42,8 @@
     </nav>
     <div class="shipper-content flex-grow-1 p-4">
         <h2 class="mb-4"><i class="fa fa-shipping-fast"></i> Đơn đang giao</h2>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
         <div class="card p-3">
             <table class="table shipper-table">
                 <thead>
@@ -64,7 +66,7 @@
                     <td th:text="${#temporals.format(os.assignedAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td>
                         <span class="shipper-status-badge shipper-status-shipping"
-                              th:text="${os.order.status}"></span>
+                              th:text="${os.order.status.label}"></span>
                     </td>
                     <td>
                         <a th:href="@{'/shipper/order-detail'(orderId=${os.order.id}, branchId=${branchId})}"
@@ -85,6 +87,18 @@
                                 xong
                             </button>
                         </form>
+                        <form th:if="${os.order.status.name() == 'SHIPPING' or os.order.status.name() == 'ASSIGNED'}"
+                              th:action="@{/shipper/orders-assigned/failed}" method="post" style="display:inline"
+                              onsubmit="return confirmFailedFromTable();">
+                            <input type="hidden" name="orderId" th:value="${os.order.id}"/>
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <input type="hidden" name="action" value="failed"/>
+                            <input type="hidden" name="failReason" id="failReasonInputTable__"
+                                   th:id="'failReasonInputTable_' + ${os.order.id}"/>
+                            <button class="btn btn-danger btn-sm" type="submit">
+                                <i class="fa fa-times"></i> Không giao được
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
@@ -92,5 +106,23 @@
         </div>
     </div>
 </div>
+<script>
+    function confirmFailedFromTable(orderId) {
+        var reason = prompt('Nhập lý do không giao được:');
+        if (reason == null || reason.trim() === '') return false;
+        document.getElementById('failReasonInputTable_' + orderId).value = reason;
+        return true;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("form[onsubmit^='return confirmFailedFromTable']").forEach(function (form) {
+            form.onsubmit = function () {
+                // Lấy orderId từ input ẩn
+                var orderId = this.querySelector("input[name='orderId']").value;
+                return confirmFailedFromTable(orderId);
+            };
+        });
+    });
+</script>
 </body>
 </html> 
