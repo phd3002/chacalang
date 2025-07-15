@@ -69,36 +69,39 @@
                               th:text="${os.order.status.label}"></span>
                     </td>
                     <td>
-                        <a th:href="@{'/shipper/order-detail'(orderId=${os.order.id}, branchId=${branchId})}"
-                           class="btn btn-link">
-                            Chi tiết
-                        </a>
-                        <form th:if="${os.order.status.name() == 'ASSIGNED'}"
-                              th:action="@{/shipper/orders-assigned/start-shipping}" method="post"
-                              style="display:inline">
-                            <input type="hidden" name="orderId" th:value="${os.order.id}">
-                            <button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-play"></i> Nhận giao
-                            </button>
-                        </form>
-                        <form th:if="${os.order.status.name() == 'SHIPPING'}"
-                              th:action="@{/shipper/orders-assigned/complete}" method="post" style="display:inline">
-                            <input type="hidden" name="orderId" th:value="${os.order.id}">
-                            <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Đã giao
-                                xong
-                            </button>
-                        </form>
-                        <form th:if="${os.order.status.name() == 'SHIPPING' or os.order.status.name() == 'ASSIGNED'}"
-                              th:action="@{/shipper/orders-assigned/failed}" method="post" style="display:inline"
-                              onsubmit="return confirmFailedFromTable();">
-                            <input type="hidden" name="orderId" th:value="${os.order.id}"/>
-                            <input type="hidden" name="branchId" th:value="${branchId}"/>
-                            <input type="hidden" name="action" value="failed"/>
-                            <input type="hidden" name="failReason" id="failReasonInputTable__"
-                                   th:id="'failReasonInputTable_' + ${os.order.id}"/>
-                            <button class="btn btn-danger btn-sm" type="submit">
-                                <i class="fa fa-times"></i> Không giao được
-                            </button>
-                        </form>
+                        <div class="d-flex align-items-center gap-2">
+                            <a th:href="@{'/shipper/order-detail'(orderId=${os.order.id}, branchId=${branchId})}" class="btn btn-link">
+                                Chi tiết
+                            </a>
+                            <form th:if="${os.order.status.name() == 'ASSIGNED'}"
+                                  th:action="@{/shipper/orders-assigned/start-shipping}" method="post" style="display:inline">
+                                <input type="hidden" name="orderId" th:value="${os.order.id}">
+                                <button type="submit" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-play"></i> Nhận giao
+                                </button>
+                            </form>
+                            <form th:if="${os.order.status.name() == 'SHIPPING'}"
+                                  th:action="@{/shipper/orders-assigned/complete}" method="post" style="display:inline">
+                                <input type="hidden" name="orderId" th:value="${os.order.id}">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="fa fa-check"></i> Đã giao xong
+                                </button>
+                            </form>
+                        </div>
+                        <div class="d-flex justify-content-end mt-2">
+                            <form th:if="${os.order.status.name() == 'SHIPPING' or os.order.status.name() == 'ASSIGNED'}"
+                                  th:action="@{/shipper/orders-assigned/failed}" method="post"
+                                  onsubmit="return confirmFailedFromTable();">
+                                <input type="hidden" name="orderId" th:value="${os.order.id}"/>
+                                <input type="hidden" name="branchId" th:value="${branchId}"/>
+                                <input type="hidden" name="action" value="failed"/>
+                                <input type="hidden" name="failReason" id="failReasonInputTable__"
+                                       th:id="'failReasonInputTable_' + ${os.order.id}"/>
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    <i class="fa fa-times"></i> Không giao được
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 </tbody>

@@ -59,6 +59,9 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().matches(AuthConst.VALIDATE.REGEX_PASSWORD)) {
             throw new BusinessException(AuthConst.ERROR.INVALID_PASSWORD_FORMAT);
         }
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            throw new BusinessException(AuthConst.ERROR.CONFIRM_PASSWORD_NOT_MATCH);
+        }
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BusinessException(AuthConst.ERROR.EMAIL_ALREADY_EXISTS);
         }
@@ -120,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole().getName());
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), // vẫn dùng email làm định danh chính
+                user.getEmail(),
                 user.getPassword(),
                 List.of(authority)
         );

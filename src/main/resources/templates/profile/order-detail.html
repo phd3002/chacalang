@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết đơn hàng</title>
-<!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
+    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700%7CCabin:400%7CDancing+Script"
@@ -16,26 +16,32 @@
             border-radius: 8px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+
         .order-info-section {
             margin-bottom: 24px;
         }
+
         .order-info-section h4 {
             color: #f36700;
             font-weight: 600;
             margin-bottom: 16px;
         }
+
         .info-item {
             margin-bottom: 12px;
         }
+
         .info-label {
             font-weight: 500;
             color: #333;
         }
+
         .order-items {
             margin-bottom: 24px;
         }
+
         .order-item {
             display: flex;
             justify-content: space-between;
@@ -43,38 +49,84 @@
             padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
+
         .item-name {
             flex: 2;
         }
+
         .item-quantity {
             flex: 1;
             text-align: center;
         }
+
         .item-price {
             flex: 1;
             text-align: right;
             color: #f36700;
             font-weight: 600;
         }
+
         .order-summary {
             background: #fff;
-            border-radius: 6px;
-            padding: 16px;
-            margin-top: 20px;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 22px;
+            box-shadow: 0 2px 16px 0 rgba(255, 193, 7, 0.07);
         }
+
         .summary-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 8px;
-        }
-        .summary-total {
+            font-size: 1.16rem;
             font-weight: 600;
-            color: #f36700;
-            font-size: 18px;
-            border-top: 1px solid #eee;
-            padding-top: 12px;
-            margin-top: 12px;
+            letter-spacing: 0.5px;
+            color: #444;
+            padding: 7px 0;
         }
+
+        .summary-item span:last-child {
+            color: #ff8800;
+            font-weight: 700;
+            font-size: 1.22rem;
+            letter-spacing: 1px;
+        }
+
+        .summary-total {
+            font-weight: 900 !important;
+            color: #ff7100 !important;
+            font-size: 1.5rem !important;
+            border-top: 3px solid #ffae2c;
+            padding: 24px 0 12px 0;
+            margin-top: 18px;
+            background: linear-gradient(90deg, #ffe082 75%, #fff 100%);
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px 0 rgba(255, 193, 7, 0.11);
+            letter-spacing: 1.1px;
+        }
+
+        .summary-total span:first-child {
+            font-size: 1.35rem !important;
+            text-transform: uppercase;
+            color: #ff7100;
+            letter-spacing: 0.8px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-total span:last-child {
+            font-size: 2.1rem !important;
+            font-weight: 900;
+            color: #e65100;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 10px rgba(255, 180, 0, 0.12);
+        }
+
         .back-btn {
             background: #f36700;
             color: white;
@@ -85,11 +137,13 @@
             display: inline-block;
             margin-top: 20px;
         }
+
         .back-btn:hover {
             background: #d95a00;
             color: white;
             text-decoration: none;
         }
+
         .modal-lg-custom {
             max-width: 600px;
             width: 90%;
@@ -108,7 +162,8 @@
                     <div class="sidebar-title">TÀI KHOẢN CỦA TÔI</div>
                     <ul class="sidebar-menu">
                         <li><a href="/user/profile-manager"><i class="fa fa-user-circle"></i>QUẢN LÝ TÀI KHOẢN</a></li>
-                        <li class="active"><a href="/user/orders"><i class="fa fa-shopping-bag"></i>ĐƠN HÀNG CỦA TÔI</a></li>
+                        <li class="active"><a href="/user/orders"><i class="fa fa-shopping-bag"></i>ĐƠN HÀNG CỦA TÔI</a>
+                        </li>
                         <li><a href="/user/user-address"><i class="fa fa-map-marker"></i>ĐỊA CHỈ GIAO HÀNG</a></li>
                         <li><a href="/user/profile"><i class="fa fa-info-circle"></i>THÔNG TIN TÀI KHOẢN</a></li>
                         <li><a href="#"><i class="fa fa-gift"></i>DANH SÁCH ƯU ĐÃI</a></li>
@@ -131,7 +186,7 @@
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Ngày đặt:</span>
-                                <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</span>
+                                <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2025</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Trạng thái:</span>
@@ -163,24 +218,39 @@
                         </div>
                         <div class="order-items">
                             <h4>Chi tiết sản phẩm</h4>
+                            <!-- Tiêu đề cột -->
+                            <div class="order-item"
+                                 style="font-weight:600; background:#f8f9fa; border-bottom:2px solid #eee;">
+                                <div class="item-name">Tên món</div>
+                                <div class="item-quantity">Số lượng</div>
+                                <div class="item-price">Giá</div>
+                            </div>
+                            <!-- Dòng sản phẩm -->
                             <div class="order-item" th:each="item : ${order.items}">
-                                <div class="item-name" th:text="${item.menu != null ? item.menu.name : 'Sản phẩm không xác định'}"></div>
+                                <div class="item-name"
+                                     th:text="${item.menu != null ? item.menu.name : 'Sản phẩm không xác định'}"></div>
                                 <div class="item-quantity" th:text="${item.quantity}">1</div>
-                                <div class="item-price" th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
+                                <div class="item-price"
+                                     th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                                    0₫
+                                </div>
                             </div>
                         </div>
                         <div class="order-summary">
                             <div class="summary-item">
-                                <span>Tạm tính</span>
-                                <span th:text="${#numbers.formatDecimal(order.invoice.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                <div class="item-name">Tạm tính</div>
+                                <div class="item-quantity"></div>
+                                <div class="item-price" th:text="${#numbers.formatDecimal(order.invoice.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
                             </div>
                             <div class="summary-item">
-                                <span>Phí giao hàng</span>
-                                <span th:text="${#numbers.formatDecimal(order.invoice.shippingFee, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                <div class="item-name">Phí giao hàng</div>
+                                <div class="item-quantity"></div>
+                                <div class="item-price" th:text="${#numbers.formatDecimal(order.invoice.shippingFee, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
                             </div>
                             <div class="summary-item summary-total">
-                                <span>Tổng cộng</span>
-                                <span th:text="${#numbers.formatDecimal(order.invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                <div class="item-name"><i class="fa fa-coins" style="margin-right:8px"></i>Tổng cộng</div>
+                                <div class="item-quantity"></div>
+                                <div class="item-price" th:text="${#numbers.formatDecimal(order.invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</div>
                             </div>
                         </div>
                         <a href="/user/orders" class="back-btn">Quay lại danh sách</a>
@@ -188,6 +258,18 @@
                              th:if="${order.status.name() == 'DELIVERED' and order.review == null}">
                             <button class="btn btn-success" onclick="showReviewModal()">
                                 <i class="fa fa-check"></i> Tôi đã nhận được hàng
+                            </button>
+                        </div>
+                        <div class="mt-3 text-center"
+                             th:if="${order.status.name() == 'PICKED_UP' and order.review == null}">
+                            <button class="btn btn-success" onclick="showReviewModal()">
+                                <i class="fa fa-check"></i> Tôi đã lấy được hàng
+                            </button>
+                        </div>
+                        <div class="mt-3 text-center"
+                             th:if="${order.status.name() == 'PENDING' or order.status.name() == 'CONFIRMED' or order.status.name() == 'PREPARING'}">
+                            <button type="button" class="btn btn-danger" onclick="showCancelModal()">
+                                <i class="fa fa-times"></i> Hủy đơn hàng
                             </button>
                         </div>
                     </div>
@@ -210,7 +292,8 @@
                         <label class="form-label">Chọn số sao:</label>
                         <select class="form-select" name="rating" required>
                             <option value="">-- Chọn sao --</option>
-                            <option th:each="i : ${#numbers.sequence(1,5)}" th:value="${i}" th:text="${i + ' sao'}"></option>
+                            <option th:each="i : ${#numbers.sequence(1,5)}" th:value="${i}"
+                                    th:text="${i + ' sao'}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -226,6 +309,34 @@
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg-custom">
+        <form th:action="@{/user/order-cancel}" method="post" id="cancelForm">
+            <input type="hidden" name="orderId" th:value="${order.id}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel"><i class="fa fa-times"></i> Xác nhận hủy đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Lý do hủy đơn:</label>
+                        <textarea name="cancelReason" class="form-control" rows="3" maxlength="300" required></textarea>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fa fa-exclamation-triangle"></i> Đơn đã hủy sẽ không thể phục hồi. Bạn chắc chắn muốn tiếp tục?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="submit"><i class="fa fa-times"></i> Xác nhận hủy đơn</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không hủy nữa</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div th:replace="~{base :: footer}"></div>
 <!-- Modal đánh giá -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -235,5 +346,12 @@
         modal.show();
     }
 </script>
+<script>
+    function showCancelModal() {
+        var modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+        modal.show();
+    }
+</script>
+
 </body>
 </html> 

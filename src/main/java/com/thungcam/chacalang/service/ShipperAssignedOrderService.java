@@ -8,6 +8,6 @@ import java.util.List;
 public interface ShipperAssignedOrderService {
     List<OrderShipper> getAssignedOrders(Long shipperId, Long branchId);
 
-    void updateOrderStatus(Long orderId, Long shipperId, OrderStatus status);
+    void updateOrderStatus(Long orderId, Long shipperId, OrderStatus status, String failReason);
 
 }

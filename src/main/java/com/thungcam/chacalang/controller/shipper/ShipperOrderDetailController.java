@@ -58,7 +58,7 @@ public class ShipperOrderDetailController {
                 case "failed" -> OrderStatus.FAILED;
                 default -> throw new RuntimeException("Hành động không hợp lệ!");
             };
-            System.out.println("Updating order status to: " + newStatus);
+//            System.out.println("Updating order status to: " + newStatus);
             shipperOrderDetailService.updateOrderStatus(orderId, shipper.getId(), newStatus, failReason);
 
             redirectAttributes.addFlashAttribute("success", "Cập nhật trạng thái đơn hàng thành công!");

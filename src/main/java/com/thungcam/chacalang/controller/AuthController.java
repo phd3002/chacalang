@@ -73,7 +73,7 @@ public class AuthController {
         session.removeAttribute("tempUser");
 
         redirect.addFlashAttribute("successMessage", AuthConst.MESSAGE.VERIFY_SUCCESS);
-        return "redirect:/auth/verify-otp-success";
+        return "redirect:/auth/login";
     }
 
 
@@ -81,11 +81,6 @@ public class AuthController {
     @GetMapping("/verify-otp")
     public String otpPage() {
         return "auth/verify-otp";
-    }
-
-    @GetMapping("/verify-otp-success")
-    public String otpSuccess() {
-        return "auth/verify-otp-success";
     }
 
     @GetMapping("/login")
@@ -104,7 +99,7 @@ public class AuthController {
                                         HttpServletRequest request) {
         try {
             userService.sendResetPasswordLink(email, request);
-            redirect.addFlashAttribute("successMessage", "Đã gửi link đặt lại mật khẩu qua email.");
+            redirect.addFlashAttribute("successMessage", AuthConst.MESSAGE.OTP_SENT);
         } catch (BusinessException ex) {
             redirect.addFlashAttribute("errorMessage", ex.getMessage());
         }
@@ -114,7 +109,7 @@ public class AuthController {
     @GetMapping("/reset-password")
     public String showResetForm(@RequestParam("token") String token, Model model) {
         if (!userService.isValidResetToken(token)) {
-            model.addAttribute("errorMessage", "Token không hợp lệ hoặc đã hết hạn.");
+            model.addAttribute("errorMessage", AuthConst.ERROR.INVALID_TOKEN);
             return "auth/reset-password-error";
         }
         model.addAttribute("token", token);

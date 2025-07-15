@@ -82,6 +82,7 @@
                     <th>Ngày giao</th>
                     <th>Giá trị</th>
                     <th>Trạng thái</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -91,7 +92,15 @@
                     <td th:text="${os.order.customerAddress}"></td>
                     <td th:text="${#temporals.format(os.deliveredAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${#numbers.formatDecimal(os.order.invoice.finalAmount, 0, 'POINT', 0, 'COMMA')} + 'đ'"></td>
-                    <td><span class="shipper-status-badge shipper-status-completed">COMPLETED</span></td>
+                    <td>
+                        <span class="shipper-status-badge shipper-status-shipping"
+                              th:text="${os.order.status.label}"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/shipper/order-detail'(orderId=${os.order.id}, branchId=${branchId})}" class="btn btn-link">
+                            Chi tiết
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

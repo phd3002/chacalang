@@ -32,7 +32,7 @@ public class ShipperAssignedOrderServiceImpl implements ShipperAssignedOrderServ
     }
 
     @Override
-    public void updateOrderStatus(Long orderId, Long shipperId, OrderStatus status) {
+    public void updateOrderStatus(Long orderId, Long shipperId, OrderStatus status, String failReason) {
         OrderShipper os = orderShipperRepository.findByOrder_IdAndShipper_Id(orderId, shipperId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hoặc bạn không được phép thao tác!"));
         Orders order = os.getOrder();
@@ -47,6 +47,7 @@ public class ShipperAssignedOrderServiceImpl implements ShipperAssignedOrderServ
             invoice.setPaymentStatus(PaymentStatus.PAID);
         } else if (status == OrderStatus.FAILED) {
             os.setFailedAt(LocalDateTime.now());
+            os.setNote(failReason);
             order.setStatus(OrderStatus.FAILED);
             invoice.setPaymentStatus(PaymentStatus.CANCELED);
         }

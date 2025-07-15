@@ -1,9 +1,7 @@
-package com.thungcam.chacalang.controller.ordering;
+package com.thungcam.chacalang.controller.order;
 
-import com.thungcam.chacalang.dto.OrderCheckoutDTO;
 import com.thungcam.chacalang.entity.Category;
 import com.thungcam.chacalang.entity.Menu;
-import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,10 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +23,6 @@ public class OrderController {
     final private CategoryService categoryService;
 
     final private MenuService menuService;
-
-    final private OrderService orderService;
 
     final private UserService userService;
 

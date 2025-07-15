@@ -2,11 +2,13 @@ package com.thungcam.chacalang.service;
 
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.entity.User;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface OrderQueryService {
-    List<Orders> findAllByUser(User user);
+    Page<Orders> getOrdersByUser(Long userId, int page, int size);
 
     Orders findDetailByIdAndUser(Long orderId, User user);
+
+    void cancelOrderByUser(Long orderId, String cancelReason, String username);
+
 }

@@ -1,4 +1,4 @@
-package com.thungcam.chacalang.controller.ordering;
+package com.thungcam.chacalang.controller.order;
 
 import com.thungcam.chacalang.service.BranchService;
 import org.springframework.beans.factory.annotation.Autowired;

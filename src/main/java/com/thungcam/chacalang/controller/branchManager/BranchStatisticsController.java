@@ -31,12 +31,11 @@ public class BranchStatisticsController {
 
         // Validate "Từ ngày" không sau "Đến ngày"
         if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
-            model.addAttribute("dateError", "Từ ngày không được sau Đến ngày!");
+            model.addAttribute("error", "Từ ngày không được sau Đến ngày!");
             // Đổ lại trang với các biến cần thiết
             return "branch-manager/branch-statistics";
         }
 
-        // Truyền xuống service dùng LocalDateTime
         Map<String, Object> statistics = branchStatisticsService.getBranchStatistics(branchId, fromDateTime, toDateTime);
 
         model.addAttribute("fromDate", fromDate);
@@ -49,7 +48,6 @@ public class BranchStatisticsController {
         model.addAttribute("cancelRate", statistics.get("cancelRate"));
         model.addAttribute("topMenu", statistics.get("topMenu"));
 
-        // Dữ liệu cho JS biểu đồ
         model.addAttribute("ordersLabels", statistics.get("ordersLabels"));
         model.addAttribute("ordersValues", statistics.get("ordersValues"));
         model.addAttribute("revenueLabels", statistics.get("revenueLabels"));

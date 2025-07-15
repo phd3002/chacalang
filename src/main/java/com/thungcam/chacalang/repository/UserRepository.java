@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByPhone(String phone);
 
+    boolean existsByUsername(String username);
+
     User findByEmail(String email);
 
     User findByUsername(String username);
@@ -26,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Lấy user theo branch và roleId
     List<User> findByBranch_IdAndRole_Id(Long branchId, Long roleId);
+
+    int countByBranchIdAndRole_Name(Long branchId, String roleCode);
+
 }

@@ -1,4 +1,4 @@
-package com.thungcam.chacalang.controller.ordering;
+package com.thungcam.chacalang.controller.order;
 
 import com.thungcam.chacalang.dto.OrderCheckoutDTO;
 import com.thungcam.chacalang.entity.*;
@@ -69,7 +69,9 @@ public class CheckoutController {
                                   RedirectAttributes redirectAttributes) {
         User user = userService.findByEmail(userDetails.getUsername());
         Orders order = orderService.createOrder(dto, user);
-        redirectAttributes.addFlashAttribute("success", order.getOrderCode());
+        String branchPhone = order.getBranch().getPhone();
+        redirectAttributes.addFlashAttribute("orderCode", order.getOrderCode());
+        redirectAttributes.addFlashAttribute("branchPhone", branchPhone);
         return "redirect:/order/success";
     }
 }

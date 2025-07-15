@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/menu")
@@ -44,7 +43,7 @@ public class AdminMenuController {
     public String showCreateForm(Model model) {
         model.addAttribute("menu", new Menu());
         model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("activePage", "menu"); // 👈 thêm
+        model.addAttribute("activePage", "menu");
         return "admin/menu-form";
     }
 
@@ -59,7 +58,7 @@ public class AdminMenuController {
     public String edit(@PathVariable Long id, Model model) {
         model.addAttribute("menu", menuService.getMenuById(id));
         model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("activePage", "menu"); // 👈 thêm
+        model.addAttribute("activePage", "menu");
         return "admin/menu-form";
     }
 

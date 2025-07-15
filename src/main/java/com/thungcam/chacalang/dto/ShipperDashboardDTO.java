@@ -12,7 +12,7 @@ public class ShipperDashboardDTO {
     private long shippingOrders;   // Đơn đang giao (SHIPPING)
     private long deliveredOrders; // Đơn đã giao (DELIVERED)
     private long completedOrders;  // Đơn đã hoàn tất (COMPLETED)
-    private long cancelledOrders;  // Đơn hủy (CANCELLED)
+    private long cancelledOrders;  // Đơn hủy (FAILED)
     private String shipperName;
     private String branchName;
     private String phone;

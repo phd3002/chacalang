@@ -35,7 +35,7 @@ public class ShippingDashboardServiceImpl implements ShippingDashboardService {
                 branchId, OrderStatus.COMPLETED, shipperId
         );
         long cancelledOrders = orderShipperRepository.countOrdersByBranchAndStatusAndShipper(
-                branchId, OrderStatus.CANCELLED, shipperId
+                branchId, OrderStatus.FAILED, shipperId
         );
 
         User shipper = userRepository.findById(shipperId)

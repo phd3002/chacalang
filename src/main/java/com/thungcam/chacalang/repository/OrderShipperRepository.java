@@ -5,6 +5,7 @@ import com.thungcam.chacalang.entity.OrderShipper;
 import com.thungcam.chacalang.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,34 +26,41 @@ public interface OrderShipperRepository extends JpaRepository<OrderShipper, Long
     boolean existsByOrder_Id(Long orderId);
 
     @Query("""
-        SELECT os FROM OrderShipper os
-        JOIN FETCH os.order o
-        WHERE os.shipper.id = :shipperId
-    """)
+                SELECT os FROM OrderShipper os
+                JOIN FETCH os.order o
+                WHERE os.shipper.id = :shipperId
+                  AND o.status IN ('ASSIGNED', 'SHIPPING', 'DELIVERED')
+            """)
     List<OrderShipper> findAssignedShippingOrdersByShipper(Long shipperId);
 
     Optional<OrderShipper> findByOrder_IdAndShipper_Id(Long orderId, Long shipperId);
 
     @Query("""
-        SELECT os FROM OrderShipper os
-        WHERE os.deliveredAt <= :threshold
-        AND os.order.status = 'DELIVERED'
-    """)
+                SELECT os FROM OrderShipper os
+                WHERE os.deliveredAt <= :threshold
+                AND os.order.status = 'DELIVERED'
+            """)
     List<OrderShipper> findDeliveredOrdersBefore(LocalDateTime threshold);
 
     @Query("""
-        SELECT os FROM OrderShipper os
-        JOIN FETCH os.order o
-        WHERE os.shipper.id = :shipperId
-          AND o.status = :status
-          AND (:fromDate IS NULL OR os.deliveredAt >= :fromDate)
-          AND (:toDate IS NULL OR os.deliveredAt <= :toDate)
-    """)
+                SELECT os FROM OrderShipper os
+                JOIN FETCH os.order o
+                WHERE os.shipper.id = :shipperId
+                  AND (:fromDate IS NULL OR os.deliveredAt >= :fromDate)
+                  AND (:toDate IS NULL OR os.deliveredAt <= :toDate)
+            """)
     List<OrderShipper> findHistoryOrders(
             Long shipperId,
-            OrderStatus status,
             LocalDateTime fromDate,
             LocalDateTime toDate
     );
+
+    @Query("""
+                SELECT COUNT(os) > 0 FROM OrderShipper os
+                WHERE os.shipper.id = :shipperId
+            """)
+    boolean existsActiveOrderByShipperId(@Param("shipperId") Long shipperId);
+
+    void deleteByOrder_IdIn(List<Long> orderIds);
 
 }

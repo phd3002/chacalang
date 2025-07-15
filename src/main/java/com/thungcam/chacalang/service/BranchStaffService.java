@@ -11,9 +11,9 @@ public interface BranchStaffService {
 
     void updateUserFields(Long id, String firstName, String lastName, String email, String phone);
 
-    void deleteStaff(Long userId); // xóa người dùng theo ID
+    void deleteStaff(Long userId, Long branchId);
 
     void toggleUserStatus(Long userId);
 
-    void createStaff(Long branchId, String firstName, String lastName, String username, String email, String phone, String password);
+    void createStaffOrShipper(Long branchId, String firstName, String lastName, String username, String email, String phone, String password, String role);
 }

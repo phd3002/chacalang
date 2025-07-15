@@ -1,11 +1,13 @@
 package com.thungcam.chacalang.controller.branchManager;
 
+import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.BranchStaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -39,10 +41,17 @@ public class BranchStaffController {
 
     @PostMapping("/branch-staff/delete")
     public String deleteStaff(@RequestParam Long userId,
-                              @RequestParam Long branchId) {
-        branchStaffService.deleteStaff(userId);
+                              @RequestParam Long branchId,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            branchStaffService.deleteStaff(userId, branchId);
+            redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.DELETE_STAFF_SUCCESS);
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/branch-manager/branch-staff-management?branchId=" + branchId;
     }
+
 
     @PostMapping("/branch-staff/toggle-status")
     public String toggleStatus(@RequestParam Long userId, @RequestParam Long branchId) {
@@ -51,8 +60,11 @@ public class BranchStaffController {
     }
 
     @GetMapping("/branch-staff-create")
-    public String showCreateForm(@RequestParam Long branchId, Model model) {
+    public String showCreateForm(@RequestParam Long branchId,
+                                 @RequestParam String role,
+                                 Model model) {
         model.addAttribute("branchId", branchId);
+        model.addAttribute("role", role);
         return "branch-manager/branch-staff-create";
     }
 
@@ -63,10 +75,10 @@ public class BranchStaffController {
                               @RequestParam String email,
                               @RequestParam String phone,
                               @RequestParam String password,
-                              @RequestParam Long branchId) {
-        branchStaffService.createStaff(branchId, firstName, lastName, username, email, phone, password);
+                              @RequestParam Long branchId,
+                              @RequestParam String role
+    ) {
+        branchStaffService.createStaffOrShipper(branchId, firstName, lastName, username, email, phone, password, role);
         return "redirect:/branch-manager/branch-staff-management?branchId=" + branchId;
     }
-
-
 }

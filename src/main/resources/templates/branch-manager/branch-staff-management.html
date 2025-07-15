@@ -38,10 +38,17 @@
     <main class="branch-main-content">
         <div class="branch-page-header d-flex justify-content-between align-items-center">
             <h1>Quản lý nhân viên chi nhánh</h1>
-            <a th:href="@{'/branch-manager/branch-staff-create'(branchId=${branchId})}" class="btn btn-primary">
-                <i class="fa fa-plus"></i> Thêm nhân viên
-            </a>
+            <div class="d-flex gap-2">
+                <a th:href="@{'/branch-manager/branch-staff-create'(branchId=${branchId}, role='STAFF')}" class="btn btn-success">
+                    <i class="fa fa-user-plus"></i> Thêm nhân viên phục vụ
+                </a>
+                <a th:href="@{'/branch-manager/branch-staff-create'(branchId=${branchId}, role='SHIPPER')}" class="btn btn-primary">
+                    <i class="fa fa-motorcycle"></i> Thêm nhân viên giao hàng
+                </a>
+            </div>
         </div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success text-center" th:text="${success}"></div>
         <div class="branch-staff-table-wrapper">
             <h3 class="mt-4">Nhân viên phục vụ (STAFF)</h3>
             <table class="table table-striped branch-staff-table">
@@ -102,7 +109,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user : ${shipperList}" th:if="${user.role.name == 'SHIPPER'}">
+                <tr th:each="user : ${shipperList}"
+                >
                     <td th:text="${user.lastName + ' ' + user.firstName}">Họ tên</td>
                     <td th:text="${user.email}">Email</td>
                     <td th:text="${user.phone}">SĐT</td>
@@ -134,9 +142,9 @@
                 </tr>
                 </tbody>
             </table>
-
-
         </div>
+
+<!--        Edit and Delete Modals for Staffs-->
         <div th:each="user : ${staffList}">
             <div class="modal fade" th:id="'editModal-' + ${user.id}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
@@ -202,6 +210,70 @@
             </div>
         </div>
 
+<!--        Edit and Delete Modals for Shippers-->
+        <div th:each="user : ${shipperList}">
+            <div class="modal fade" th:id="'editModal-' + ${user.id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form th:action="@{/branch-manager/branch-staff/update}" method="post">
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <input type="hidden" name="id" th:value="${user.id}"/>
+                            <div class="modal-header">
+                                <h5 class="modal-title">Cập nhật nhân viên giao hàng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>Họ</label>
+                                    <input name="firstName" class="form-control" th:value="${user.firstName}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Tên</label>
+                                    <input name="lastName" class="form-control" th:value="${user.lastName}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input name="email" type="email" class="form-control" th:value="${user.email}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Số điện thoại</label>
+                                    <input name="phone" class="form-control" th:value="${user.phone}" required/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:each="user : ${shipperList}">
+            <div class="modal fade" th:id="'deleteModal-' + ${user.id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form th:action="@{/branch-manager/branch-staff/delete}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}"/>
+                            <input type="hidden" name="branchId" th:value="${branchId}"/>
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger">Xác nhận xóa</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn xóa nhân viên
+                                <strong th:text="${user.lastName + ' ' + user.firstName}">Tên</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
 </body>

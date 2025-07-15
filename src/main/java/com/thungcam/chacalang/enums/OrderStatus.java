@@ -12,8 +12,9 @@ public enum OrderStatus {
     SHIPPING("Đang Giao Hàng"),
 
     WAITING_FOR_PICKUP("Chờ Nhận Tại Quán"),
+    PICKED_UP("Đã Nhận Tại Quán"),
     DELIVERED("Đã Giao Hàng"),
-    COMPLETED("Hoàn Tất"),      // Giao hàng thành công / khách nhận tại quán
+    COMPLETED("Hoàn Tất"),
     CANCELLED("Đã Huỷ"),
     FAILED("Giao Hàng Thất Bại"),
     REFUNDED("Hoàn Tiền");

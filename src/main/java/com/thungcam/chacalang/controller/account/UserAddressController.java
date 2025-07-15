@@ -58,7 +58,6 @@ public class UserAddressController {
         UserAddress address = (id != null) ? userAddressService.getAddressById(id) : new UserAddress();
         model.addAttribute("address", address);
 
-        // Nếu có districtId hoặc address đã có district thì nạp danh sách phường
         List<Ward> wards = new ArrayList<>();
         if (districtId != null) {
             wards = wardService.getWardsByDistrictId(districtId);
@@ -89,10 +88,11 @@ public class UserAddressController {
         try {
             if (address.getId() == null) {
                 userAddressService.createUserAddress(user, address, isDefaultFlag);
+                redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.SAVE_ADDRESS_SUCCESS);
             } else {
                 userAddressService.updateUserAddress(user, address, isDefaultFlag);
+                redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.UPDATE_ADDRESS_SUCCESS);
             }
-            redirectAttributes.addFlashAttribute("success", "Lưu địa chỉ thành công");
         } catch (BusinessException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }

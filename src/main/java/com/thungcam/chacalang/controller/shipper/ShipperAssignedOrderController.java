@@ -44,10 +44,13 @@ public class ShipperAssignedOrderController {
     }
 
     @PostMapping("/orders-assigned/start-shipping")
-    public String startShipping(@RequestParam("orderId") Long orderId, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String startShipping(@RequestParam("orderId") Long orderId,
+                                @RequestParam(value = "failReason", required = false) String failReason,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
         User shipper = userService.findByEmail(authentication.getName());
         try {
-            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.SHIPPING);
+            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.SHIPPING, failReason);
             redirectAttributes.addFlashAttribute("success", "Nhận giao thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Không thể nhận giao: " + e.getMessage());
@@ -56,10 +59,13 @@ public class ShipperAssignedOrderController {
     }
 
     @PostMapping("/orders-assigned/complete")
-    public String completeOrder(@RequestParam("orderId") Long orderId, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String completeOrder(@RequestParam("orderId") Long orderId,
+                                @RequestParam(value = "failReason", required = false) String failReason,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
         User shipper = userService.findByEmail(authentication.getName());
         try {
-            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.DELIVERED);
+            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.DELIVERED, failReason);
             redirectAttributes.addFlashAttribute("success", "Đơn hàng đã giao thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Không thể hoàn thành đơn: " + e.getMessage());
@@ -68,10 +74,13 @@ public class ShipperAssignedOrderController {
     }
 
     @PostMapping("/orders-assigned/failed")
-    public String failOrder(@RequestParam("orderId") Long orderId, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String failOrder(@RequestParam("orderId") Long orderId,
+                            @RequestParam(value = "failReason", required = false) String failReason,
+                            Authentication authentication,
+                            RedirectAttributes redirectAttributes) {
         User shipper = userService.findByEmail(authentication.getName());
         try {
-            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.FAILED);
+            shipperAssignedOrderService.updateOrderStatus(orderId, shipper.getId(), OrderStatus.FAILED,failReason);
             redirectAttributes.addFlashAttribute("success", "Đơn hàng đã giao thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Không thể hoàn thành đơn: " + e.getMessage());

@@ -105,15 +105,17 @@
                 <p style="margin-bottom: 10px;">Cảm ơn bạn đã đặt hàng tại <strong>Chả Cá Lăng Thung Cấm</strong>.</p>
                 <p style="color: #f36700; font-weight: 600; margin-bottom: 16px;">Đơn hàng của bạn đã được ghi nhận thành công.</p>
 
-                <!-- Mã đơn hàng nếu có -->
-                <div class="order-code" th:if="${success != null}">
-                    Mã đơn hàng: <span th:text="${success}"></span>
+                <div class="order-code" th:if="${orderCode != null}">
+                    Mã đơn hàng: <span th:text="${orderCode}"></span>
                 </div>
-
                 <p style="margin-top: 20px;">Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất để xác nhận đơn hàng.</p>
-                <p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ qua số: <strong>0123 456 789</strong></p>
+                <p>
+                    Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ qua số:
+                    <strong th:text="${branchPhone}">0123 456 789</strong>
+                </p>
+
             </div>
-            <a href="/" class="btn-home">Về Trang Chủ</a>
+            <a href="/user/orders" class="btn-home">Xem Đơn</a>
         </div>
     </section>
 
@@ -123,7 +125,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="copyright">© 2024 Chả Cá Lăng Thung Cấm. Bảo lưu mọi quyền.</p>
+                    <p class="copyright">© 2025 Chả Cá Lăng Thung Cấm. Bảo lưu mọi quyền.</p>
                 </div>
             </div>
         </div>

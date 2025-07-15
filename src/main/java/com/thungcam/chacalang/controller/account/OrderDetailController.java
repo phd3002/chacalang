@@ -1,5 +1,6 @@
 package com.thungcam.chacalang.controller.account;
 
+import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.OrderQueryService;
@@ -46,8 +47,27 @@ public class OrderDetailController {
 
         reviewService.createReview(user, orderId, rating, comment);
 
-        redirectAttributes.addFlashAttribute("success", "Đánh giá của bạn đã được ghi nhận!");
+        redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.RATE_SUCCESS);
         return "redirect:/user/orders";
     }
+
+    @PostMapping("/order-cancel")
+    public String cancelOrder(
+            @RequestParam("orderId") Long orderId,
+            @RequestParam(value = "cancelReason", required = false) String cancelReason,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            orderQueryService.cancelOrderByUser(orderId, cancelReason, authentication.getName());
+            redirectAttributes.addFlashAttribute("success", AuthConst.MESSAGE.ORDER_CANCEL_SUCCESS);
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", AuthConst.ERROR.ERROR);
+        }
+        return "redirect:/user/orders";
+    }
+
 
 }

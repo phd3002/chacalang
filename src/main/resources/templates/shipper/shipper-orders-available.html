@@ -42,28 +42,6 @@
     </nav>
     <div class="shipper-content flex-grow-1 p-4">
         <h2 class="mb-4"><i class="fa fa-list"></i> Đơn chờ nhận giao</h2>
-        <form class="row g-3 mb-3">
-            <div class="col-md-3">
-                <select class="form-select">
-                    <option>Khu vực (District)</option>
-                    <option>Thủ Đức</option>
-                    <option>Bình Thạnh</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-select">
-                    <option>Phường (Ward)</option>
-                    <option>Hiệp Bình Chánh</option>
-                    <option>Linh Trung</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <input type="date" class="form-control" placeholder="Từ ngày">
-            </div>
-            <div class="col-md-3">
-                <button class="shipper-btn-main w-100" type="submit">Lọc</button>
-            </div>
-        </form>
         <div class="card p-3">
             <table class="table shipper-table">
                 <thead>
@@ -75,7 +53,6 @@
                     <th>Khu vực</th>
                     <th>Ngày tạo</th>
                     <th>Trạng thái</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -85,13 +62,10 @@
                     <td th:text="${order.customerName}">Nguyễn Văn A</td>
                     <td th:text="${order.address}">123 Lê Văn Việt</td>
                     <td th:text="${order.district} + ' - ' + ${order.ward}">Thủ Đức - Hiệp Bình Chánh</td>
-                    <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">2024-06-01 10:00</td>
+                    <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">2025-06-01 10:00</td>
                     <td>
-        <span class="shipper-status-badge shipper-status-pending"
-              th:text="${order.status}">PREPARING</span>
-                    </td>
-                    <td>
-                        <a th:href="@{/shipper/order-detail(orderId=${order.orderId},branchId=${branchId})}" class="btn btn-link">Chi tiết</a>
+                        <span class="shipper-status-badge shipper-status-pending"
+                            th:text="${order.status}">PREPARING</span>
                     </td>
                 </tr>
                 </tbody>

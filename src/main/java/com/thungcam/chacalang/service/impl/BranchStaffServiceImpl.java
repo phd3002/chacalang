@@ -1,10 +1,12 @@
 package com.thungcam.chacalang.service.impl;
 
+import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.Branch;
 import com.thungcam.chacalang.entity.Role;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.enums.UserStatus;
 import com.thungcam.chacalang.repository.BranchRepository;
+import com.thungcam.chacalang.repository.OrderShipperRepository;
 import com.thungcam.chacalang.repository.RoleRepository;
 import com.thungcam.chacalang.repository.UserRepository;
 import com.thungcam.chacalang.service.BranchStaffService;
@@ -21,17 +23,19 @@ import java.util.NoSuchElementException;
 public class BranchStaffServiceImpl implements BranchStaffService {
 
     private final UserRepository userRepository;
-    
+
     private final BranchRepository branchRepository;
-    
+
     private final RoleRepository roleRepository;
-    
+
     private final PasswordEncoder passwordEncoder;
+
+    private final OrderShipperRepository orderShipperRepository;
 
     @Override
     public void updateUserFields(Long id, String firstName, String lastName, String email, String phone) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy user"));
+                .orElseThrow(() -> new NoSuchElementException(AuthConst.ERROR.USER_NOT_FOUND));
 
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -41,8 +45,25 @@ public class BranchStaffServiceImpl implements BranchStaffService {
     }
 
     @Override
-    public void deleteStaff(Long userId) {
-        userRepository.deleteById(userId);
+    public void deleteStaff(Long userId, Long branchId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy nhân viên"));
+
+        if (user.getRole().getName().equalsIgnoreCase("STAFF")) {
+            int staffCount = userRepository.countByBranchIdAndRole_Name(branchId, "STAFF");
+            if (staffCount <= 1) {
+                throw new IllegalStateException("Chi nhánh phải có ít nhất 1 nhân viên phục vụ! Không thể xóa nhân viên cuối cùng.");
+            }
+        }
+
+        if (user.getRole().getName().equalsIgnoreCase("SHIPPER")) {
+            boolean hasActiveOrder = orderShipperRepository.existsActiveOrderByShipperId(userId);
+            if (hasActiveOrder) {
+                throw new IllegalStateException(AuthConst.ERROR.CANNOT_DELETE_SHIPPER);
+            }
+        }
+
+        userRepository.delete(user);
     }
 
     @Override
@@ -58,7 +79,7 @@ public class BranchStaffServiceImpl implements BranchStaffService {
     @Override
     public void toggleUserStatus(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy người dùng"));
+                .orElseThrow(() -> new NoSuchElementException(AuthConst.ERROR.USER_NOT_FOUND));
 
         if (user.getStatus() == UserStatus.ACTIVE) {
             user.setStatus(UserStatus.INACTIVE);
@@ -69,10 +90,22 @@ public class BranchStaffServiceImpl implements BranchStaffService {
     }
 
     @Override
-    public void createStaff(Long branchId, String firstName, String lastName, String username, String email, String phone, String password) {
+    public void createStaffOrShipper(Long branchId, String firstName, String lastName, String username, String email, String phone, String password, String role) {
         Branch branch = branchRepository.findById(branchId)
-                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy chi nhánh"));
-        Role staffRole = roleRepository.findByName("STAFF");
+                .orElseThrow(() -> new NoSuchElementException(AuthConst.ERROR.BRANCH_NOT_FOUND));
+
+        Role selectedRole;
+        if ("STAFF".equalsIgnoreCase(role)) {
+            selectedRole = roleRepository.findByName("STAFF");
+        } else if ("SHIPPER".equalsIgnoreCase(role)) {
+            selectedRole = roleRepository.findByName("SHIPPER");
+        } else {
+            throw new IllegalArgumentException(AuthConst.ERROR.ERROR);
+        }
+
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException(AuthConst.ERROR.USERNAME_ALREADY_EXISTS);
+        }
 
         User user = new User();
         user.setFirstName(firstName);
@@ -83,10 +116,9 @@ public class BranchStaffServiceImpl implements BranchStaffService {
         user.setPassword(passwordEncoder.encode(password));
         user.setStatus(UserStatus.ACTIVE);
         user.setBranch(branch);
-        user.setRole(staffRole);
+        user.setRole(selectedRole);
         user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
     }
-
 }

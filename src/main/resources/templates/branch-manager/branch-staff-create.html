@@ -38,10 +38,11 @@
 
     <main class="branch-main-content">
         <div class="branch-page-header">
-            <h1>Thêm nhân viên mới</h1>
+            <h1 th:text="${role == 'SHIPPER'} ? 'Thêm nhân viên giao hàng' : 'Thêm nhân viên phục vụ'"></h1>
         </div>
         <form class="card p-4" th:action="@{/branch-manager/branch-staff/create}" method="post">
             <input type="hidden" name="branchId" th:value="${branchId}"/>
+            <input type="hidden" name="role" th:value="${role}"/>
             <div class="mb-3">
                 <label>Họ</label>
                 <input type="text" name="firstName" class="form-control" required/>
@@ -69,7 +70,10 @@
             <div class="text-end">
                 <a th:href="@{'/branch-manager/branch-staff-management'(branchId=${branchId})}"
                    class="btn btn-secondary">Hủy</a>
-                <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
+                <button type="submit" class="btn btn-primary"
+                        th:text="${role == 'SHIPPER'} ? 'Thêm nhân viên giao hàng' : 'Thêm nhân viên phục vụ'">
+                    Thêm nhân viên
+                </button>
             </div>
         </form>
     </main>

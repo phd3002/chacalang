@@ -224,6 +224,10 @@ body {
     background: #e53935;
 }
 
+.shipper-status-failed {
+    background: #616161;
+}
+
 /* ORDER STATUS HIỆN ĐẠI HƠN */
 .shipper-order-status {
     padding: 6px 13px;

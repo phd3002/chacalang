@@ -3,8 +3,10 @@ package com.thungcam.chacalang.controller.staff;
 import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.entity.OrderItem;
 import com.thungcam.chacalang.entity.Invoice;
+import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.enums.OrderStatus;
 import com.thungcam.chacalang.service.StaffOrderService;
+import com.thungcam.chacalang.service.StaffShipOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ import java.util.List;
 public class StaffOrderDetailController {
     private final StaffOrderService staffOrderService;
 
+    private final StaffShipOrderService staffShipOrderService;
+
     @GetMapping("/orders/update/{orderId}")
     public String orderDetail(@PathVariable Long orderId,
                               @RequestParam Long branchId,
@@ -28,7 +32,8 @@ public class StaffOrderDetailController {
         Orders order = staffOrderService.getOrderDetail(orderId);
         List<OrderItem> items = staffOrderService.getOrderItems(orderId);
         Invoice invoice = staffOrderService.getOrderInvoice(orderId);
-
+        List<User> shippers = staffShipOrderService.getShippersByBranch(branchId);
+        model.addAttribute("shippers", shippers);
         model.addAttribute("order", order);
         model.addAttribute("items", items);
         model.addAttribute("invoice", invoice);
@@ -45,10 +50,11 @@ public class StaffOrderDetailController {
     // Xử lý cập nhật trạng thái/ghi chú
     @PostMapping("/orders/update/{orderId}")
     public String updateOrderDetail(@PathVariable Long orderId,
-                                    @RequestParam String newStatus,
+                                    @RequestParam(required = false) String newStatus,
                                     @RequestParam(required = false) String note,
                                     @RequestParam(required = false) Long branchId,
                                     RedirectAttributes redirectAttributes) {
+        System.out.println("Order ID: " + orderId + ", New Status: " + newStatus);
         staffOrderService.updateOrderStatus(orderId, OrderStatus.valueOf(newStatus));
         staffOrderService.updateOrderNote(orderId, note);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công!");

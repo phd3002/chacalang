@@ -1,8 +1,6 @@
-package com.thungcam.chacalang.controller.ordering;
+package com.thungcam.chacalang.controller.order;
 
 import com.thungcam.chacalang.dto.CartItemDTO;
-import com.thungcam.chacalang.entity.CartItem;
-import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.service.CartService;
 import com.thungcam.chacalang.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

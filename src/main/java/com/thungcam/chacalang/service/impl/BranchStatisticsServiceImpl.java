@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -26,6 +25,7 @@ public class BranchStatisticsServiceImpl implements BranchStatisticsService {
 
         // Tổng đơn hàng
         long totalOrders = ordersRepository.countByBranch(branchId, fromDate, toDate);
+        System.out.println("Total orders: " + totalOrders + ", From: " + fromDate + ", To: " + toDate + ", Branch ID: " + branchId);
         data.put("totalOrders", totalOrders);
 
         // Doanh thu

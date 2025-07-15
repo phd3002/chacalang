@@ -237,8 +237,7 @@
                             </th:block>
                         </select>
                     </div>
-
-                    <button class="main-button" type="submit">Xác Nhận Đặt Hàng</button>
+                    <button class="main-button" id="submitOrderBtn" type="submit">Xác Nhận Đặt Hàng</button>
                 </form>
             </div>
         </div>
@@ -248,7 +247,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <p class="copyright">© 2024 Chả Cá Lăng Thung Cấm. Bảo lưu mọi quyền.</p>
+                <p class="copyright">© 2025 Chả Cá Lăng Thung Cấm. Bảo lưu mọi quyền.</p>
             </div>
         </div>
     </div>
@@ -312,6 +311,11 @@
         radios.forEach(radio => {
             radio.addEventListener('change', toggleShippingFields);
         });
+    });
+</script>
+<script>
+    document.getElementById('checkoutForm').addEventListener('submit', function() {
+        document.getElementById('submitOrderBtn').disabled = true;
     });
 </script>
 </body>

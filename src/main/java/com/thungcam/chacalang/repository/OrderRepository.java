@@ -4,8 +4,11 @@ import com.thungcam.chacalang.entity.Orders;
 import com.thungcam.chacalang.entity.User;
 import com.thungcam.chacalang.enums.OrderStatus;
 import com.thungcam.chacalang.enums.ShippingMethod;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -14,7 +17,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
-    List<Orders> findByUserOrderByCreatedAtDesc(User user);
+    Page<Orders> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
 
     Optional<Orders> findByIdAndUser(Long id, User user);
 
@@ -81,5 +84,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             LocalDateTime fromDate,
             LocalDateTime toDate
     );
+
+    @Query("SELECT o.id FROM Orders o WHERE o.status IN :statuses")
+    List<Long> findOrderIdsByStatusIn(@Param("statuses") List<OrderStatus> statuses);
+
 
 }
