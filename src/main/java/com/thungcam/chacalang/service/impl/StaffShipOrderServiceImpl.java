@@ -50,7 +50,7 @@ public class StaffShipOrderServiceImpl implements StaffShipOrderService {
     @Override
     public Map<OrderStatus, Long> getShipOrderStats(Long branchId) {
         Map<OrderStatus, Long> stats = new LinkedHashMap<>();
-        for (OrderStatus status : List.of(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.PREPARING, OrderStatus.ASSIGNED, OrderStatus.SHIPPING, OrderStatus.COMPLETED, OrderStatus.CANCELLED)) {
+        for (OrderStatus status : List.of(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.PREPARING, OrderStatus.ASSIGNED, OrderStatus.SHIPPING, OrderStatus.COMPLETED, OrderStatus.FAILED, OrderStatus.CANCELLED)) {
             stats.put(status, orderRepository.countByShippingMethodAndStatusAndBranch_Id(ShippingMethod.DELIVERY, status, branchId));
         }
         return stats;

@@ -279,6 +279,7 @@
                             <i class="fa fa-eye"></i> Chi tiết
                         </a>
                         <a type="button" class="btn btn-sm btn-success"
+                                th:if="${order.status.name() == 'PENDING' or order.status.name() == 'CONFIRMED' or order.status.name() == 'PREPARING'}"
                                 th:onclick="'showAssignShipperModal(' + ${orderId} + ');'">
                             <i class="fa fa-truck"></i> Giao phó
                         </a>
@@ -327,7 +328,8 @@
                             (${stat.key.name() == 'ASSIGNED'} ? 'badge badge-order badge-assigned' :
                             (${stat.key.name() == 'SHIPPING'} ? 'badge badge-order badge-shipping' :
                             (${stat.key.name() == 'COMPLETED'} ? 'badge badge-order badge-completed' :
-                            (${stat.key.name() == 'CANCELLED'} ? 'badge badge-order badge-cancelled' : 'badge badge-order badge-secondary'))))))"
+                            (${stat.key.name() == 'FAILED'} ? 'badge badge-order badge-cancelled' :
+                            (${stat.key.name() == 'CANCELLED'} ? 'badge badge-order badge-cancelled' : 'badge badge-order badge-secondary')))))))"
                                       th:text="${stat.value}">0</span>
                             </div>
                         </div>

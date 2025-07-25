@@ -92,22 +92,28 @@
 
         /* Cart Popup Styles */
         .cart-popup {
-            display: none;
+            /*display: none;*/
             position: fixed;
             top: 0;
             right: 0;
             width: 350px;
             height: 100vh;
             background: white;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             transition: transform 0.3s ease;
             transform: translateX(100%);
+
+            display: flex;
+            flex-direction: column;
         }
 
         .cart-popup.active {
-            display: block;
+            /*display: block;*/
+            /*transform: translateX(0);*/
+            display: flex;
             transform: translateX(0);
+            flex-direction: column;
         }
 
         .cart-header {
@@ -117,6 +123,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+
+            flex-shrink: 0;
         }
 
         .cart-close {
@@ -131,15 +139,25 @@
             padding: 20px;
             height: calc(100vh - 180px);
             overflow-y: auto;
+
+            flex: 1 1 auto; /* Chiều cao tự động co giãn */
+            min-height: 0;  /* Giúp scroll chính xác ở các trình duyệt mới */
         }
 
         .cart-footer {
-            position: absolute;
-            bottom: 0;
+            /*position: absolute;*/
+            /*bottom: 0;*/
+            /*width: 100%;*/
+            /*padding: 20px;*/
+            /*background: white;*/
+            /*box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);*/
+
             width: 100%;
             padding: 20px;
             background: white;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            position: static; /* Bỏ absolute, chuyển sang static hoặc relative */
         }
 
         .cart-trigger {
@@ -290,7 +308,7 @@
             background: white;
             z-index: 100;
             padding: 15px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
 
@@ -339,6 +357,7 @@
             gap: 10px;
             min-height: 48px;
         }
+
         .cart-item-name {
             flex: 2;
             font-size: 15px;
@@ -347,6 +366,7 @@
             align-items: center;
             display: flex;
         }
+
         .quantity-control {
             flex: 1;
             display: flex;
@@ -354,6 +374,7 @@
             justify-content: center;
             gap: 8px;
         }
+
         .cart-item-price {
             flex: 1;
             text-align: right;
@@ -364,6 +385,7 @@
             display: flex;
             justify-content: flex-end;
         }
+
         .quantity-btn {
             display: flex;
             align-items: center;
@@ -374,6 +396,7 @@
             margin-right: 350px; /* đúng bằng chiều rộng popup */
             transition: margin-right 0.3s;
         }
+
         @media (max-width: 991px) {
             body.cart-open .order-section .container {
                 margin-right: 0;
@@ -408,7 +431,7 @@
                 <div class="category-nav">
                     <ul class="nav nav-tabs" id="menuTabs" role="tablist">
                         <li class="nav-item" th:each="category : ${categories}">
-                            <a class="nav-link" href="#" 
+                            <a class="nav-link" href="#"
                                th:classappend="${categoryStat.first} ? 'active'"
                                th:onclick="'scrollToCategory(\'' + ${category.id} + '\'); return false;'"
                                th:text="${category.name}">
@@ -461,14 +484,14 @@
     </div>
     <div class="cart-footer">
         <div class="order-summary">
-<!--            <div class="cart-item">-->
-<!--                <span>Tạm Tính</span>-->
-<!--                <span id="subtotal">0₫</span>-->
-<!--            </div>-->
-<!--            <div class="cart-item">-->
-<!--                <span>Phí Giao Hàng</span>-->
-<!--                <span id="shippingFee">30.000₫</span>-->
-<!--            </div>-->
+            <!--            <div class="cart-item">-->
+            <!--                <span>Tạm Tính</span>-->
+            <!--                <span id="subtotal">0₫</span>-->
+            <!--            </div>-->
+            <!--            <div class="cart-item">-->
+            <!--                <span>Phí Giao Hàng</span>-->
+            <!--                <span id="shippingFee">30.000₫</span>-->
+            <!--            </div>-->
             <div class="cart-item">
                 <strong>Tổng Cộng</strong>
                 <strong id="total">0₫</strong>
@@ -517,17 +540,17 @@
             document.querySelector(`[onclick="scrollToCategory('${categoryId}'); return false;"]`).classList.add('active');
 
             // Smooth scroll to category
-            categoryElement.scrollIntoView({ behavior: 'smooth' });
+            categoryElement.scrollIntoView({behavior: 'smooth'});
         }
     }
 
     // Add scroll spy functionality
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const categories = document.querySelectorAll('.menu-category');
         const navLinks = document.querySelectorAll('.nav-link');
-        
+
         let currentCategory = '';
-        
+
         categories.forEach(category => {
             const categoryTop = category.getBoundingClientRect().top;
             if (categoryTop <= 150) { // 150px threshold for better UX
@@ -547,11 +570,11 @@
 
     function addToCart(menuId) {
         $.post('/cart/add', {menuId: menuId, quantity: 1})
-            .done(function() {
+            .done(function () {
                 refreshCartDisplay();
                 showNotification('Đã thêm vào giỏ hàng');
             })
-            .fail(function() {
+            .fail(function () {
                 alert("Không thể thêm vào giỏ hàng.");
             });
     }
@@ -585,7 +608,7 @@
     }
 
     function refreshCartDisplay() {
-        $.get('/api/cart', function(data) {
+        $.get('/api/cart', function (data) {
             const cartItems = $('#cartItems');
             cartItems.empty();
             let subtotal = 0;
@@ -596,40 +619,59 @@
                 subtotal += itemTotal;
                 totalItems += item.quantity;
                 const html = `
-                <div class="cart-item cart-item-flex">
-                    <span class="cart-item-name">${item.name}</span>
-                    <div class="quantity-control">
-                        <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity - 1})">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity + 1})">+</button>
-                    </div>
-                    <span class="cart-item-price">${itemTotal.toLocaleString()}₫</span>
-                </div>`;
+            <div class="cart-item cart-item-flex">
+                <button class="remove-btn" data-menu-id="${item.menuId}" style="background:none;border:none;color:#f36700;font-size:16px;margin-left:6px;cursor:pointer;" title="Xóa">
+                    <i class="fas fa-times"></i>
+                </button>
+                <span class="cart-item-name">${item.name}</span>
+                <div class="quantity-control">
+                    <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity - 1})">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn" onclick="updateQuantity(${item.menuId}, ${item.quantity + 1})">+</button>
+                </div>
+                <span class="cart-item-price">${itemTotal.toLocaleString()}₫</span>
+            </div>`;
                 cartItems.append(html);
             });
 
-            const total = subtotal;
-
             $('#subtotal').text(subtotal.toLocaleString() + '₫');
-            $('#total').text(total.toLocaleString() + '₫');
+            $('#total').text(subtotal.toLocaleString() + '₫');
             $('#cartCount').text(totalItems);
         });
     }
 
-    function updateQuantity(menuId, newQuantity) {
-        if (newQuantity < 0) return;
-        
-        $.post('/cart/update', {menuId: menuId, quantity: newQuantity})
+    // Đăng ký sự kiện chỉ 1 lần sau khi trang đã sẵn sàng:
+    $(document).on('click', '.remove-btn', function() {
+        const btn = $(this);
+        btn.prop('disabled', true); // khoá nút ngay khi vừa click
+        const menuId = btn.data('menu-id');
+        $.post('/cart/remove', {menuId: menuId})
             .done(function() {
                 refreshCartDisplay();
+                showNotification('Đã xóa khỏi giỏ!');
             })
             .fail(function() {
+                btn.prop('disabled', false); // Mở lại nếu lỗi
+                alert('Lỗi khi xóa món khỏi giỏ.');
+            });
+    });
+
+
+    function updateQuantity(menuId, newQuantity) {
+        if (newQuantity < 0) return;
+
+        $.post('/cart/update', {menuId: menuId, quantity: newQuantity})
+            .done(function () {
+                refreshCartDisplay();
+            })
+            .fail(function () {
                 alert("Không thể cập nhật giỏ hàng.");
             });
+
     }
 
     // Initialize cart display on page load
-    $(document).ready(function() {
+    $(document).ready(function () {
         refreshCartDisplay();
     });
 </script>

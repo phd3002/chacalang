@@ -44,25 +44,42 @@
             font-weight: 500;
         }
 
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
+        .status-pending, /* Đang xử lý */
+        .status-PENDING     { background: #fff3cd; color: #856404; }
 
-        .status-confirmed {
-            background: #cce5ff;
-            color: #004085;
-        }
+        .status-confirmed,  /* Đã xác nhận */
+        .status-CONFIRMED   { background: #cce5ff; color: #004085; }
 
-        .status-completed {
-            background: #d4edda;
-            color: #155724;
-        }
+        .status-preparing,  /* Đang chuẩn bị */
+        .status-PREPARING   { background: #ffedcc; color: #ad6704; }
 
-        .status-cancelled {
-            background: #f8d7da;
-            color: #721c24;
-        }
+        .status-assigned,   /* Đã giao nhân viên */
+        .status-ASSIGNED    { background: #f0e5ff; color: #694397; }
+
+        .status-shipping,   /* Đang giao hàng */
+        .status-SHIPPING    { background: #d1ecf1; color: #0c5460; }
+
+        .status-waiting_for_pickup, /* Chờ nhận tại quán */
+        .status-WAITING_FOR_PICKUP  { background: #fff8e1; color: #8d6e63; }
+
+        .status-picked_up, /* Đã nhận tại quán */
+        .status-PICKED_UP   { background: #e0f2f1; color: #00695c; }
+
+        .status-delivered,  /* Đã giao hàng */
+        .status-DELIVERED   { background: #b2f5ea; color: #22543d; }
+
+        .status-completed,  /* Hoàn tất */
+        .status-COMPLETED   { background: #d4edda; color: #155724; }
+
+        .status-cancelled,  /* Đã huỷ */
+        .status-CANCELLED   { background: #f8d7da; color: #721c24; }
+
+        .status-failed,     /* Giao hàng thất bại */
+        .status-FAILED      { background: #f9bdbb; color: #c62828; }
+
+        .status-refunded,   /* Đã hoàn tiền */
+        .status-REFUNDED    { background: #ffe; color: #039be5; }
+
 
         .order-info {
             margin-bottom: 15px;
@@ -136,7 +153,8 @@
                                 <span class="order-date"
                                       th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2025</span>
                             </div>
-                            <span class="order-status" th:classappend="${'status-' + order.status}"
+                            <span class="order-status"
+                                  th:classappend="'status-' + ${order.status.name().toLowerCase()}"
                                   th:text="${order.status.label}">Đang xử lý</span>
                         </div>
 

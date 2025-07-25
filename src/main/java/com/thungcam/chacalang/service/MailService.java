@@ -13,5 +13,7 @@ public interface MailService {
     void sendResetPasswordLink(String to, String resetLink);
 
     void sendOrderConfirmation(Orders order);
+
+    void sendOrderCancellation(Orders order, String reason);
 }
 

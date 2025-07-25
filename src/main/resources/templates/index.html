@@ -36,6 +36,14 @@
         .logo img {
             filter: drop-shadow(0 0 4px #000000aa);
         }
+
+        .map-container {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
     </style>
 
 </head>
@@ -353,11 +361,11 @@
             </div>
 
             <!-- Thông báo thành công -->
-            <div class="col-md-12">
-                <div class="alert alert-success text-center" th:if="${success}">
-                    Đặt bàn thành công! Cảm ơn quý khách.
-                </div>
+            <div class="alert alert-success" id="successAlert" th:if="${success}">
+                Đặt bàn thành công! Cảm ơn quý khách.
+                <button type="button" onclick="document.getElementById('successAlert').style.display='none';" style="float:right;border:none;background:none;font-size:20px;line-height:1;cursor:pointer;">&times;</button>
             </div>
+
 
             <!-- Form đặt bàn -->
             <form class="reserve-form row" method="post" th:action="@{/dat-ban}" th:object="${reservation}">
@@ -410,12 +418,7 @@
 
         <!-- row -->
         <div class="row">
-            <!-- FORM LIÊN HỆ BÊN TRÁI -->
             <div class="col-md-5">
-                <!--                <div class="section-header">-->
-                <!--                    <h4 class="sub-title">Liên hệ với chúng tôi</h4>-->
-                <!--                    <h2 class="title">Gửi liên hệ</h2>-->
-                <!--                </div>-->
                 <div class="alert alert-success text-center" th:if="${contactSuccess}">
                     Cảm ơn quý khách đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.
                 </div>
@@ -436,7 +439,8 @@
 
                         <div class="form-group">
                             <label>Tiêu đề *</label>
-                            <input class="input form-control" placeholder="Tiêu đề liên hệ" required th:field="*{subject}"
+                            <input class="input form-control" placeholder="Tiêu đề liên hệ" required
+                                   th:field="*{subject}"
                                    type="text">
                         </div>
 
@@ -491,7 +495,13 @@
     <!-- /container -->
 
     <!-- map -->
-    <!--    <div id="map"></div>-->
+    <div class="map-container" style="width: 100%; max-width: 600px; height: 300px; margin-top: 20px;">
+        <iframe
+                src="https://www.google.com/maps?q=1/1+Nguyễn+Thị+Định,+Cầu+Giấy,+Hà+Nội&output=embed"
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+    </div>
+
     <!-- /map -->
 
 </div>
@@ -565,6 +575,20 @@
         });
     });
 </script>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dateInput = document.getElementById("reservationDate");
+        if (dateInput) {
+            // Lấy ngày hôm nay theo local user, định dạng yyyy-mm-dd
+            var today = new Date();
+            var yyyy = today.getFullYear();
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var dd = String(today.getDate()).padStart(2, '0');
+            var formatted = yyyy + '-' + mm + '-' + dd;
+            dateInput.value = formatted;
+            dateInput.min = formatted; // Không cho chọn ngày trước hôm nay nếu muốn
+        }
+    });
+</script>
 </body>
 </html>

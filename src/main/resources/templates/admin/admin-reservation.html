@@ -85,15 +85,15 @@
                     <td th:text="${r.note}">Sinh nhật</td>
                     <td th:if="${r.createdAt != null}" th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}">19/04/2025</td>
                     <td>
-                        <span th:text="${r.status}"></span>
+                        <span th:text="${r.status.label}"></span>
                     </td>
                     <td>
                         <form th:action="@{'/admin/reservations/' + ${r.id} + '/status'}" method="post" class="form-inline">
                             <label>
                                 <select name="status" class="form-control form-control-sm mr-2">
                                     <option th:each="s : ${T(com.thungcam.chacalang.enums.ReservationStatus).values()}"
-                                            th:value="${s}" th:text="${s}"
-                                            th:selected="${s == r.status}">
+                                            th:value="${s}" th:text="${s.label}"
+                                            th:selected="${s == r.status.label}">
                                     </option>
                                 </select>
                             </label>

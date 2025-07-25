@@ -9,7 +9,10 @@ import com.thungcam.chacalang.repository.CartRepository;
 import com.thungcam.chacalang.repository.MenuRepository;
 import com.thungcam.chacalang.repository.UserRepository;
 import com.thungcam.chacalang.service.CartService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -78,11 +81,23 @@ public class CartServiceImpl implements CartService {
 
     }
 
+//    @Override
+//    @Transactional
+//    public void removeFromCart(Long userId, Long menuId) {
+//        Cart cart = getCart(userId);
+//        cartItemRepository.findByCart_IdAndMenu_Id(cart.getId(), menuId)
+//                .ifPresent(cartItemRepository::delete);
+//    }
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void removeFromCart(Long userId, Long menuId) {
         Cart cart = getCart(userId);
-        cartItemRepository.deleteByCart_IdAndMenu_Id(cart.getId(), menuId);
+        CartItem cartItem = cartItemRepository.findByCart_IdAndMenu_Id(cart.getId(), menuId)
+                .orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
+        cartItemRepository.delete(cartItem);
     }
+
+
 
     @Override
     public List<CartItem> getCartItems(Long userId) {

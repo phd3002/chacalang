@@ -79,4 +79,25 @@ public class MailServiceImpl implements MailService {
         return sb.toString();
     }
 
+    @Override
+    public void sendOrderCancellation(Orders order, String reason) {
+        if (order.getCustomerEmail() == null || order.getCustomerEmail().isBlank()) return;
+        String subject = "Thông báo huỷ đơn hàng #" + order.getOrderCode();
+
+        String content = "Xin chào " + order.getCustomerName() + ",\n\n" +
+                "Đơn hàng của bạn với mã #" + order.getOrderCode() + " đã bị huỷ.\n";
+        if (reason != null) {
+            content += "Lý do huỷ: " + reason + "\n";
+        }
+        content += "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.\n\n" +
+                "Số điện thoại: " + order.getBranch().getPhone() + "\n" +
+                "Cảm ơn bạn đã ủng hộ!";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(order.getCustomerEmail());
+        message.setSubject(subject);
+        message.setText(content);
+        mailSender.send(message);
+    }
+
 }

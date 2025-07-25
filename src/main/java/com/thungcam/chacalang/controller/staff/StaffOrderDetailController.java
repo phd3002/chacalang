@@ -54,7 +54,7 @@ public class StaffOrderDetailController {
                                     @RequestParam(required = false) String note,
                                     @RequestParam(required = false) Long branchId,
                                     RedirectAttributes redirectAttributes) {
-        System.out.println("Order ID: " + orderId + ", New Status: " + newStatus);
+//        System.out.println("Order ID: " + orderId + ", New Status: " + newStatus);
         staffOrderService.updateOrderStatus(orderId, OrderStatus.valueOf(newStatus));
         staffOrderService.updateOrderNote(orderId, note);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công!");

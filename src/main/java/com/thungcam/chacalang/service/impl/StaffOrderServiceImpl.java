@@ -9,6 +9,7 @@ import com.thungcam.chacalang.enums.ShippingMethod;
 import com.thungcam.chacalang.repository.InvoiceRepository;
 import com.thungcam.chacalang.repository.OrderItemRepository;
 import com.thungcam.chacalang.repository.OrderRepository;
+import com.thungcam.chacalang.service.MailService;
 import com.thungcam.chacalang.service.StaffOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class StaffOrderServiceImpl implements StaffOrderService {
     private final OrderItemRepository orderItemRepository;
 
     private final InvoiceRepository invoiceRepository;
+
+    private final MailService mailService;
 
     @Override
     public List<Orders> getPickupOrders(Long branchId, String search, OrderStatus status, LocalDate dateFrom, LocalDate dateTo, int page, int size) {
@@ -74,6 +77,8 @@ public class StaffOrderServiceImpl implements StaffOrderService {
             Invoice invoice = invoiceRepository.findByOrderId(orderId)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy hóa đơn với orderId = " + orderId));
             invoice.setPaymentStatus(PaymentStatus.PAID);
+        } else if (status == OrderStatus.CANCELLED) {
+            mailService.sendOrderCancellation(order, order.getNote());
         }
         return true;
     }
@@ -84,8 +89,10 @@ public class StaffOrderServiceImpl implements StaffOrderService {
         if (note != null && note.trim().isEmpty()) {
             note = null;
         }
-        order.setNote(note);
-        orderRepository.save(order);
+        if (order != null) {
+            order.setNote(note);
+            orderRepository.save(order);
+        }
         return true;
     }
 

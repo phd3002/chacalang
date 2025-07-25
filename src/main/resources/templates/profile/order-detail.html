@@ -148,6 +148,19 @@
             max-width: 600px;
             width: 90%;
         }
+
+        .status-pending { background: #fff3cd; color: #856404; padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block; }
+        .status-confirmed { background: #cce5ff; color: #004085; padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block; }
+        .status-preparing { background: #ffedcc; color: #ad6704;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-assigned { background: #f0e5ff; color: #694397;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-shipping { background: #d1ecf1; color: #0c5460;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-waiting_for_pickup { background: #fff8e1; color: #8d6e63;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-delivered { background: #b2f5ea; color: #22543d;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-completed { background: #d4edda; color: #155724;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-cancelled { background: #f8d7da; color: #721c24;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-failed { background: #f9bdbb; color: #c62828;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+        .status-refunded { background: #e3f2fd; color: #039be5;padding: 4px 14px; border-radius: 20px; font-weight: 500; display: inline-block;}
+
     </style>
 </head>
 <body>
@@ -190,7 +203,9 @@
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Trạng thái:</span>
-                                <span th:text="${order.status.label}">Đang xử lý</span>
+                                <span class="order-status"
+                                      th:class="'order-status status-' + ${order.status.name().toLowerCase()}"
+                                      th:text="${order.status.label}">Đang xử lý</span>
                             </div>
                         </div>
                         <div class="order-info-section">
