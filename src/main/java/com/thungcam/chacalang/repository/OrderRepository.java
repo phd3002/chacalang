@@ -41,7 +41,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     @Query("SELECT DATE(i.issuedDate), SUM(i.finalAmount) FROM Invoice i WHERE i.order.branch.id = :branchId AND i.order.status = 'COMPLETED' AND i.issuedDate >= :fromDate AND i.issuedDate <= :toDate GROUP BY DATE(i.issuedDate) ORDER BY DATE(i.issuedDate)")
     List<Object[]> sumRevenueByDay(Long branchId, LocalDateTime fromDate, LocalDateTime toDate);
-
+    
     long countByStatusAndBranchId(OrderStatus status, Long branch_id);
 
     // Lấy tất cả đơn pickup của 1 chi nhánh

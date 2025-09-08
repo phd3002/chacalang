@@ -194,6 +194,10 @@
                         <div class="order-info-section">
                             <h4>Thông tin đơn hàng</h4>
                             <div class="info-item">
+                                <span class="info-label">Chi nhánh:</span>
+                                <span th:text="${order.branch.name}">Thung Cấm</span>
+                            </div>
+                            <div class="info-item">
                                 <span class="info-label">Mã đơn hàng:</span>
                                 <span th:text="${order.orderCode}">#123</span>
                             </div>

@@ -63,9 +63,6 @@ public class MailServiceImpl implements MailService {
         StringBuilder sb = new StringBuilder();
         sb.append("Xin chào ").append(order.getCustomerName()).append(",\n\n");
         sb.append("Mã đơn hàng: ").append(order.getOrderCode()).append("\n");
-//        sb.append("Tổng tiền: ").append(order.getTotalPrice()).append(" đ\n");
-//        sb.append("Phí giao hàng: ").append(order.getShippingFee()).append(" đ\n\n");
-
         sb.append("Chi tiết đơn hàng:\n");
 
         List<OrderItem> items = orderItemRepository.findByOrderId(order.getId());

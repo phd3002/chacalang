@@ -76,7 +76,10 @@
             <div th:each="contact : ${contacts}" class="contact-item">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <strong th:text="${contact.name}">Tên khách</strong> - <span th:text="${contact.email}">email@email.com</span>
+                        <strong th:text="${contact.name}">Tên khách</strong>
+                        &nbsp;<span th:text="${contact.subject}">Chủ đề</span>
+                        &nbsp;-&nbsp;
+                        <span th:text="${contact.email}">email@email.com</span>
                         <p th:text="${contact.message}">Nội dung liên hệ</p>
                         <small class="text-muted" th:text="${#temporals.format(contact.createdAt, 'dd/MM/yyyy HH:mm')}">Thời
                             gian</small>
