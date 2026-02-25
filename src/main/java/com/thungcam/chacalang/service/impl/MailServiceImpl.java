@@ -71,7 +71,8 @@ public class MailServiceImpl implements MailService {
                     .append(" x").append(item.getQuantity())
                     .append(" = ").append(item.getSubtotal()).append(" đ\n");
         }
-
+//        sb.append("Tổng tiền: ").append(order.getInvoice().getTotalAmount()).append(" đ\n");
+        sb.append("Chi nhánh: ").append(order.getBranch().getName());
         sb.append("\nCảm ơn bạn đã ủng hộ!");
         return sb.toString();
     }

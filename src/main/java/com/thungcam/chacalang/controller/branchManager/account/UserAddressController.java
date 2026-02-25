@@ -1,4 +1,4 @@
-package com.thungcam.chacalang.controller.account;
+package com.thungcam.chacalang.controller.branchManager.account;
 
 import com.thungcam.chacalang.constant.AuthConst;
 import com.thungcam.chacalang.entity.District;

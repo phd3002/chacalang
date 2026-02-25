@@ -2,6 +2,7 @@ package com.thungcam.chacalang.entity;
 
 import com.thungcam.chacalang.enums.UserStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -47,6 +48,7 @@ public class User implements UserDetails {
     @Column(name = "last_name", length = 100)
     private String lastName;
 
+//    @Email
     @Size(max = 100)
     @Column(name = "email", length = 100)
     private String email;

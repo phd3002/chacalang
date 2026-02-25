@@ -83,7 +83,7 @@ public class HomeController {
                                     RedirectAttributes redirectAttributes) {
         reservationService.save(reservation);
         redirectAttributes.addFlashAttribute("success", Optional.of(true));
-        redirectAttributes.addFlashAttribute("reservation", new Reservation()); // 👈 thêm lại object
+        redirectAttributes.addFlashAttribute("reservation", new Reservation());
         return "redirect:/#reservation";
     }
 

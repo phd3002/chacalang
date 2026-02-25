@@ -57,15 +57,6 @@ public class CartController {
                 .collect(Collectors.toList());
     }
 
-//    @PostMapping("/cart/remove")
-//    @ResponseBody
-//    @Transactional
-//    public String removeFromCart(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Long menuId) {
-//        Long userId = userService.findByEmail(userDetails.getUsername()).getId();
-//        cartService.removeFromCart(userId, menuId);
-//        return "OK";
-//    }
-
     @PostMapping("/cart/remove")
     @ResponseBody
     @Transactional(isolation = Isolation.SERIALIZABLE)
